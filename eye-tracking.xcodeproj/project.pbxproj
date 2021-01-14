@@ -7,66 +7,27 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CD52432725AC4FE2004C570B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD52432625AC4FE2004C570B /* AppDelegate.swift */; };
-		CD52432925AC4FE2004C570B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD52432825AC4FE2004C570B /* SceneDelegate.swift */; };
-		CD52432B25AC4FE2004C570B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD52432A25AC4FE2004C570B /* ViewController.swift */; };
-		CD52432E25AC4FE2004C570B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CD52432C25AC4FE2004C570B /* Main.storyboard */; };
-		CD52433025AC4FE2004C570B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CD52432F25AC4FE2004C570B /* Assets.xcassets */; };
-		CD52433325AC4FE2004C570B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CD52433125AC4FE2004C570B /* LaunchScreen.storyboard */; };
-		CD52433E25AC4FE3004C570B /* eye_trackingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD52433D25AC4FE3004C570B /* eye_trackingTests.swift */; };
-		CD52434925AC4FE3004C570B /* eye_trackingUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD52434825AC4FE3004C570B /* eye_trackingUITests.swift */; };
+		CD92B10725AF1A850072E4E5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD92B10625AF1A850072E4E5 /* AppDelegate.swift */; };
+		CD92B10925AF1A850072E4E5 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = CD92B10825AF1A850072E4E5 /* art.scnassets */; };
+		CD92B10B25AF1A850072E4E5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD92B10A25AF1A850072E4E5 /* ViewController.swift */; };
+		CD92B10E25AF1A850072E4E5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CD92B10C25AF1A850072E4E5 /* Main.storyboard */; };
+		CD92B11025AF1A870072E4E5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CD92B10F25AF1A870072E4E5 /* Assets.xcassets */; };
+		CD92B11325AF1A870072E4E5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CD92B11125AF1A870072E4E5 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		CD52433A25AC4FE3004C570B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = CD52431B25AC4FE2004C570B /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = CD52432225AC4FE2004C570B;
-			remoteInfo = "eye-tracking";
-		};
-		CD52434525AC4FE3004C570B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = CD52431B25AC4FE2004C570B /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = CD52432225AC4FE2004C570B;
-			remoteInfo = "eye-tracking";
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
-		CD52432325AC4FE2004C570B /* eye-tracking.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "eye-tracking.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		CD52432625AC4FE2004C570B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		CD52432825AC4FE2004C570B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		CD52432A25AC4FE2004C570B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		CD52432D25AC4FE2004C570B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		CD52432F25AC4FE2004C570B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		CD52433225AC4FE2004C570B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		CD52433425AC4FE2004C570B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		CD52433925AC4FE3004C570B /* eye-trackingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "eye-trackingTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		CD52433D25AC4FE3004C570B /* eye_trackingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = eye_trackingTests.swift; sourceTree = "<group>"; };
-		CD52433F25AC4FE3004C570B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		CD52434425AC4FE3004C570B /* eye-trackingUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "eye-trackingUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		CD52434825AC4FE3004C570B /* eye_trackingUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = eye_trackingUITests.swift; sourceTree = "<group>"; };
-		CD52434A25AC4FE3004C570B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CD92B10325AF1A850072E4E5 /* eye-tracking.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "eye-tracking.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CD92B10625AF1A850072E4E5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		CD92B10825AF1A850072E4E5 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
+		CD92B10A25AF1A850072E4E5 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		CD92B10D25AF1A850072E4E5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		CD92B10F25AF1A870072E4E5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		CD92B11225AF1A870072E4E5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		CD92B11425AF1A870072E4E5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		CD52432025AC4FE2004C570B /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		CD52433625AC4FE3004C570B /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		CD52434125AC4FE3004C570B /* Frameworks */ = {
+		CD92B10025AF1A850072E4E5 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -76,68 +37,46 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		CD52431A25AC4FE2004C570B = {
+		CD92B0FA25AF1A850072E4E5 = {
 			isa = PBXGroup;
 			children = (
-				CD52432525AC4FE2004C570B /* eye-tracking */,
-				CD52433C25AC4FE3004C570B /* eye-trackingTests */,
-				CD52434725AC4FE3004C570B /* eye-trackingUITests */,
-				CD52432425AC4FE2004C570B /* Products */,
+				CD92B10525AF1A850072E4E5 /* eye-tracking */,
+				CD92B10425AF1A850072E4E5 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		CD52432425AC4FE2004C570B /* Products */ = {
+		CD92B10425AF1A850072E4E5 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				CD52432325AC4FE2004C570B /* eye-tracking.app */,
-				CD52433925AC4FE3004C570B /* eye-trackingTests.xctest */,
-				CD52434425AC4FE3004C570B /* eye-trackingUITests.xctest */,
+				CD92B10325AF1A850072E4E5 /* eye-tracking.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		CD52432525AC4FE2004C570B /* eye-tracking */ = {
+		CD92B10525AF1A850072E4E5 /* eye-tracking */ = {
 			isa = PBXGroup;
 			children = (
-				CD52432625AC4FE2004C570B /* AppDelegate.swift */,
-				CD52432825AC4FE2004C570B /* SceneDelegate.swift */,
-				CD52432A25AC4FE2004C570B /* ViewController.swift */,
-				CD52432C25AC4FE2004C570B /* Main.storyboard */,
-				CD52432F25AC4FE2004C570B /* Assets.xcassets */,
-				CD52433125AC4FE2004C570B /* LaunchScreen.storyboard */,
-				CD52433425AC4FE2004C570B /* Info.plist */,
+				CD92B10625AF1A850072E4E5 /* AppDelegate.swift */,
+				CD92B10825AF1A850072E4E5 /* art.scnassets */,
+				CD92B10A25AF1A850072E4E5 /* ViewController.swift */,
+				CD92B10C25AF1A850072E4E5 /* Main.storyboard */,
+				CD92B10F25AF1A870072E4E5 /* Assets.xcassets */,
+				CD92B11125AF1A870072E4E5 /* LaunchScreen.storyboard */,
+				CD92B11425AF1A870072E4E5 /* Info.plist */,
 			);
 			path = "eye-tracking";
-			sourceTree = "<group>";
-		};
-		CD52433C25AC4FE3004C570B /* eye-trackingTests */ = {
-			isa = PBXGroup;
-			children = (
-				CD52433D25AC4FE3004C570B /* eye_trackingTests.swift */,
-				CD52433F25AC4FE3004C570B /* Info.plist */,
-			);
-			path = "eye-trackingTests";
-			sourceTree = "<group>";
-		};
-		CD52434725AC4FE3004C570B /* eye-trackingUITests */ = {
-			isa = PBXGroup;
-			children = (
-				CD52434825AC4FE3004C570B /* eye_trackingUITests.swift */,
-				CD52434A25AC4FE3004C570B /* Info.plist */,
-			);
-			path = "eye-trackingUITests";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		CD52432225AC4FE2004C570B /* eye-tracking */ = {
+		CD92B10225AF1A850072E4E5 /* eye-tracking */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = CD52434D25AC4FE3004C570B /* Build configuration list for PBXNativeTarget "eye-tracking" */;
+			buildConfigurationList = CD92B11725AF1A870072E4E5 /* Build configuration list for PBXNativeTarget "eye-tracking" */;
 			buildPhases = (
-				CD52431F25AC4FE2004C570B /* Sources */,
-				CD52432025AC4FE2004C570B /* Frameworks */,
-				CD52432125AC4FE2004C570B /* Resources */,
+				CD92B0FF25AF1A850072E4E5 /* Sources */,
+				CD92B10025AF1A850072E4E5 /* Frameworks */,
+				CD92B10125AF1A850072E4E5 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -145,68 +84,24 @@
 			);
 			name = "eye-tracking";
 			productName = "eye-tracking";
-			productReference = CD52432325AC4FE2004C570B /* eye-tracking.app */;
+			productReference = CD92B10325AF1A850072E4E5 /* eye-tracking.app */;
 			productType = "com.apple.product-type.application";
-		};
-		CD52433825AC4FE3004C570B /* eye-trackingTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = CD52435025AC4FE3004C570B /* Build configuration list for PBXNativeTarget "eye-trackingTests" */;
-			buildPhases = (
-				CD52433525AC4FE3004C570B /* Sources */,
-				CD52433625AC4FE3004C570B /* Frameworks */,
-				CD52433725AC4FE3004C570B /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				CD52433B25AC4FE3004C570B /* PBXTargetDependency */,
-			);
-			name = "eye-trackingTests";
-			productName = "eye-trackingTests";
-			productReference = CD52433925AC4FE3004C570B /* eye-trackingTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		CD52434325AC4FE3004C570B /* eye-trackingUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = CD52435325AC4FE3004C570B /* Build configuration list for PBXNativeTarget "eye-trackingUITests" */;
-			buildPhases = (
-				CD52434025AC4FE3004C570B /* Sources */,
-				CD52434125AC4FE3004C570B /* Frameworks */,
-				CD52434225AC4FE3004C570B /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				CD52434625AC4FE3004C570B /* PBXTargetDependency */,
-			);
-			name = "eye-trackingUITests";
-			productName = "eye-trackingUITests";
-			productReference = CD52434425AC4FE3004C570B /* eye-trackingUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		CD52431B25AC4FE2004C570B /* Project object */ = {
+		CD92B0FB25AF1A850072E4E5 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1230;
 				LastUpgradeCheck = 1230;
 				TargetAttributes = {
-					CD52432225AC4FE2004C570B = {
+					CD92B10225AF1A850072E4E5 = {
 						CreatedOnToolsVersion = 12.3;
-					};
-					CD52433825AC4FE3004C570B = {
-						CreatedOnToolsVersion = 12.3;
-						TestTargetID = CD52432225AC4FE2004C570B;
-					};
-					CD52434325AC4FE3004C570B = {
-						CreatedOnToolsVersion = 12.3;
-						TestTargetID = CD52432225AC4FE2004C570B;
 					};
 				};
 			};
-			buildConfigurationList = CD52431E25AC4FE2004C570B /* Build configuration list for PBXProject "eye-tracking" */;
+			buildConfigurationList = CD92B0FE25AF1A850072E4E5 /* Build configuration list for PBXProject "eye-tracking" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -214,100 +109,55 @@
 				en,
 				Base,
 			);
-			mainGroup = CD52431A25AC4FE2004C570B;
-			productRefGroup = CD52432425AC4FE2004C570B /* Products */;
+			mainGroup = CD92B0FA25AF1A850072E4E5;
+			productRefGroup = CD92B10425AF1A850072E4E5 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				CD52432225AC4FE2004C570B /* eye-tracking */,
-				CD52433825AC4FE3004C570B /* eye-trackingTests */,
-				CD52434325AC4FE3004C570B /* eye-trackingUITests */,
+				CD92B10225AF1A850072E4E5 /* eye-tracking */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		CD52432125AC4FE2004C570B /* Resources */ = {
+		CD92B10125AF1A850072E4E5 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CD52433325AC4FE2004C570B /* LaunchScreen.storyboard in Resources */,
-				CD52433025AC4FE2004C570B /* Assets.xcassets in Resources */,
-				CD52432E25AC4FE2004C570B /* Main.storyboard in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		CD52433725AC4FE3004C570B /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		CD52434225AC4FE3004C570B /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				CD92B10925AF1A850072E4E5 /* art.scnassets in Resources */,
+				CD92B11325AF1A870072E4E5 /* LaunchScreen.storyboard in Resources */,
+				CD92B11025AF1A870072E4E5 /* Assets.xcassets in Resources */,
+				CD92B10E25AF1A850072E4E5 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		CD52431F25AC4FE2004C570B /* Sources */ = {
+		CD92B0FF25AF1A850072E4E5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CD52432B25AC4FE2004C570B /* ViewController.swift in Sources */,
-				CD52432725AC4FE2004C570B /* AppDelegate.swift in Sources */,
-				CD52432925AC4FE2004C570B /* SceneDelegate.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		CD52433525AC4FE3004C570B /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				CD52433E25AC4FE3004C570B /* eye_trackingTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		CD52434025AC4FE3004C570B /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				CD52434925AC4FE3004C570B /* eye_trackingUITests.swift in Sources */,
+				CD92B10B25AF1A850072E4E5 /* ViewController.swift in Sources */,
+				CD92B10725AF1A850072E4E5 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-		CD52433B25AC4FE3004C570B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = CD52432225AC4FE2004C570B /* eye-tracking */;
-			targetProxy = CD52433A25AC4FE3004C570B /* PBXContainerItemProxy */;
-		};
-		CD52434625AC4FE3004C570B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = CD52432225AC4FE2004C570B /* eye-tracking */;
-			targetProxy = CD52434525AC4FE3004C570B /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
 /* Begin PBXVariantGroup section */
-		CD52432C25AC4FE2004C570B /* Main.storyboard */ = {
+		CD92B10C25AF1A850072E4E5 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				CD52432D25AC4FE2004C570B /* Base */,
+				CD92B10D25AF1A850072E4E5 /* Base */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
-		CD52433125AC4FE2004C570B /* LaunchScreen.storyboard */ = {
+		CD92B11125AF1A870072E4E5 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				CD52433225AC4FE2004C570B /* Base */,
+				CD92B11225AF1A870072E4E5 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -315,7 +165,7 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		CD52434B25AC4FE3004C570B /* Debug */ = {
+		CD92B11525AF1A870072E4E5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -376,7 +226,7 @@
 			};
 			name = Debug;
 		};
-		CD52434C25AC4FE3004C570B /* Release */ = {
+		CD92B11625AF1A870072E4E5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -431,7 +281,7 @@
 			};
 			name = Release;
 		};
-		CD52434E25AC4FE3004C570B /* Debug */ = {
+		CD92B11825AF1A870072E4E5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -443,14 +293,14 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "lexplore.eye-tracking";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.eye-tracking";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
-		CD52434F25AC4FE3004C570B /* Release */ = {
+		CD92B11925AF1A870072E4E5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -462,137 +312,35 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "lexplore.eye-tracking";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.eye-tracking";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		CD52435125AC4FE3004C570B /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8959K9SBUN;
-				INFOPLIST_FILE = "eye-trackingTests/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "lexplore.eye-trackingTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/eye-tracking.app/eye-tracking";
-			};
-			name = Debug;
-		};
-		CD52435225AC4FE3004C570B /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8959K9SBUN;
-				INFOPLIST_FILE = "eye-trackingTests/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "lexplore.eye-trackingTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/eye-tracking.app/eye-tracking";
-			};
-			name = Release;
-		};
-		CD52435425AC4FE3004C570B /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8959K9SBUN;
-				INFOPLIST_FILE = "eye-trackingUITests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "lexplore.eye-trackingUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = "eye-tracking";
-			};
-			name = Debug;
-		};
-		CD52435525AC4FE3004C570B /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8959K9SBUN;
-				INFOPLIST_FILE = "eye-trackingUITests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "lexplore.eye-trackingUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = "eye-tracking";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		CD52431E25AC4FE2004C570B /* Build configuration list for PBXProject "eye-tracking" */ = {
+		CD92B0FE25AF1A850072E4E5 /* Build configuration list for PBXProject "eye-tracking" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				CD52434B25AC4FE3004C570B /* Debug */,
-				CD52434C25AC4FE3004C570B /* Release */,
+				CD92B11525AF1A870072E4E5 /* Debug */,
+				CD92B11625AF1A870072E4E5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		CD52434D25AC4FE3004C570B /* Build configuration list for PBXNativeTarget "eye-tracking" */ = {
+		CD92B11725AF1A870072E4E5 /* Build configuration list for PBXNativeTarget "eye-tracking" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				CD52434E25AC4FE3004C570B /* Debug */,
-				CD52434F25AC4FE3004C570B /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		CD52435025AC4FE3004C570B /* Build configuration list for PBXNativeTarget "eye-trackingTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				CD52435125AC4FE3004C570B /* Debug */,
-				CD52435225AC4FE3004C570B /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		CD52435325AC4FE3004C570B /* Build configuration list for PBXNativeTarget "eye-trackingUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				CD52435425AC4FE3004C570B /* Debug */,
-				CD52435525AC4FE3004C570B /* Release */,
+				CD92B11825AF1A870072E4E5 /* Debug */,
+				CD92B11925AF1A870072E4E5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = CD52431B25AC4FE2004C570B /* Project object */;
+	rootObject = CD92B0FB25AF1A850072E4E5 /* Project object */;
 }

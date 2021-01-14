@@ -1,2 +1,0 @@
-# eye-tracking
-master thesis

@@ -17,7 +17,40 @@ extension matrix_float4x4 {
 
 class ViewController: UIViewController, ARSCNViewDelegate {
 
+    // MARK: - outlets
     @IBOutlet var sceneView: ARSCNView!
+    
+    // MARK: - variables
+    var phonePointsWidth = 414;
+    var phonePointsHeight = 896;
+    
+    var virtualPhone: SCNNode = SCNNode()
+    var virtualScreen: SCNNode = {
+        let plane = SCNPlane(width: 1, height: 1)
+        plane.firstMaterial?.diffuse.contents = UIColor.blue
+        return SCNNode(geometry: plane)
+    }()
+    
+    var leftEye: SCNNode = {
+        let cylinder = SCNCylinder(radius: 0.002, height: 0.1)
+        cylinder.firstMaterial?.diffuse.contents = UIColor.red
+        return SCNNode(geometry: cylinder)
+    }()
+    
+    var rightEye: SCNNode = {
+        let cylinder = SCNCylinder(radius: 0.002, height: 0.1)
+        cylinder.firstMaterial?.diffuse.contents = UIColor.green
+        return SCNNode(geometry: cylinder)
+    }()
+    
+    // algebra from: https://github.com/andrewzimmer906/HeatMapEyeTracking?fbclid=IwAR2R663PglsButlR0d-tT9egU3UhTYi4EWIrgs50wRTt2SsfdyfNnJNrPGo
+    let eyeRotationMatrix: matrix_float4x4 =
+        simd_float4x4(
+            SCNMatrix4Mult(
+                SCNMatrix4MakeRotation(-Float.pi / 2, 1, 0, 0), SCNMatrix4MakeTranslation(0, 0, 0.1/2)
+            )
+        )
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +58,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sceneView.delegate = self
         sceneView.automaticallyUpdatesLighting = true
         UIApplication.shared.isIdleTimerDisabled = true
+        
+        // add virtual screen to virtual phone
+        virtualPhone.addChildNode(virtualScreen)
+        // add virtual phone to scene
+        sceneView.scene.rootNode.addChildNode(virtualPhone)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -67,6 +105,14 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             leftEye.simdTransform = faceAnchor.leftEyeTransform * eyeRotationMatrix;
             rightEye.simdTransform = faceAnchor.rightEyeTransform * eyeRotationMatrix;
         }
+    }
+    
+    // called once per frame
+    func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
+        virtualPhone.transform = (sceneView.pointOfView?.transform)!
+        print(virtualPhone)
+        
+
     }
     
     // MARK: - ARSessions

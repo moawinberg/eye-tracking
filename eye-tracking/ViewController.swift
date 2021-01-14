@@ -53,6 +53,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         let node = SCNNode(geometry: faceMesh)
         node.geometry?.firstMaterial?.fillMode = .lines
         
+        node.addChildNode(leftEye)
+        node.addChildNode(rightEye)
+        
         return node
     }
     
@@ -60,6 +63,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
         if let faceAnchor = anchor as? ARFaceAnchor, let faceGeometry = node.geometry as? ARSCNFaceGeometry {
             faceGeometry.update(from: faceAnchor.geometry)
+
+            leftEye.simdTransform = faceAnchor.leftEyeTransform * eyeRotationMatrix;
+            rightEye.simdTransform = faceAnchor.rightEyeTransform * eyeRotationMatrix;
         }
     }
     

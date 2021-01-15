@@ -8,6 +8,7 @@
 import UIKit
 import SceneKit
 import ARKit
+import WebKit
 
 extension matrix_float4x4 {
     func position() -> SCNVector3 {
@@ -15,10 +16,13 @@ extension matrix_float4x4 {
     }
 }
 
+
 class ViewController: UIViewController, ARSCNViewDelegate {
 
     // MARK: - outlets
     @IBOutlet var sceneView: ARSCNView!
+    @IBOutlet weak var webView: WKWebView!
+    @IBOutlet weak var distanceLabel: UILabel!
     
     // MARK: - variables
     var phonePointsWidth = 414;
@@ -27,7 +31,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     var virtualPhone: SCNNode = SCNNode()
     var virtualScreen: SCNNode = {
         let plane = SCNPlane(width: 1, height: 1)
-        plane.firstMaterial?.diffuse.contents = UIColor.blue
         return SCNNode(geometry: plane)
     }()
     
@@ -51,9 +54,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             )
         )
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // webView.load(URLRequest(url: URL(string: "https://www.lipsum.com/")!))
      
         sceneView.delegate = self
         sceneView.automaticallyUpdatesLighting = true
@@ -63,6 +67,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         virtualPhone.addChildNode(virtualScreen)
         // add virtual phone to scene
         sceneView.scene.rootNode.addChildNode(virtualPhone)
+        
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -97,6 +103,17 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         return node
     }
     
+    func avgDistance(_ node1: SCNNode, _ node2: SCNNode) -> Float {
+        // Distance of the eyes to the camera don't have to subtract because the center of worldPosition (camera) is (0,0,0)
+        let distanceL = node1.worldPosition
+        let distanceR = node2.worldPosition
+        
+        let distanceLLength = sqrt(distanceL.x*distanceL.x + distanceL.y*distanceL.y + distanceL.z*distanceL.z)
+        let distanceRLength = sqrt(distanceR.x*distanceR.x + distanceR.y*distanceR.y + distanceR.z*distanceR.z)
+        
+        return (distanceLLength + distanceRLength) / 2
+    }
+    
     // update face mesh when face changes
     func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
         if let faceAnchor = anchor as? ARFaceAnchor, let faceGeometry = node.geometry as? ARSCNFaceGeometry {
@@ -104,15 +121,18 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
             leftEye.simdTransform = faceAnchor.leftEyeTransform * eyeRotationMatrix;
             rightEye.simdTransform = faceAnchor.rightEyeTransform * eyeRotationMatrix;
+            
+            let distance = avgDistance(leftEye, rightEye)
+            
+            DispatchQueue.main.async{
+                self.distanceLabel.text = "\(Int(round(distance * 100))) cm"
+            }
         }
     }
     
     // called once per frame
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
         virtualPhone.transform = (sceneView.pointOfView?.transform)!
-        print(virtualPhone)
-        
-
     }
     
     // MARK: - ARSessions

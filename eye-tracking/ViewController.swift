@@ -56,13 +56,14 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }()
 
     var virtualPhoneNode: SCNNode = {
-        let geometry = SCNPlane(width: 1, height: 1)
+        let geometry = SCNPlane()
         geometry.firstMaterial?.isDoubleSided = true
-        geometry.firstMaterial?.fillMode = .fill
+        geometry.firstMaterial?.fillMode = .lines
         geometry.firstMaterial?.diffuse.contents = UIColor.blue
 
         let node = SCNNode()
         node.geometry = geometry
+        node.position.z = -1 // position in center of screen
         return node
     }()
     
@@ -72,7 +73,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sceneView.delegate = self
         sceneView.automaticallyUpdatesLighting = true
         UIApplication.shared.isIdleTimerDisabled = true
-        
+
         sceneView.pointOfView?.addChildNode(virtualPhoneNode)
     }
     
@@ -146,9 +147,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         let avgX = (rightEyeX + leftEyeX) / 2
         let avgY = (rightEyeY + leftEyeY) / 2
-
+        
         DispatchQueue.main.async{
-            self.gazeIndicator.center = CGPoint(x: avgX, y: -avgY)
+            UIView.animate(withDuration: 0.1, animations: {
+                self.gazeIndicator.center = CGPoint(x: avgX, y: -avgY)
+            })
         }
     }
     

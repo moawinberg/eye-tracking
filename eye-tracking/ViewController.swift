@@ -24,22 +24,28 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     var phoneWidth = CGFloat(0.1509)
     var phoneHeight = CGFloat(0.0757)
     
+    var gazePoints: [CGPoint] = []
+    
     // Set target at 2 meters away from the center of eyeballs to create segment vector
-    var gazeTargetLeftEye: SCNNode = {
+    var leftEyeEnd: SCNNode = {
         let node = SCNNode()
         node.position.z = 2
         return node
     }()
     
-    var gazeTargetRightEye: SCNNode = {
+    var rightEyeEnd: SCNNode = {
         let node = SCNNode()
         node.position.z = 2
         return node
     }()
     
     var leftEye: SCNNode = {
+        let geometry = SCNCone(topRadius: 0.005, bottomRadius: 0, height: 0.2)
+        geometry.radialSegmentCount = 3
+        geometry.firstMaterial?.diffuse.contents = UIColor.blue
         let node = SCNNode()
-        node.eulerAngles.x = -.pi / 2 // rotate x angle (pitch) -90 degrees to point at device
+        node.geometry = geometry
+        node.eulerAngles.x = -.pi / 2
         node.position.z = 0.1
         let parentNode = SCNNode()
         parentNode.addChildNode(node)
@@ -47,7 +53,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }()
     
     var rightEye: SCNNode = {
+        let geometry = SCNCone(topRadius: 0.005, bottomRadius: 0, height: 0.2)
+        geometry.radialSegmentCount = 3
+        geometry.firstMaterial?.diffuse.contents = UIColor.blue
         let node = SCNNode()
+        node.geometry = geometry
         node.eulerAngles.x = -.pi / 2
         node.position.z = 0.1
         let parentNode = SCNNode()
@@ -56,14 +66,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }()
 
     var virtualPhoneNode: SCNNode = {
-        let geometry = SCNPlane()
+        let geometry = SCNPlane(width: 1, height: 1)
         geometry.firstMaterial?.isDoubleSided = true
-        geometry.firstMaterial?.fillMode = .lines
         geometry.firstMaterial?.diffuse.contents = UIColor.blue
-
         let node = SCNNode()
         node.geometry = geometry
-        node.position.z = -1 // position in center of screen
         return node
     }()
     
@@ -75,6 +82,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         UIApplication.shared.isIdleTimerDisabled = true
 
         sceneView.pointOfView?.addChildNode(virtualPhoneNode)
+        
+        // set camera to center of screen
+        sceneView.pointOfView?.position.x = 207.0
+        sceneView.pointOfView?.position.y = 448.0
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -104,8 +115,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         node.addChildNode(rightEye)
         
         // add target to eyes
-        leftEye.addChildNode(gazeTargetLeftEye)
-        rightEye.addChildNode(gazeTargetRightEye)
+        leftEye.addChildNode(leftEyeEnd)
+        rightEye.addChildNode(rightEyeEnd)
         
         return node
     }
@@ -126,32 +137,50 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         }
     }
     
+    func smoothing() {
+        let threshold = 50
+        let points = gazePoints.suffix(threshold)
+        
+        var sumX = 0
+        var sumY = 0
+        for point in points {
+            sumX += Int(point.x)
+            sumY += Int(point.y)
+        }
+        
+        let avgX = sumX / gazePoints.count
+        let avgY = sumY / gazePoints.count
+        
+
+    }
+    
     func hitTest() {
         guard let rightEyeHitTestResults = self.virtualPhoneNode.hitTestWithSegment(
-                from: self.gazeTargetRightEye.worldPosition,
-                to: self.rightEye.worldPosition,
-                options: nil
+            from: rightEye.worldPosition,
+            to: rightEyeEnd.worldPosition,
+            options: nil
         ).first else { return }
         
         guard let leftEyeHitTestResults = self.virtualPhoneNode.hitTestWithSegment(
-                from: self.gazeTargetLeftEye.worldPosition,
-                to: self.leftEye.worldPosition,
-                options: nil
+            from: leftEye.worldPosition,
+            to: leftEyeEnd.worldPosition,
+            options: nil
         ).first else { return }
         
-        let rightEyeX = CGFloat(rightEyeHitTestResults.localCoordinates.x) / (phoneWidth / 2) * phonePointsWidth
+        // number of points for x, half of the screen. from meter to number of points. divide to get half of screen, get points relative to origo
+        let rightEyeX = CGFloat(rightEyeHitTestResults.localCoordinates.x) / ((phoneWidth / 2) * phonePointsWidth)
         let rightEyeY = CGFloat(rightEyeHitTestResults.localCoordinates.y) / (phoneHeight / 2) * phonePointsHeight
         
         let leftEyeX = CGFloat(leftEyeHitTestResults.localCoordinates.x) / (phoneWidth / 2) * phonePointsWidth
         let leftEyeY = CGFloat(leftEyeHitTestResults.localCoordinates.y) / (phoneHeight / 2) * phonePointsHeight
         
         let avgX = (rightEyeX + leftEyeX) / 2
-        let avgY = (rightEyeY + leftEyeY) / 2
+        let avgY = -(rightEyeY + leftEyeY) / 2
         
+        gazePoints.append(CGPoint(x: avgX, y: avgY))
+
         DispatchQueue.main.async{
-            UIView.animate(withDuration: 0.1, animations: {
-                self.gazeIndicator.center = CGPoint(x: avgX, y: -avgY)
-            })
+            self.gazeIndicator.center = CGPoint(x: avgX, y: avgY)
         }
     }
     

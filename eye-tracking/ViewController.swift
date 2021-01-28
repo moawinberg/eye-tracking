@@ -10,6 +10,32 @@ import SceneKit
 import ARKit
 import WebKit
 
+extension CGFloat {
+
+    func clamped(to: ClosedRange<CGFloat>) -> CGFloat {
+        return to.lowerBound > self ? to.lowerBound
+            : to.upperBound < self ? to.upperBound
+            : self
+    }
+}
+
+struct Constants {
+
+    struct Device {
+        static let screenSize = CGSize(width: 0.0623908297, height: 0.135096943231532)
+        static let frameSize = CGSize(width: 375, height: 812)
+    }
+
+    struct Ranges {
+        static let widthRange: ClosedRange<CGFloat> = (0...CGFloat(414))
+        static let heightRange: ClosedRange<CGFloat> = (0...CGFloat(896))
+    }
+
+    struct Colors {
+        static let crosshairColor: UIColor = .white
+    }
+}
+
 class ViewController: UIViewController, ARSCNViewDelegate {
 
     // MARK: - outlets
@@ -23,8 +49,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     var phonePointsHeight = CGFloat(896);
     var phoneWidth = CGFloat(0.1509)
     var phoneHeight = CGFloat(0.0757)
+    var phonePixelWidth = CGFloat(828)
+    var phonePixelHeight = CGFloat(1792)
     
-    var gazePoints: [CGPoint] = []
+    var screenPointsX: [CGFloat] = []
+    var screenPointsY: [CGFloat] = []
     
     // Set target at 2 meters away from the center of eyeballs to create segment vector
     var leftEyeEnd: SCNNode = {
@@ -71,6 +100,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         geometry.firstMaterial?.diffuse.contents = UIColor.blue
         let node = SCNNode()
         node.geometry = geometry
+        node.position.z = 1
         return node
     }()
     
@@ -138,52 +168,94 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     func smoothing() {
-        let threshold = 50
-        let points = gazePoints.suffix(threshold)
+        let threshold = 5
         
-        var sumX = 0
-        var sumY = 0
-        for point in points {
-            sumX += Int(point.x)
-            sumY += Int(point.y)
+        let pointsX = screenPointsX.suffix(threshold)
+        let pointsY = screenPointsY.suffix(threshold)
+        
+        var sumX = CGFloat(0);
+        for point in pointsX {
+           sumX += point
         }
         
-        let avgX = sumX / gazePoints.count
-        let avgY = sumY / gazePoints.count
+        var sumY = CGFloat(0);
+        for point in pointsY {
+           sumY += point
+        }
         
-
-    }
-    
-    func hitTest() {
-        guard let rightEyeHitTestResults = self.virtualPhoneNode.hitTestWithSegment(
-            from: rightEye.worldPosition,
-            to: rightEyeEnd.worldPosition,
-            options: nil
-        ).first else { return }
+        var avgX = sumX / CGFloat(pointsX.count)
+        var avgY = sumY / CGFloat(pointsY.count)
         
-        guard let leftEyeHitTestResults = self.virtualPhoneNode.hitTestWithSegment(
-            from: leftEye.worldPosition,
-            to: leftEyeEnd.worldPosition,
-            options: nil
-        ).first else { return }
+        avgX = avgX.clamped(to: Constants.Ranges.widthRange)
+        avgY = avgY.clamped(to: Constants.Ranges.heightRange)
         
-        // number of points for x, half of the screen. from meter to number of points. divide to get half of screen, get points relative to origo
-        let rightEyeX = CGFloat(rightEyeHitTestResults.localCoordinates.x) / ((phoneWidth / 2) * phonePointsWidth)
-        let rightEyeY = CGFloat(rightEyeHitTestResults.localCoordinates.y) / (phoneHeight / 2) * phonePointsHeight
-        
-        let leftEyeX = CGFloat(leftEyeHitTestResults.localCoordinates.x) / (phoneWidth / 2) * phonePointsWidth
-        let leftEyeY = CGFloat(leftEyeHitTestResults.localCoordinates.y) / (phoneHeight / 2) * phonePointsHeight
-        
-        let avgX = (rightEyeX + leftEyeX) / 2
-        let avgY = -(rightEyeY + leftEyeY) / 2
-        
-        gazePoints.append(CGPoint(x: avgX, y: avgY))
-
-        DispatchQueue.main.async{
-            self.gazeIndicator.center = CGPoint(x: avgX, y: avgY)
+        DispatchQueue.main.async {
+           // self.gazeIndicator.center.x = CGFloat(avgX)
+            self.gazeIndicator.center.y = CGFloat(avgY)
+            // self.gazeIndicator.center = CGPoint(x: CGFloat(p_raster_x), y: CGFloat(p_raster_y))
         }
     }
     
+    func rasterization() {
+        var p_world_right = SCNVector4(x: rightEye.worldPosition.x, y: rightEye.worldPosition.y, z: rightEye.worldPosition.z, w: 1)
+        var p_world_left = SCNVector4(x: leftEye.worldPosition.x, y: leftEye.worldPosition.y, z: leftEye.worldPosition.z, w: 1)
+        
+        let rightEyeNode: SCNNode = {
+            let node = SCNNode()
+            node.position.x = rightEye.worldPosition.x
+            node.position.y = rightEye.worldPosition.y
+            node.position.z = rightEye.worldPosition.z
+            let parentNode = SCNNode()
+            parentNode.addChildNode(node)
+            return parentNode
+        }()
+        
+        let leftEyeNode: SCNNode = {
+            let node = SCNNode()
+            node.position.x = leftEye.worldPosition.x
+            node.position.y = leftEye.worldPosition.y
+            node.position.z = leftEye.worldPosition.z
+            let parentNode = SCNNode()
+            parentNode.addChildNode(node)
+            return parentNode
+        }()
+        
+        rightEyeNode.simdTransform = rightEye.simdTransform
+        leftEyeNode.simdTransform = leftEye.simdTransform
+        
+        let matrix_world_to_local_right = rightEye.simdTransform
+        let matrix_world_to_local_left = leftEye.simdTransform
+        
+        let p_local_right = SIMD4<Float>(p_world_right) * matrix_world_to_local_right.inverse
+        let p_local_left = SIMD4<Float>(p_world_left) * matrix_world_to_local_left.inverse
+        
+        let camera = sceneView.session.currentFrame?.camera
+        let p_camera_right = SIMD4<Float>(p_local_right) * camera!.viewMatrix(for: .portrait).inverse
+        let p_camera_left = SIMD4<Float>(p_local_left) * camera!.viewMatrix(for: .portrait).inverse
+        
+        let p_x_right = p_camera_right.x / -p_camera_right.z
+        let p_x_left = p_camera_left.x / -p_camera_left.z
+    
+        let p_y_right = p_camera_right.y / -p_camera_right.z
+        let p_y_left = p_camera_left.y / -p_camera_left.z
+        
+        let p_x = (p_x_right + p_x_left) / 2
+        let p_y = (p_y_right + p_y_left) / 2
+        
+        if abs(CGFloat(p_x)) <= phoneWidth/2 || abs(CGFloat(p_y)) <= phoneHeight/2 {
+            let p_normalized_x  = (CGFloat(p_x) + phoneWidth/2) / phoneWidth
+            let p_normalized_y  = (CGFloat(p_y) + phoneHeight/2) / phoneHeight
+            
+            let p_raster_x = floor(p_normalized_x * phonePixelWidth)
+            let p_raster_y = floor(p_normalized_y * phonePixelHeight)
+            
+            screenPointsX.append(p_raster_x)
+            screenPointsY.append(p_raster_y)
+            
+            smoothing()
+        }
+    }
+
     // runs when face changes
     func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
         if let faceAnchor = anchor as? ARFaceAnchor, let faceGeometry = node.geometry as? ARSCNFaceGeometry {
@@ -193,7 +265,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             rightEye.simdTransform = faceAnchor.rightEyeTransform
             
             averageDistance()
-            hitTest()
+            rasterization()
         }
     }
 

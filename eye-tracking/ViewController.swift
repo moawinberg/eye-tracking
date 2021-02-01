@@ -21,10 +21,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     // MARK: - variables
     var phonePointsWidth = CGFloat(414);
     var phonePointsHeight = CGFloat(896);
-    var phoneWidth = CGFloat(0.1509)
-    var phoneHeight = CGFloat(0.0757)
-    var phonePixelWidth = CGFloat(828)
-    var phonePixelHeight = CGFloat(1792)
     
     var screenPointsX: [CGFloat] = []
     var screenPointsY: [CGFloat] = []
@@ -124,88 +120,40 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             self.gazeIndicator.center = CGPoint(x: CGFloat(pointX), y: CGFloat(pointY))
         }
     }
+
     
     func pinholeCamera() {
-        // https://staff.fnwi.uva.nl/r.vandenboomgaard/IPCV20172018/LectureNotes/CV/PinholeCamera/PinholeCamera.html
-        // http://www.cs.toronto.edu/~jepson/csc420/notes/imageProjection.pdf
+        // http://www.cse.psu.edu/~rtc12/CSE486/lecture13.pdf
         
-        let p_world_right = SIMD4<Float>(x: rightEye.worldPosition.x, y: rightEye.worldPosition.y, z: rightEye.worldPosition.z, w: 1)
-        let p_world_left = SIMD4<Float>(x: leftEye.worldPosition.x, y: leftEye.worldPosition.y, z: leftEye.worldPosition.z, w: 1)
+        let f = sceneView.session.currentFrame?.camera.intrinsics.columns.0.x
+        let ox = sceneView.session.currentFrame?.camera.intrinsics.columns.2.x
+        let oy = sceneView.session.currentFrame?.camera.intrinsics.columns.2.y
         
-        let p_local_right = p_world_right * rightEye.simdTransform
-        let p_local_left = p_world_left * leftEye.simdTransform
+        var p_world_right = simd_float4(x: rightEye.worldPosition.x, y: rightEye.worldPosition.y, z: rightEye.worldPosition.z, w: 1)
+        var p_world_left = simd_float4(x: leftEye.worldPosition.x, y: leftEye.worldPosition.y, z: leftEye.worldPosition.z, w: 1)
         
-        let K = sceneView.session.currentFrame?.camera.intrinsics
-        var internalMatrix = matrix_identity_float4x4
+        p_world_right = rightEye.simdTransform * p_world_right
+        p_world_left = leftEye.simdTransform * p_world_left
         
-        // [row, column] add empthy fourth column
-        internalMatrix[0,0] = K![0,0]
-        internalMatrix[2,0] = K![2,0]
-        internalMatrix[1,1] = K![1,1]
-        internalMatrix[2,1] = K![2,1]
-        internalMatrix[3,3] = K![0,0]
-        
-        let externalMatrix = sceneView.session.currentFrame?.camera.transform.inverse
-        
-        var right_point = internalMatrix * externalMatrix! * p_local_right
-        var left_point = internalMatrix * externalMatrix! * p_local_left
-        
-        right_point = right_point / right_point.z
-        left_point = left_point / left_point.z
+        let world_to_camera = sceneView.session.currentFrame?.camera.viewMatrix(for: .portrait)
 
-        let avgX = (left_point.x + right_point.x) / 2
-        let avgY = (left_point.y + right_point.y) / 2
-
-        screenPointsX.append(CGFloat(avgX))
-        screenPointsY.append(CGFloat(avgY))
+        var p_camera_right = world_to_camera! * p_world_right
+        var p_camera_left = world_to_camera! * p_world_left
+        
+        p_camera_right = p_camera_right / p_camera_right.z
+        p_camera_left = p_camera_left / p_camera_left.z
+        
+        let p_camera_x = (p_camera_right.x + p_camera_left.x) / 2
+        let p_camera_y = (p_camera_right.y + p_camera_left.y) / 2
+        
+        // 1/2 for scaling factor (pixels to points)
+        let x = CGFloat( 1/2 * Float(f!) * p_camera_x + Float(ox!))
+        let y = CGFloat( 1/2 * Float(-f!) * p_camera_y + Float(oy!))
+        
+        screenPointsX.append(x)
+        screenPointsY.append(y)
         
         smoothing()
-    }
-    
-    func rasterization() {
-        // focal length = sceneView.pointOfView?.camera?.focalLength [mm]
-        // frame?.camera.intrinsics
-        
-        // find point in local coordinate system
-        let p_world_right = SCNVector4(x: rightEye.worldPosition.x, y: rightEye.worldPosition.y, z: rightEye.worldPosition.z, w: 1)
-        let p_world_left = SCNVector4(x: leftEye.worldPosition.x, y: leftEye.worldPosition.y, z: leftEye.worldPosition.z, w: 1)
-        
-        let matrix_world_to_local_right = rightEye.simdTransform.inverse
-        let matrix_world_to_local_left = leftEye.simdTransform.inverse
-        
-        let p_local_right = SIMD4<Float>(p_world_right) * matrix_world_to_local_right
-        let p_local_left = SIMD4<Float>(p_world_left) * matrix_world_to_local_left
-        
-        // find point in camera system
-        let camera = sceneView.session.currentFrame?.camera
-        let p_camera_right = SIMD4<Float>(p_local_right) * camera!.viewMatrix(for: .portrait).inverse
-        let p_camera_left = SIMD4<Float>(p_local_left) * camera!.viewMatrix(for: .portrait).inverse
-        
-        let p_x_right = p_camera_right.x / -p_camera_right.z
-        let p_x_left = p_camera_left.x / -p_camera_left.z
-    
-        let p_y_right = p_camera_right.y / -p_camera_right.z
-        let p_y_left = p_camera_left.y / -p_camera_left.z
-        
-        // get average point of both eyes
-        let p_x = (p_x_right + p_x_left) / 2
-        let p_y = (p_y_right + p_y_left) / 2
-        
-        // check if point is visible
-        if abs(CGFloat(p_x)) <= phoneWidth/2 || abs(CGFloat(p_y)) <= phoneHeight/2 {
-            // Normalized Device Coordinate system. Remaps the point's coordinates in the range [0,1]
-            let p_normalized_x  = (CGFloat(p_x) + phoneWidth/2) / phoneWidth
-            let p_normalized_y  = (CGFloat(p_y) + phoneHeight/2) / phoneHeight
-            
-            // define coordinates in raster space
-            let p_raster_x = floor(p_normalized_x * phonePixelWidth)
-            let p_raster_y = floor(p_normalized_y * phonePixelHeight)
-            
-            screenPointsX.append(p_raster_x)
-            screenPointsY.append(p_raster_y)
-            
-            smoothing()
-        }
     }
 
     // runs when face changes

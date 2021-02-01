@@ -21,8 +21,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     // MARK: - variables
     var phonePointsWidth = CGFloat(414);
     var phonePointsHeight = CGFloat(896);
-    var phoneWidth = CGFloat(0.1509)
-    var phoneHeight = CGFloat(0.0757)
+    var phoneHeight = CGFloat(0.1509)
+    var phoneWidth = CGFloat(0.0757)
     var phonePixelWidth = CGFloat(828)
     var phonePixelHeight = CGFloat(1792)
     
@@ -170,8 +170,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         let p_world_right = SCNVector4(x: rightEye.worldPosition.x, y: rightEye.worldPosition.y, z: rightEye.worldPosition.z, w: 1)
         let p_world_left = SCNVector4(x: leftEye.worldPosition.x, y: leftEye.worldPosition.y, z: leftEye.worldPosition.z, w: 1)
         
-        let matrix_world_to_local_right = rightEye.simdTransform.inverse
-        let matrix_world_to_local_left = leftEye.simdTransform.inverse
+        let matrix_world_to_local_right = rightEye.simdTransform
+        let matrix_world_to_local_left = leftEye.simdTransform
         
         let p_local_right = SIMD4<Float>(p_world_right) * matrix_world_to_local_right
         let p_local_left = SIMD4<Float>(p_world_left) * matrix_world_to_local_left
@@ -184,8 +184,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         let p_x_right = p_camera_right.x / -p_camera_right.z
         let p_x_left = p_camera_left.x / -p_camera_left.z
     
-        let p_y_right = p_camera_right.y / -p_camera_right.z
-        let p_y_left = p_camera_left.y / -p_camera_left.z
+        let p_y_right = p_camera_right.y / p_camera_right.z
+        let p_y_left = p_camera_left.y / p_camera_left.z
         
         // get average point of both eyes
         let p_x = (p_x_right + p_x_left) / 2
@@ -217,7 +217,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             rightEye.simdTransform = faceAnchor.rightEyeTransform
             
             averageDistance()
-            pinholeCamera()
+            rasterization()
         }
     }
 

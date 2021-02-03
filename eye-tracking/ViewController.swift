@@ -222,41 +222,41 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     // LATEST VERSION
     func rasterization3() {
-            // camera's focal length measured in pixels
-            let focalLength = sceneView.session.currentFrame?.camera.intrinsics.columns.0.x
-            
-            // find eye point in world coordinate system
-            let p_world_right = rightEye.simdTransform * simd_float4(rightEye.worldPosition.x, rightEye.worldPosition.y, rightEye.worldPosition.z, 1)
-            let p_world_left =  leftEye.simdTransform * simd_float4(leftEye.worldPosition.x, leftEye.worldPosition.y, leftEye.worldPosition.z, 1)
-            
-            // convert point to camera coordinates
-            let camera = sceneView.session.currentFrame?.camera
-            let p_camera_right = p_world_right * camera!.viewMatrix(for: .portrait)
-            let p_camera_left = p_world_left * camera!.viewMatrix(for: .portrait)
-            
-            // find point in pixel coordinatees
-            var p_x_right = focalLength! * p_camera_right.x / p_camera_right.z
-            var p_x_left = focalLength! * p_camera_left.x / p_camera_left.z
+        // camera's focal length measured in pixels
+        let focalLength = sceneView.session.currentFrame?.camera.intrinsics.columns.0.x
         
-            var p_y_right = focalLength! * (p_camera_right.y / p_camera_right.z)
-            var p_y_left = focalLength! * (p_camera_left.y / p_camera_left.z)
-            
-            // divide by 2 to get point instead of pixel, translate to half screen
-            p_y_right = (p_y_right / 2) + Float(phonePointsHeight/2)
-            p_y_left = (p_y_left / 2) + Float(phonePointsHeight/2)
-            
-            p_x_right = (p_x_right / 2) + Float(phonePointsWidth/2)
-            p_x_left = (p_x_left / 2) + Float(phonePointsWidth/2)
-            
-            // get average point of both eyes
-            let p_x = (p_x_right + p_x_left) / 2
-            let p_y = -(p_y_right + p_y_left) / 2
-            
-            screenPointsX.append(CGFloat(p_x))
-            screenPointsY.append(CGFloat(p_y))
+        // find eye point in world coordinate system
+        let p_world_right = rightEye.simdTransform * simd_float4(rightEye.worldPosition.x, rightEye.worldPosition.y, rightEye.worldPosition.z, 1)
+        let p_world_left =  leftEye.simdTransform * simd_float4(leftEye.worldPosition.x, leftEye.worldPosition.y, leftEye.worldPosition.z, 1)
+        
+        // convert point to camera coordinates
+        let camera = sceneView.session.currentFrame?.camera
+        let p_camera_right = p_world_right * camera!.viewMatrix(for: .portrait)
+        let p_camera_left = p_world_left * camera!.viewMatrix(for: .portrait)
+        
+        // find point in pixel coordinatees
+        var p_x_right = focalLength! * p_camera_right.x / p_camera_right.z
+        var p_x_left = focalLength! * p_camera_left.x / p_camera_left.z
+    
+        var p_y_right = focalLength! * (p_camera_right.y / p_camera_right.z)
+        var p_y_left = focalLength! * (p_camera_left.y / p_camera_left.z)
+        
+        // divide by 2 to get point instead of pixel, translate to half screen
+        p_y_right = (p_y_right / 2) + Float(phonePointsHeight/2)
+        p_y_left = (p_y_left / 2) + Float(phonePointsHeight/2)
+        
+        p_x_right = (p_x_right / 2) + Float(phonePointsWidth/2)
+        p_x_left = (p_x_left / 2) + Float(phonePointsWidth/2)
+        
+        // get average point of both eyes
+        let p_x = (p_x_right + p_x_left) / 2
+        let p_y = -(p_y_right + p_y_left) / 2
+        
+        screenPointsX.append(CGFloat(p_x))
+        screenPointsY.append(CGFloat(p_y))
 
-            smoothing()
-        }
+        smoothing()
+    }
 
     // runs when face changes
     func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {

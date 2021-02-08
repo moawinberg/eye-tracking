@@ -102,29 +102,40 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
         if let faceAnchor = anchor as? ARFaceAnchor, let faceGeometry = node.geometry as? ARSCNFaceGeometry {
             faceGeometry.update(from: faceAnchor.geometry)
-            
             averageDistance()
 
-            let cameraViewMatrix = sceneView.session.currentFrame?.camera.viewMatrix(for: .portrait)
-    
-            let worldTransformMatrix = faceAnchor.transform * faceAnchor.leftEyeTransform
+            let cameraTransformMatrix = sceneView.session.currentFrame?.camera.viewMatrix(for: .portrait)
+            let worldTransformMatrixLeft = faceAnchor.transform * faceAnchor.leftEyeTransform
+            let worldTransformMatrixRight = faceAnchor.transform * faceAnchor.rightEyeTransform
             
-            let transformMatrix = cameraViewMatrix! * worldTransformMatrix
+            let worldToCameraMatrixLeft = cameraTransformMatrix! * worldTransformMatrixLeft
+            let worldToCameraMatrixRight = cameraTransformMatrix! * worldTransformMatrixRight
             
-            let o_HeadCenter = simd_float4(0, 0, 0, 1) // local space
-            let o_HeadLookAtDir = simd_float4(0, 0, 1, 0)
+            let localEyePosition = simd_float4(0, 0, 0, 1) // local space for eye
+            let localEyeDirection = simd_float4(0, 0, 1, 0) // direction vector for eye
             
-            let c_HeadCenter = transformMatrix * o_HeadCenter
-            let c_lookAtDir  = transformMatrix * o_HeadLookAtDir
+            let cameraEyePositionLeft = worldToCameraMatrixLeft * localEyePosition // eye center in camera coords
+            let cameraEyeDirectionLeft = worldToCameraMatrixLeft * localEyeDirection // direction vector in camera coords
             
-            let t = (0.0 - c_HeadCenter.z) / c_lookAtDir.z
-            let hitPos = c_HeadCenter + t*c_lookAtDir // intersection between ray-plane in NDC. value between 0 and 1
+            let cameraEyePositionRight = worldToCameraMatrixRight * localEyePosition
+            let cameraEyeDirectionRight = worldToCameraMatrixRight * localEyeDirection
             
-            let p_x = CGFloat(hitPos.x / hitPos.w) // remove homogenous coordinate
-            let p_y = CGFloat(hitPos.y / hitPos.w)
+            let tLeft = (0.0 - cameraEyePositionLeft.z) / cameraEyeDirectionLeft.z // since all coords except z is 0 we only focus on z
+            let intersectionPointLeft = cameraEyePositionLeft + tLeft*cameraEyeDirectionLeft // intersection between ray-plane in NDC. value between 0 and 1
+            
+            let tRight = (0.0 - cameraEyePositionRight.z) / cameraEyeDirectionRight.z
+            let intersectionPointRight = cameraEyePositionRight + tRight*cameraEyeDirectionRight
+            
+            let avgIntersectionPoint = (intersectionPointLeft + intersectionPointRight) / 2
+
+            let scalingFactorX = CGFloat(4)
+            let scalingFactorY = CGFloat(4)
+            
+            let p_x = CGFloat(avgIntersectionPoint.x / avgIntersectionPoint.w) * scalingFactorX // remove homogenous coordinate
+            let p_y = CGFloat(avgIntersectionPoint.y / avgIntersectionPoint.w) * scalingFactorY
             
             let x = (p_x * phonePointsWidth) + phonePointsWidth/2 // positioned in top left corner, translate to half screen
-            let y = (-p_y * phonePointsHeight) + phonePointsHeight/2
+            let y = (-p_y * phonePointsHeight) + phonePointsHeight/2 // y is negative along screen
             
             screenPointsX.append(x)
             screenPointsY.append(y)

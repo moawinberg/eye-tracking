@@ -123,105 +123,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         }
     }
     
-    // FIRST VERSION
     func rasterization() {
-        // find point in local coordinate system
-        let p_world_right = SCNVector4(x: rightEye.worldPosition.x, y: rightEye.worldPosition.y, z: rightEye.worldPosition.z, w: 1)
-        let p_world_left = SCNVector4(x: leftEye.worldPosition.x, y: leftEye.worldPosition.y, z: leftEye.worldPosition.z, w: 1)
-        
-        let matrix_world_to_local_right = rightEye.simdTransform
-        let matrix_world_to_local_left = leftEye.simdTransform
-        
-        let p_local_right = SIMD4<Float>(p_world_right) * matrix_world_to_local_right
-        let p_local_left = SIMD4<Float>(p_world_left) * matrix_world_to_local_left
-        
-        // find point in camera system
-        let camera = sceneView.session.currentFrame?.camera
-        let p_camera_right = SIMD4<Float>(p_local_right) * camera!.viewMatrix(for: .portrait).inverse
-        let p_camera_left = SIMD4<Float>(p_local_left) * camera!.viewMatrix(for: .portrait).inverse
-        
-        let p_x_right = p_camera_right.x / -p_camera_right.z
-        let p_x_left = p_camera_left.x / -p_camera_left.z
-    
-        let p_y_right = p_camera_right.y / p_camera_right.z
-        let p_y_left = p_camera_left.y / p_camera_left.z
-        
-        // get average point of both eyes
-        let p_x = (p_x_right + p_x_left) / 2
-        let p_y = (p_y_right + p_y_left) / 2
-        
-        // check if point is visible
-        if abs(CGFloat(p_x)) <= phoneWidth/2 || abs(CGFloat(p_y)) <= phoneHeight/2 {
-            // Normalized Device Coordinate system. Remaps the point's coordinates in the range [0,1]
-            let p_normalized_x  = (CGFloat(p_x) + phoneWidth/2) / phoneWidth
-            let p_normalized_y  = (CGFloat(p_y) + phoneHeight/2) / phoneHeight
-            
-            // define coordinates in raster space
-            let p_raster_x = floor(p_normalized_x * phonePixelWidth)
-            let p_raster_y = floor(p_normalized_y * phonePixelHeight)
-            
-            screenPointsX.append(p_raster_x)
-            screenPointsY.append(p_raster_y)
-            
-            smoothing()
-        }
-    }
-    
-    // SECOND VERSION
-    func rasterization2() {
-        var vr = rightEye.simdTransform * simd_float4(x: rightEye.worldPosition.x, y: rightEye.worldPosition.y, z: rightEye.worldPosition.z, w: 1)
-        var vl = leftEye.simdTransform * simd_float4(x: leftEye.worldPosition.x, y: leftEye.worldPosition.y, z: leftEye.worldPosition.z, w: 1)
-        
-        vr = vr / vr.w
-        vl = vl / vl.w
-
-        let v1 = simd_float3(x: vl.x, y: vl.y, z: vl.z)
-        let v2 = simd_float3(x: vr.x, y: vr.y, z: vr.z)
-        
-        let camera = sceneView.session.currentFrame?.camera
-        
-        // which rotation to use??
-//        var R = matrix_identity_float3x3
-//        R[0,0] = camera!.transform[0,0]
-//        R[0,1] = camera!.transform[0,1]
-//        R[0,2] = camera!.transform[0,2]
-//        R[1,0] = camera!.transform[1,0]
-//        R[1,1] = camera!.transform[1,1]
-//        R[1,2] = camera!.transform[1,2]
-//        R[2,0] = camera!.transform[2,0]
-//        R[2,1] = camera!.transform[2,1]
-//        R[2,2] = camera!.transform[2,2]
-        
-        let yaw = camera!.eulerAngles.x
-        //let Rx = simd_float3x3([[1, 0, 0], [0, cos(yaw), -sin(yaw)], [-sin(yaw), 0, cos(yaw)]]);
-        let Ry = simd_float3x3([[cos(yaw), 0, sin(yaw)], [0, 1, 0], [-sin(yaw), 0, cos(yaw)]]);
-        //let Rz = simd_float3x3([[cos(yaw), -sin(yaw), 0], [sin(yaw), cos(yaw), 0], [0, 0, 1]]);
-
-        let cameraPos = simd_float3(camera!.transform.columns.3.x, camera!.transform.columns.3.y, -camera!.transform.columns.3.z)
-        
-        let focalLength = camera!.intrinsics.columns.0.x
-
-        let T_l = Ry * (v1 - cameraPos) // should be switched because row vectors
-        let T_r = Ry * (v2 - cameraPos)
-        
-        // x, y = f X/Z+W2 (4) start in lower left, check offset values!
-        let p_right_x = focalLength * (T_r.x / T_r.z) + Float(20)
-        let p_right_y = focalLength * (T_r.y / T_r.z) - Float(phonePixelHeight/2)
-    
-        let p_left_x = focalLength * (T_l.x / T_l.z) + Float(20)
-        let p_left_y = focalLength * (T_l.y / T_l.z) - Float(phonePixelHeight/2)
-        
-        let avgX = (p_right_x + p_left_x) / 2
-        let avgY = -(p_right_y + p_left_y) / 2
-        
-        screenPointsX.append(CGFloat(avgX))
-        screenPointsY.append(CGFloat(avgY))
-        
-        smoothing()
-    }
-    
-    // LATEST VERSION
-    func rasterization3() {
         // camera's focal length measured in pixels
         let focalLength = sceneView.session.currentFrame?.camera.intrinsics.columns.0.x
         
@@ -267,7 +169,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             rightEye.simdTransform = faceAnchor.rightEyeTransform
             
             averageDistance()
-            rasterization3()
+            rasterization()
         }
     }
 

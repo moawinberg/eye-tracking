@@ -114,7 +114,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         let p_camera_right = p_world_right * camera!.viewMatrix(for: .portrait)
         let p_camera_left = p_world_left * camera!.viewMatrix(for: .portrait)
         
-        // perspective divide
+        // perspective divide, camera to screen space
         let p_x_right = distanceR * p_camera_right.x / p_camera_right.z
         let p_x_left = distanceL * p_camera_left.x / p_camera_left.z
     
@@ -125,12 +125,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         let p_x = (p_x_right + p_x_left) / 2
         let p_y = (p_y_right + p_y_left) / 2
         
-        let scalingX = CGFloat(1)
-        let scalingY = CGFloat(1)
-        
-        let x = CGFloat(p_x + 0.5) * phonePointsWidth * scalingX
-        let y = -CGFloat(p_y + 0.5) * phonePointsHeight * scalingY
-        
+        // translate to middle of screen
+        let x = CGFloat(p_x + 0.5) * phonePointsWidth
+        let y = -CGFloat(p_y + 0.5) * phonePointsHeight
         print(x, y)
 
         DispatchQueue.main.async {

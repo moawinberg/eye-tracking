@@ -21,10 +21,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     // MARK: - variables
     var phonePointsWidth = CGFloat(414);
     var phonePointsHeight = CGFloat(896);
-    var phoneHeight = CGFloat(0.1509)
-    var phoneWidth = CGFloat(0.0757)
-    var phonePixelWidth = CGFloat(828)
-    var phonePixelHeight = CGFloat(1792)
     
     var screenPointsX: [CGFloat] = []
     var screenPointsY: [CGFloat] = []
@@ -96,23 +92,22 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         let pointY = min(max(avgY, 0), CGFloat(phonePointsHeight))
         
         DispatchQueue.main.async {
-            self.gazeIndicator.center.x = CGFloat(pointX)
-            // self.gazeIndicator.center = CGPoint(x: CGFloat(pointX), y: CGFloat(pointY))
+            self.gazeIndicator.center = CGPoint(x: CGFloat(pointX), y: CGFloat(pointY))
         }
     }
     
     func rasterization(withFaceAnchor anchor: ARFaceAnchor) {
         let distanceL = sqrt(leftEye.worldPosition.x*leftEye.worldPosition.x + leftEye.worldPosition.y*leftEye.worldPosition.y + leftEye.worldPosition.z*leftEye.worldPosition.z)
         let distanceR = sqrt(rightEye.worldPosition.x*rightEye.worldPosition.x + rightEye.worldPosition.y*rightEye.worldPosition.y + rightEye.worldPosition.z*rightEye.worldPosition.z)
-        
+
         // local to world
         let p_world_right = anchor.rightEyeTransform * simd_float4(rightEye.worldPosition.x, rightEye.worldPosition.y, rightEye.worldPosition.z, 1)
         let p_world_left = anchor.leftEyeTransform * simd_float4(leftEye.worldPosition.x, leftEye.worldPosition.y, leftEye.worldPosition.z, 1)
-        
+
         // world to camera coordinates
         let camera = sceneView.session.currentFrame?.camera
-        let p_camera_right = p_world_right * camera!.viewMatrix(for: .portrait)
-        let p_camera_left = p_world_left * camera!.viewMatrix(for: .portrait)
+        let p_camera_right = camera!.viewMatrix(for: .portrait) * p_world_right
+        let p_camera_left = camera!.viewMatrix(for: .portrait) * p_world_left
         
         // perspective divide, camera to screen space
         let p_x_right = distanceR * p_camera_right.x / p_camera_right.z
@@ -122,17 +117,21 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         let p_y_left = distanceL * (p_camera_left.y / p_camera_left.z)
         
         // get average point of both eyes
-        let p_x = (p_x_right + p_x_left) / 2
-        let p_y = (p_y_right + p_y_left) / 2
+        var p_x = CGFloat(p_x_right + p_x_left) / 2
+        var p_y = CGFloat(p_y_right + p_y_left) / 2
+        
+        let scalingX = CGFloat(10)
+        let scalingY = CGFloat(10)
+        
+        p_x *= scalingX
+        p_y *= scalingY
         
         // translate to middle of screen
-        let x = CGFloat(p_x + 0.5) * phonePointsWidth
-        let y = -CGFloat(p_y + 0.5) * phonePointsHeight
-        print(x, y)
+        let xPos = CGFloat(p_x + 0.5) * phonePointsWidth
+        let yPos = -CGFloat(p_y + 0.5) * phonePointsHeight
 
         DispatchQueue.main.async {
-            // self.gazeIndicator.center.y = CGFloat(y)
-            self.gazeIndicator.center = CGPoint(x: CGFloat(x), y: CGFloat(y))
+            self.gazeIndicator.center = CGPoint(x: xPos, y: yPos)
         }
     }
 
@@ -140,9 +139,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
         if let faceAnchor = anchor as? ARFaceAnchor, let faceGeometry = node.geometry as? ARSCNFaceGeometry {
             faceGeometry.update(from: faceAnchor.geometry)
-            
-            leftEye.simdTransform = faceAnchor.leftEyeTransform
-            rightEye.simdTransform = faceAnchor.rightEyeTransform
             
             averageDistance()
             rasterization(withFaceAnchor: faceAnchor)

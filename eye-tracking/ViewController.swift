@@ -96,6 +96,46 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         }
     }
     
+    func rayPlaneIntersection(withFaceAnchor anchor: ARFaceAnchor) {
+        let cameraTransformMatrix = sceneView.session.currentFrame?.camera.viewMatrix(for: .portrait)
+        let worldTransformMatrixLeft = anchor.transform * anchor.leftEyeTransform
+        let worldTransformMatrixRight = anchor.transform * anchor.rightEyeTransform
+        
+        let worldToCameraMatrixLeft = cameraTransformMatrix! * worldTransformMatrixLeft
+        let worldToCameraMatrixRight = cameraTransformMatrix! * worldTransformMatrixRight
+        
+        let localEyePosition = simd_float4(0, 0, 0, 1) // local space for eye
+        let localEyeDirection = simd_float4(0, 0, 1, 0) // direction vector for eye
+        
+        let cameraEyePositionLeft = worldToCameraMatrixLeft * localEyePosition // eye center in camera coords
+        let cameraEyeDirectionLeft = worldToCameraMatrixLeft * localEyeDirection // direction vector in camera coords
+        
+        let cameraEyePositionRight = worldToCameraMatrixRight * localEyePosition
+        let cameraEyeDirectionRight = worldToCameraMatrixRight * localEyeDirection
+        
+        let tLeft = (0.0 - cameraEyePositionLeft.z) / cameraEyeDirectionLeft.z // since all coords except z is 0 we only focus on z
+        let intersectionPointLeft = cameraEyePositionLeft + tLeft*cameraEyeDirectionLeft // intersection between ray-plane in NDC. value between 0 and 1
+        
+        let tRight = (0.0 - cameraEyePositionRight.z) / cameraEyeDirectionRight.z
+        let intersectionPointRight = cameraEyePositionRight + tRight*cameraEyeDirectionRight
+        
+        let avgIntersectionPoint = (intersectionPointLeft + intersectionPointRight) / 2
+
+        let scalingFactorX = CGFloat(4)
+        let scalingFactorY = CGFloat(4)
+        
+        let p_x = CGFloat(avgIntersectionPoint.x / avgIntersectionPoint.w) * scalingFactorX // remove homogenous coordinate
+        let p_y = CGFloat(avgIntersectionPoint.y / avgIntersectionPoint.w) * scalingFactorY
+        
+        let xPos = (p_x * phonePointsWidth) + phonePointsWidth/2 // positioned in top left corner, translate to half screen
+        let yPos = (-p_y * phonePointsHeight) + phonePointsHeight/2 // y is negative along screen
+        
+        DispatchQueue.main.async {
+            self.gazeIndicator.center = CGPoint(x: xPos, y: yPos)
+        }
+
+    }
+    
     func rasterization(withFaceAnchor anchor: ARFaceAnchor) {
         let distanceL = sqrt(leftEye.worldPosition.x*leftEye.worldPosition.x + leftEye.worldPosition.y*leftEye.worldPosition.y + leftEye.worldPosition.z*leftEye.worldPosition.z)
         let distanceR = sqrt(rightEye.worldPosition.x*rightEye.worldPosition.x + rightEye.worldPosition.y*rightEye.worldPosition.y + rightEye.worldPosition.z*rightEye.worldPosition.z)
@@ -141,7 +181,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             faceGeometry.update(from: faceAnchor.geometry)
             
             averageDistance()
-            rasterization(withFaceAnchor: faceAnchor)
+           // rasterization(withFaceAnchor: faceAnchor)
+            rayPlaneIntersection(withFaceAnchor: faceAnchor)
         }
     }
 

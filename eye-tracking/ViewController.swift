@@ -28,6 +28,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         calibration()
     }
     @IBAction func startCalibration(_ sender: UIButton) {
+        counter = 0
+        calibrationPoint.isHidden = false
         savePosBtn.isHidden = false
         startCalibrationBtn.isHidden = true
         calibration()

@@ -20,6 +20,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     @IBOutlet weak var calibrationPoint: UIImageView!
     @IBOutlet weak var startCalibrationBtn: UIButton!
     @IBOutlet weak var savePosBtn: UIButton!
+    @IBOutlet weak var switchBtn: UISwitch!
     
     // MARK: - button actions
     
@@ -34,6 +35,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         startCalibrationBtn.isHidden = true
         calibration()
     }
+    @IBAction func toggleGazeIndicator(_ sender: UISwitch) {
+        gazeIndicator.isHidden = !gazeIndicator.isHidden
+    }
+    
     
     // MARK: - variables
     var phonePointsWidth = CGFloat(414);

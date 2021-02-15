@@ -17,6 +17,21 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     @IBOutlet weak var webView: WKWebView!
     @IBOutlet weak var distanceLabel: UILabel!
     @IBOutlet weak var gazeIndicator: UIImageView!
+    @IBOutlet weak var calibrationPoint: UIImageView!
+    @IBOutlet weak var startCalibrationBtn: UIButton!
+    @IBOutlet weak var savePosBtn: UIButton!
+    
+    // MARK: - button actions
+    
+    @IBAction func savePosition(_ sender: UIButton) {
+        gazeData[counter] = gazePoint
+        calibration()
+    }
+    @IBAction func startCalibration(_ sender: UIButton) {
+        savePosBtn.isHidden = false
+        startCalibrationBtn.isHidden = true
+        calibration()
+    }
     
     // MARK: - variables
     var phonePointsWidth = CGFloat(414);
@@ -28,12 +43,42 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     var leftEye: SCNNode = SCNNode()
     var rightEye: SCNNode = SCNNode()
     
+    var gazePoint = CGPoint(x: 0, y: 0)
+    var distance = Float(0.0)
+    
+    var counter = 0
+    var gazeData: [Int: CGPoint] = [:]
+    
+    var calibrationPoints = [
+        CGPoint(x: 50, y: 850), // bottom-left,
+        CGPoint(x: 360, y: 850), // bottom-right
+        CGPoint(x: 50, y: 50), // top-left
+        CGPoint(x: 360, y: 50), // top-right
+        CGPoint(x: 207, y: 448) // center
+    ]
+    
+    func calibration() {
+        if (counter < 5) {
+            calibrationPoint.center = calibrationPoints[counter]
+        } else {
+            print(gazeData)
+            calibrationPoint.isHidden = true
+            savePosBtn.isHidden = true
+            startCalibrationBtn.isHidden = false
+        }
+        counter += 1
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
      
         sceneView.delegate = self
         sceneView.automaticallyUpdatesLighting = true
         UIApplication.shared.isIdleTimerDisabled = true
+        
+        calibrationPoint.isHidden = true
+        savePosBtn.isHidden = true
+        startCalibrationBtn.isHidden = false
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -69,11 +114,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         let distanceL = sqrt(leftEye.worldPosition.x*leftEye.worldPosition.x + leftEye.worldPosition.y*leftEye.worldPosition.y + leftEye.worldPosition.z*leftEye.worldPosition.z)
         let distanceR = sqrt(rightEye.worldPosition.x*rightEye.worldPosition.x + rightEye.worldPosition.y*rightEye.worldPosition.y + rightEye.worldPosition.z*rightEye.worldPosition.z)
         
-        let distance = (distanceL + distanceR) / 2
-        
-        DispatchQueue.main.async{
-            self.distanceLabel.text = "\(Int(round(distance * 100))) cm"
-        }
+        distance = (distanceL + distanceR) / 2
     }
     
     func smoothing() {
@@ -130,6 +171,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         let xPos = (p_x * phonePointsWidth) + phonePointsWidth/2 // positioned in top left corner, translate to half screen
         let yPos = (-p_y * phonePointsHeight) + phonePointsHeight/2 // y is negative along screen
         
+        gazePoint.x = xPos
+        gazePoint.y = yPos
+        
         DispatchQueue.main.async {
             self.gazeIndicator.center = CGPoint(x: xPos, y: yPos)
         }
@@ -169,6 +213,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         // translate to middle of screen
         let xPos = CGFloat(p_x + 0.5) * phonePointsWidth
         let yPos = -CGFloat(p_y + 0.5) * phonePointsHeight
+        
+        gazePoint.x = xPos
+        gazePoint.y = yPos
 
         DispatchQueue.main.async {
             self.gazeIndicator.center = CGPoint(x: xPos, y: yPos)
@@ -181,8 +228,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             faceGeometry.update(from: faceAnchor.geometry)
             
             averageDistance()
-           // rasterization(withFaceAnchor: faceAnchor)
-            rayPlaneIntersection(withFaceAnchor: faceAnchor)
+            rasterization(withFaceAnchor: faceAnchor)
         }
     }
 

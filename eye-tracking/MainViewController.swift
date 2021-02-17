@@ -10,6 +10,7 @@ import UIKit
 struct CalibrationData {
     static var data: CalibrationData = CalibrationData()
     var gazePoints: [Int: CGPoint] = [:]
+    var isCalibrated: Bool = false
 }
 
 class MainViewController: UIViewController {

@@ -42,6 +42,11 @@ class GazePointViewController: UIViewController {
         let intersectionPointRight = cameraEyePositionRight + tRight*cameraEyeDirectionRight
         
         let avgIntersectionPoint = (intersectionPointLeft + intersectionPointRight) / 2
+        
+        if (CalibrationData.data.isCalibrated) {
+            let calibrationGazePoints = CalibrationData.data.gazePoints
+            // do calibration here
+        }
 
         let scalingFactorX = CGFloat(4)
         let scalingFactorY = CGFloat(4)
@@ -55,9 +60,11 @@ class GazePointViewController: UIViewController {
         gazePoint.x = xPos
         gazePoint.y = yPos
         
+        // do some smoothing here if wished
+        
         return gazePoint
     }
-    
+
     ////  NOT USED
 //    func rasterization(withFaceAnchor anchor: ARFaceAnchor) {
 //        let distanceL = sqrt(leftEye.worldPosition.x*leftEye.worldPosition.x + leftEye.worldPosition.y*leftEye.worldPosition.y + leftEye.worldPosition.z*leftEye.worldPosition.z)

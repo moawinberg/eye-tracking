@@ -17,17 +17,12 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
     @IBOutlet weak var finishedLabel: UILabel!
     
     // MARK: - variables
-    var phonePointsWidth = CGFloat(414);
-    var phonePointsHeight = CGFloat(896);
-    
     var leftEye: SCNNode = SCNNode()
     var rightEye: SCNNode = SCNNode()
     
     var gazePoint = CGPoint(x: 0, y: 0)
     var index = 0
     var gazeData: [Int: CGPoint] = [:]
-    
-    var gazePointCtrl = GazePointViewController()
     
     @IBAction func next(_ sender: UIButton) {
         if (index < 5) {
@@ -40,6 +35,7 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
             nextBtn.isHidden = true
             PoR.isHidden = true
             CalibrationData.data.gazePoints = gazeData
+            CalibrationData.data.isCalibrated = true
             
             DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
               self.performSegue(withIdentifier: "Back", sender: self)
@@ -79,7 +75,6 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
         sceneView.session.pause()
     }
     
-    // add face mesh
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
         let faceMesh = ARSCNFaceGeometry(device: sceneView.device!)
         let node = SCNNode(geometry: faceMesh)
@@ -90,14 +85,14 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
         
         return node
     }
-    // runs when face changes
+    
     func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
         if let faceAnchor = anchor as? ARFaceAnchor, let faceGeometry = node.geometry as? ARSCNFaceGeometry {
             faceGeometry.update(from: faceAnchor.geometry)
             
             let ARFrame = sceneView.session.currentFrame
             
-            gazePoint = gazePointCtrl.rayPlaneIntersection(withFaceAnchor: faceAnchor, frame: ARFrame!)
+            gazePoint = GazePointViewController().rayPlaneIntersection(withFaceAnchor: faceAnchor, frame: ARFrame!)
         }
     }
 }

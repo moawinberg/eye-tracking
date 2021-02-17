@@ -30,12 +30,13 @@
                                 <rect key="frame" x="20" y="48.5" width="20" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ajf-3X-ohh">
-                                <rect key="frame" x="13" y="44" width="69" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FJq-JS-K4y">
+                                <rect key="frame" x="312" y="791" width="82" height="51"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Back"/>
+                                <color key="backgroundColor" systemColor="opaqueSeparatorColor"/>
+                                <state key="normal" title="Next"/>
                                 <connections>
-                                    <segue destination="bty-ZV-BWz" kind="show" identifier="Back" id="vRa-bv-pzm"/>
+                                    <action selector="next:" destination="Dxa-YG-hgQ" eventType="touchUpInside" id="6bZ-Xg-6mG"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Done!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eXX-jt-1JB">
@@ -45,13 +46,12 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FJq-JS-K4y">
-                                <rect key="frame" x="312" y="791" width="82" height="51"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ajf-3X-ohh">
+                                <rect key="frame" x="20" y="43" width="69" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" systemColor="opaqueSeparatorColor"/>
-                                <state key="normal" title="Next"/>
+                                <state key="normal" title="Cancel"/>
                                 <connections>
-                                    <action selector="next:" destination="Dxa-YG-hgQ" eventType="touchUpInside" id="6bZ-Xg-6mG"/>
+                                    <segue destination="bty-ZV-BWz" kind="show" identifier="Back" id="vRa-bv-pzm"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -68,7 +68,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4eP-Xu-uN4" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-257" y="61"/>
+            <point key="canvasLocation" x="-257.97101449275362" y="60.9375"/>
         </scene>
         <!--Eye Gaze View Controller-->
         <scene sceneID="eTY-d5-e0T">
@@ -167,7 +167,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="4Ul-3B-KS7"/>
+        <segue reference="vRa-bv-pzm"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="arrow.backward" catalog="system" width="128" height="98"/>

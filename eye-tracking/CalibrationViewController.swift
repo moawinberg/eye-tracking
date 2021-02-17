@@ -40,6 +40,10 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
             nextBtn.isHidden = true
             PoR.isHidden = true
             CalibrationData.data.gazePoints = gazeData
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+              self.performSegue(withIdentifier: "Back", sender: self)
+            }
         }
     }
     

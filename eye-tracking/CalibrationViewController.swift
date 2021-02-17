@@ -15,6 +15,8 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
     @IBOutlet weak var PoR: UIImageView!
     @IBOutlet weak var nextBtn: UIButton!
     @IBOutlet weak var finishedLabel: UILabel!
+    @IBOutlet weak var startBtn: UIButton!
+    @IBOutlet weak var infoPage: UIView!
     
     // MARK: - variables
     var leftEye: SCNNode = SCNNode()
@@ -25,6 +27,10 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
     var gazeData: [Int: CGPoint] = [:]
     
     let gazePointCtrl = GazePointViewController()
+    
+    @IBAction func start(_ sender: UIButton) {
+        infoPage.isHidden = true
+    }
     
     @IBAction func next(_ sender: UIButton) {
         if (index < 5) {

@@ -13,6 +13,8 @@ class GazePointViewController: UIViewController {
     var phonePointsWidth = CGFloat(414);
     var phonePointsHeight = CGFloat(896);
     var gazePoint = CGPoint(x: 0, y: 0)
+    var calibrationScaleWidth = CGFloat(4)
+    var calibrationScaleHeight = CGFloat(4)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,24 +46,25 @@ class GazePointViewController: UIViewController {
         let avgIntersectionPoint = (intersectionPointLeft + intersectionPointRight) / 2
         
         if (CalibrationData.data.isCalibrated) {
-            let calibrationGazePoints = CalibrationData.data.gazePoints
-            let calibrationGazeWidth = (CGFloat(calibrationGazePoints[2]!.x) - CGFloat(calibrationGazePoints[1]!.x) + CGFloat(calibrationGazePoints[4]!.x) - CGFloat(calibrationGazePoints[3]!.x))/2
-            let calibrationGazeHeight = (CGFloat(calibrationGazePoints[2]!.y) - CGFloat(calibrationGazePoints[1]!.y) + CGFloat(calibrationGazePoints[4]!.y) - CGFloat(calibrationGazePoints[3]!.y))/2
+            let calibrationGazePoints = CalibrationData.data.gazePoints //apply smoothing before!! results might be inaccurate otherwise
+            print(calibrationGazePoints)
+            let calibrationGazeWidth = abs((CGFloat(calibrationGazePoints[1]!.x) - CGFloat(calibrationGazePoints[0]!.x) + CGFloat(calibrationGazePoints[3]!.x) - CGFloat(calibrationGazePoints[2]!.x)) / 2)
+            
+            let calibrationGazeHeight = abs((CGFloat(calibrationGazePoints[1]!.y) - CGFloat(calibrationGazePoints[0]!.y) + CGFloat(calibrationGazePoints[3]!.y) - CGFloat(calibrationGazePoints[2]!.y)) / 2)
             
             let calibrationPoints = CalibrationData.data.calibrationPoints
+            print(calibrationPoints)
             let calibrationWidth = CGFloat(calibrationPoints[1].x) - CGFloat(calibrationPoints[2].x)
-            print(calibrationWidth)
+            //print(calibrationWidth)
             let calibrationHeight = CGFloat(calibrationPoints[1].y) - CGFloat(calibrationPoints[3].y)
-            print(calibrationHeight)
             
-            var calibrationScaleWidth = calibrationWidth / calibrationGazeWidth //x-wise scale that is multiplied later
-            var calibrationScaleHeight = calibrationHeight / calibrationGazeHeight //y-wise scale that is multiplied later
+            calibrationScaleWidth = calibrationWidth / calibrationGazeWidth //x-wise factor that is multiplied later
+            calibrationScaleHeight = calibrationHeight / calibrationGazeHeight //y-wise factor that is multiplied later
             print(calibrationScaleWidth)
             print(calibrationScaleHeight)
 
             //do calibration here
         }
-
         let scalingFactorX = CGFloat(4)
         let scalingFactorY = CGFloat(4)
         

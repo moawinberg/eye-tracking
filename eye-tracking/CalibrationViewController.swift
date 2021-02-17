@@ -40,6 +40,8 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
             // save data to struct
             CalibrationData.data.gazePoints = gazeData
             CalibrationData.data.isCalibrated = true
+            CalibrationData.data.calibrationPoints = calibrationPoints
+            print(type(of: calibrationPoints))
             
             // go back to main after finished
             DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
@@ -55,7 +57,7 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
         CGPoint(x: 360, y: 50), // top-right
         CGPoint(x: 207, y: 448) // center
     ]
-
+ 
     override func viewDidLoad() {
         super.viewDidLoad()
         

@@ -45,7 +45,21 @@ class GazePointViewController: UIViewController {
         
         if (CalibrationData.data.isCalibrated) {
             let calibrationGazePoints = CalibrationData.data.gazePoints
-            // do calibration here
+            let calibrationGazeWidth = (CGFloat(calibrationGazePoints[2]!.x) - CGFloat(calibrationGazePoints[1]!.x) + CGFloat(calibrationGazePoints[4]!.x) - CGFloat(calibrationGazePoints[3]!.x))/2
+            let calibrationGazeHeight = (CGFloat(calibrationGazePoints[2]!.y) - CGFloat(calibrationGazePoints[1]!.y) + CGFloat(calibrationGazePoints[4]!.y) - CGFloat(calibrationGazePoints[3]!.y))/2
+            
+            let calibrationPoints = CalibrationData.data.calibrationPoints
+            let calibrationWidth = CGFloat(calibrationPoints[1].x) - CGFloat(calibrationPoints[2].x)
+            print(calibrationWidth)
+            let calibrationHeight = CGFloat(calibrationPoints[1].y) - CGFloat(calibrationPoints[3].y)
+            print(calibrationHeight)
+            
+            var calibrationScaleWidth = calibrationWidth / calibrationGazeWidth //x-wise scale that is multiplied later
+            var calibrationScaleHeight = calibrationHeight / calibrationGazeHeight //y-wise scale that is multiplied later
+            print(calibrationScaleWidth)
+            print(calibrationScaleHeight)
+
+            //do calibration here
         }
 
         let scalingFactorX = CGFloat(4)

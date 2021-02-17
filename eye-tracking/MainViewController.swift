@@ -11,6 +11,7 @@ struct CalibrationData {
     static var data: CalibrationData = CalibrationData()
     var gazePoints: [Int: CGPoint] = [:]
     var isCalibrated: Bool = false
+    var calibrationPoints: Array = [CGPoint]()
 }
 
 class MainViewController: UIViewController {

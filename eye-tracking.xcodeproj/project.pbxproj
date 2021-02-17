@@ -13,7 +13,6 @@
 		CD24E4EC25DBFFD000FD5D5B /* EyeGazeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD24E4EB25DBFFD000FD5D5B /* EyeGazeViewController.swift */; };
 		CD92B10725AF1A850072E4E5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD92B10625AF1A850072E4E5 /* AppDelegate.swift */; };
 		CD92B10925AF1A850072E4E5 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = CD92B10825AF1A850072E4E5 /* art.scnassets */; };
-		CD92B10B25AF1A850072E4E5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD92B10A25AF1A850072E4E5 /* ViewController.swift */; };
 		CD92B10E25AF1A850072E4E5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CD92B10C25AF1A850072E4E5 /* Main.storyboard */; };
 		CD92B11025AF1A870072E4E5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CD92B10F25AF1A870072E4E5 /* Assets.xcassets */; };
 		CD92B11325AF1A870072E4E5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CD92B11125AF1A870072E4E5 /* LaunchScreen.storyboard */; };
@@ -27,7 +26,6 @@
 		CD92B10325AF1A850072E4E5 /* eye-tracking.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "eye-tracking.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD92B10625AF1A850072E4E5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CD92B10825AF1A850072E4E5 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
-		CD92B10A25AF1A850072E4E5 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		CD92B10D25AF1A850072E4E5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		CD92B10F25AF1A870072E4E5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CD92B11225AF1A870072E4E5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -66,7 +64,6 @@
 			children = (
 				CD92B10625AF1A850072E4E5 /* AppDelegate.swift */,
 				CD92B10825AF1A850072E4E5 /* art.scnassets */,
-				CD92B10A25AF1A850072E4E5 /* ViewController.swift */,
 				CD92B10C25AF1A850072E4E5 /* Main.storyboard */,
 				CD24E4EB25DBFFD000FD5D5B /* EyeGazeViewController.swift */,
 				CD24E4E525DBCE9D00FD5D5B /* MainViewController.swift */,
@@ -150,7 +147,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CD92B10B25AF1A850072E4E5 /* ViewController.swift in Sources */,
 				CD24E4E925DBD46E00FD5D5B /* GazePointViewController.swift in Sources */,
 				CD24E4E325DBCE6000FD5D5B /* CalibrationViewController.swift in Sources */,
 				CD92B10725AF1A850072E4E5 /* AppDelegate.swift in Sources */,

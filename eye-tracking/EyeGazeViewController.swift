@@ -20,6 +20,8 @@ class EyeGazeViewController: UIViewController, ARSCNViewDelegate {
     var leftEye: SCNNode = SCNNode()
     var rightEye: SCNNode = SCNNode()
     
+    let gazePointCtrl = GazePointViewController()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
      
@@ -69,7 +71,7 @@ class EyeGazeViewController: UIViewController, ARSCNViewDelegate {
             faceGeometry.update(from: faceAnchor.geometry)
             
             let ARFrame = sceneView.session.currentFrame
-            let gazePoint = GazePointViewController().rayPlaneIntersection(withFaceAnchor: faceAnchor, frame: ARFrame!)
+            let gazePoint = gazePointCtrl.rayPlaneIntersection(withFaceAnchor: faceAnchor, frame: ARFrame!)
             
             // let distance = averageDistance()
             

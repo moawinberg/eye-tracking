@@ -24,6 +24,8 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
     var index = 0
     var gazeData: [Int: CGPoint] = [:]
     
+    let gazePointCtrl = GazePointViewController()
+    
     @IBAction func next(_ sender: UIButton) {
         if (index < 5) {
             PoR.center = calibrationPoints[index]
@@ -34,10 +36,13 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
             finishedLabel.isHidden = false
             nextBtn.isHidden = true
             PoR.isHidden = true
+            
+            // save data to struct
             CalibrationData.data.gazePoints = gazeData
             CalibrationData.data.isCalibrated = true
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+            // go back to main after finished
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
               self.performSegue(withIdentifier: "Back", sender: self)
             }
         }
@@ -92,7 +97,7 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
             
             let ARFrame = sceneView.session.currentFrame
             
-            gazePoint = GazePointViewController().rayPlaneIntersection(withFaceAnchor: faceAnchor, frame: ARFrame!)
+            gazePoint = gazePointCtrl.rayPlaneIntersection(withFaceAnchor: faceAnchor, frame: ARFrame!)
         }
     }
 }

@@ -1,8 +1,8 @@
 //
-//  ViewController.swift
+//  EyeGazeViewController.swift
 //  eye-tracking
 //
-//  Created by moa on 2021-01-13.
+//  Created by moa on 2021-02-16.
 //
 
 import UIKit
@@ -10,14 +10,11 @@ import SceneKit
 import ARKit
 import WebKit
 
-class ViewController: UIViewController, ARSCNViewDelegate {
+class EyeGazeViewController: UIViewController, ARSCNViewDelegate {
 
     // MARK: - outlets
-    @IBOutlet var sceneView: ARSCNView!
-    @IBOutlet weak var webView: WKWebView!
-    @IBOutlet weak var distanceLabel: UILabel!
     @IBOutlet weak var gazeIndicator: UIImageView!
-    @IBOutlet weak var switchBtn: UISwitch!
+    @IBOutlet weak var sceneView: ARSCNView!
     
     // MARK: - variables
     var phonePointsWidth = CGFloat(414);
@@ -35,10 +32,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     let gazePointCtrl = GazePointViewController()
     
-    @IBAction func toggleGazeIndicator(_ sender: UISwitch) {
-        gazeIndicator.isHidden = !gazeIndicator.isHidden
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
      
@@ -52,6 +45,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         guard ARFaceTrackingConfiguration.isSupported else { return }
         let configuration = ARFaceTrackingConfiguration()
         sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
+        
+        gazeData = CalibrationData.data.gazePoints
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -135,6 +130,5 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         // Reset tracking and/or remove existing anchors if consistent tracking is required
         
     }
+
 }
-
-

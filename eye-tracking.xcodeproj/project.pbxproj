@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CD24E4E325DBCE6000FD5D5B /* CalibrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD24E4E225DBCE6000FD5D5B /* CalibrationViewController.swift */; };
+		CD24E4E625DBCE9D00FD5D5B /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD24E4E525DBCE9D00FD5D5B /* MainViewController.swift */; };
+		CD24E4E925DBD46E00FD5D5B /* GazePointViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD24E4E825DBD46D00FD5D5B /* GazePointViewController.swift */; };
+		CD24E4EC25DBFFD000FD5D5B /* EyeGazeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD24E4EB25DBFFD000FD5D5B /* EyeGazeViewController.swift */; };
 		CD92B10725AF1A850072E4E5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD92B10625AF1A850072E4E5 /* AppDelegate.swift */; };
 		CD92B10925AF1A850072E4E5 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = CD92B10825AF1A850072E4E5 /* art.scnassets */; };
 		CD92B10B25AF1A850072E4E5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD92B10A25AF1A850072E4E5 /* ViewController.swift */; };
@@ -16,6 +20,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		CD24E4E225DBCE6000FD5D5B /* CalibrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalibrationViewController.swift; sourceTree = "<group>"; };
+		CD24E4E525DBCE9D00FD5D5B /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		CD24E4E825DBD46D00FD5D5B /* GazePointViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GazePointViewController.swift; sourceTree = "<group>"; };
+		CD24E4EB25DBFFD000FD5D5B /* EyeGazeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EyeGazeViewController.swift; sourceTree = "<group>"; };
 		CD92B10325AF1A850072E4E5 /* eye-tracking.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "eye-tracking.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD92B10625AF1A850072E4E5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CD92B10825AF1A850072E4E5 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
@@ -60,6 +68,10 @@
 				CD92B10825AF1A850072E4E5 /* art.scnassets */,
 				CD92B10A25AF1A850072E4E5 /* ViewController.swift */,
 				CD92B10C25AF1A850072E4E5 /* Main.storyboard */,
+				CD24E4EB25DBFFD000FD5D5B /* EyeGazeViewController.swift */,
+				CD24E4E525DBCE9D00FD5D5B /* MainViewController.swift */,
+				CD24E4E225DBCE6000FD5D5B /* CalibrationViewController.swift */,
+				CD24E4E825DBD46D00FD5D5B /* GazePointViewController.swift */,
 				CD92B10F25AF1A870072E4E5 /* Assets.xcassets */,
 				CD92B11125AF1A870072E4E5 /* LaunchScreen.storyboard */,
 				CD92B11425AF1A870072E4E5 /* Info.plist */,
@@ -139,7 +151,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				CD92B10B25AF1A850072E4E5 /* ViewController.swift in Sources */,
+				CD24E4E925DBD46E00FD5D5B /* GazePointViewController.swift in Sources */,
+				CD24E4E325DBCE6000FD5D5B /* CalibrationViewController.swift in Sources */,
 				CD92B10725AF1A850072E4E5 /* AppDelegate.swift in Sources */,
+				CD24E4E625DBCE9D00FD5D5B /* MainViewController.swift in Sources */,
+				CD24E4EC25DBFFD000FD5D5B /* EyeGazeViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -287,13 +303,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = R5DCAGWA7V;
+				DEVELOPMENT_TEAM = 8959K9SBUN;
 				INFOPLIST_FILE = "eye-tracking/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.mina-eye-tracking";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.moa.eye-tracking";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -312,7 +328,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.mina-eye-tracking";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.moa.eye-tracking";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

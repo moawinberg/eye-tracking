@@ -34,7 +34,7 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
     
     @IBAction func next(_ sender: UIButton) {
         if (index < 5) {
-            PoR.center = calibrationPoints[index]
+            PoR.center = CalibrationData.data.calibrationPoints[index]
             gazeData[index] = gazePoint
             
             index += 1
@@ -46,8 +46,6 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
             // save data to struct
             CalibrationData.data.gazePoints = gazeData
             CalibrationData.data.isCalibrated = true
-            CalibrationData.data.calibrationPoints = calibrationPoints
-            print(type(of: calibrationPoints))
             
             // go back to main after finished
             DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
@@ -56,14 +54,6 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
         }
     }
     
-    var calibrationPoints = [
-        CGPoint(x: 50, y: 850), // bottom-left,
-        CGPoint(x: 360, y: 850), // bottom-right
-        CGPoint(x: 50, y: 50), // top-left
-        CGPoint(x: 360, y: 50), // top-right
-        CGPoint(x: 207, y: 448) // center
-    ]
- 
     override func viewDidLoad() {
         super.viewDidLoad()
         

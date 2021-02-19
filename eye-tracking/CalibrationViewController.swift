@@ -48,7 +48,7 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
             CalibrationData.data.isCalibrated = true
             
             // go back to main after finished
-            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
               self.performSegue(withIdentifier: "Back", sender: self)
             }
         }

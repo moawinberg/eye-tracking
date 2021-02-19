@@ -15,12 +15,38 @@ class EyeGazeViewController: UIViewController, ARSCNViewDelegate {
     // MARK: - outlets
     @IBOutlet weak var gazeIndicator: UIImageView!
     @IBOutlet weak var sceneView: ARSCNView!
+    @IBOutlet weak var InfoPage: UIView!
+    @IBOutlet weak var confirmText: UILabel!
+    @IBOutlet weak var backBtn: UIButton!
+    @IBOutlet weak var stopBtn: UIButton!
     
     // MARK: - variables
     var leftEye: SCNNode = SCNNode()
     var rightEye: SCNNode = SCNNode()
+    var isRecording = false
     
     let gazePointCtrl = GazePointViewController()
+    var gazePoints: [CGPoint] = []
+    
+    @IBAction func stop(_ sender: UIButton) {
+        isRecording = false
+        confirmText.isHidden = false
+        gazeIndicator.isHidden = true
+        stopBtn.isHidden = true
+        
+        print("collected data: ", gazePoints)
+        
+        // go back to main after finished
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+          self.performSegue(withIdentifier: "Back", sender: self)
+        }
+    }
+    
+    @IBAction func start(_ sender: UIButton) {
+        InfoPage.isHidden = true
+        isRecording = true
+        backBtn.isHidden = true
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +54,8 @@ class EyeGazeViewController: UIViewController, ARSCNViewDelegate {
         sceneView.delegate = self
         sceneView.automaticallyUpdatesLighting = true
         UIApplication.shared.isIdleTimerDisabled = true
+        
+        confirmText.isHidden = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -74,6 +102,10 @@ class EyeGazeViewController: UIViewController, ARSCNViewDelegate {
             let gazePoint = gazePointCtrl.rayPlaneIntersection(withFaceAnchor: faceAnchor, frame: ARFrame!)
             
             // let distance = averageDistance()
+            
+            if (isRecording) {
+                gazePoints.append(gazePoint)
+            }
             
             DispatchQueue.main.async {
                 self.gazeIndicator.center = gazePoint

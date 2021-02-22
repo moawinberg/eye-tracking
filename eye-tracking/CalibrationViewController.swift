@@ -28,11 +28,7 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
     
     let gazePointCtrl = GazePointViewController()
     
-    @IBAction func start(_ sender: UIButton) {
-        infoPage.isHidden = true
-    }
-    
-    @IBAction func next(_ sender: UIButton) {
+    func calibrate() {
         if (index < 5) {
             PoR.center = CalibrationData.data.calibrationPoints[index]
             gazeData[index] = gazePoint
@@ -52,6 +48,16 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
               self.performSegue(withIdentifier: "Back", sender: self)
             }
         }
+    }
+    
+    @IBAction func start(_ sender: UIButton) {
+        infoPage.isHidden = true
+        calibrate()
+
+    }
+    
+    @IBAction func next(_ sender: UIButton) {
+        calibrate()
     }
     
     override func viewDidLoad() {

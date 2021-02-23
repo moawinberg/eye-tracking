@@ -15,6 +15,8 @@ class GazePointViewController: UIViewController {
     var gazePoint = CGPoint(x: 0, y: 0)
     var calibrationScaleWidth = CGFloat(4)
     var calibrationScaleHeight = CGFloat(4)
+    var displacement_x = CGFloat(0)
+    var displacement_y = CGFloat(0)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,12 +61,25 @@ class GazePointViewController: UIViewController {
             let calibrationWidth = CGFloat(calibrationPoints[1].x) - CGFloat(calibrationPoints[2].x)
             let calibrationHeight = CGFloat(calibrationPoints[1].y) - CGFloat(calibrationPoints[3].y)
             
-            calibrationScaleWidth = calibrationWidth / calibrationGazeWidth //x-wise factor that is multiplied later
-            calibrationScaleHeight = calibrationHeight / calibrationGazeHeight //y-wise factor that is multiplied later
+            calibrationScaleWidth = calibrationWidth / calibrationGazeWidth //divide by  start value of scale? //x-wise factor that is multiplied later
+            calibrationScaleHeight = calibrationHeight / calibrationGazeHeight //divide by start value of scale  //y-wise factor that is multiplied later
+            let num_points = [0, 1, 2, 3, 4]
+            for i in num_points{
+                displacement_x += CGFloat(CGFloat(calibrationGazePoints[i]!.x) - CGFloat(calibrationPoints[i].x))
+                displacement_y += CGFloat(CGFloat(calibrationGazePoints[i]!.y) - CGFloat(calibrationPoints[i].y))
+                if i == (num_points.count - 1){
+                    displacement_x /= (CGFloat(num_points.count)*calibrationScaleWidth)
+                    print(displacement_x)
+                    displacement_y /= (CGFloat(num_points.count)*calibrationScaleHeight)
+                    print(displacement_y)
+                }
+            }
+            
         }
         
-        let p_x = CGFloat(avgIntersectionPoint.x / avgIntersectionPoint.w) * calibrationScaleWidth // remove homogenous coordinate
-        let p_y = CGFloat(avgIntersectionPoint.y / avgIntersectionPoint.w) * calibrationScaleHeight
+        let p_x = CGFloat(avgIntersectionPoint.x / avgIntersectionPoint.w) * calibrationScaleWidth //+ CGFloat(displacement_x)// remove homogenous coordinate
+        print("px", p_x)
+        let p_y = CGFloat(avgIntersectionPoint.y / avgIntersectionPoint.w) * calibrationScaleHeight //+ CGFloat(displacement_y)
         
         let xPos = (p_x * phonePointsWidth) + phonePointsWidth/2 // positioned in top left corner, translate to half screen
         let yPos = (-p_y * phonePointsHeight) + phonePointsHeight/2 // y is negative along screen

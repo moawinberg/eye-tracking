@@ -69,8 +69,9 @@ class GazePointViewController: UIViewController {
         let xPos = (p_x * phonePointsWidth) + phonePointsWidth/2 // positioned in top left corner, translate to half screen
         let yPos = (-p_y * phonePointsHeight) + phonePointsHeight/2 // y is negative along screen
         
-        gazePoint.x = xPos
-        gazePoint.y = yPos
+        
+        gazePoint.x = round(10*xPos)/10 // round with 1 decimal
+        gazePoint.y = round(10*yPos)/10
         
         return gazePoint
     }

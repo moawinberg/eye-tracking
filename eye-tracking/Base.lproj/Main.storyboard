@@ -30,21 +30,6 @@
                                 <rect key="frame" x="20" y="48.5" width="20" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FJq-JS-K4y">
-                                <rect key="frame" x="20" y="791" width="374" height="51"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" systemColor="opaqueSeparatorColor"/>
-                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <state key="normal" title="Next"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="5"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="next:" destination="Dxa-YG-hgQ" eventType="touchUpInside" id="6bZ-Xg-6mG"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ajf-3X-ohh">
                                 <rect key="frame" x="20" y="43" width="69" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -108,7 +93,6 @@
                         <outlet property="PoR" destination="iHP-y4-tDI" id="Bhg-PE-ex5"/>
                         <outlet property="finishedLabel" destination="eXX-jt-1JB" id="wS1-y2-m09"/>
                         <outlet property="infoPage" destination="3Wk-4U-dhZ" id="QEI-Wh-gaI"/>
-                        <outlet property="nextBtn" destination="FJq-JS-K4y" id="bUc-PY-tVn"/>
                         <outlet property="sceneView" destination="DbB-XA-ZhB" id="iU7-H8-asW"/>
                     </connections>
                 </viewController>
@@ -291,7 +275,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="4Ul-3B-KS7"/>
+        <segue reference="vRa-bv-pzm"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="arrow.backward" catalog="system" width="128" height="98"/>

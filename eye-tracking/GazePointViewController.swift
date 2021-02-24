@@ -38,7 +38,6 @@ class GazePointViewController: UIViewController {
         for value in valuesX {
             sumX += value
         }
-        
         for value in valuesY {
             sumY += value
         }
@@ -108,8 +107,8 @@ class GazePointViewController: UIViewController {
         let p_x = CGFloat(smoothedIntesectionPoint.x) * calibrationScaleWidth //+ CGFloat(displacement_x)
         let p_y = CGFloat(smoothedIntesectionPoint.y) * calibrationScaleHeight //+ CGFloat(displacement_y)
         
-        let xPos = (p_x * phonePointsWidth) + phonePointsWidth/2 // positioned in top left corner, translate to half screen
-        let yPos = (-p_y * phonePointsHeight) + phonePointsHeight/2 // y is negative along screen
+        let xPos = (p_x + 0.5) * phonePointsWidth // positioned in top left corner, translate to half screen
+        let yPos = (1 - (p_y + 0.5)) * phonePointsHeight // y is negative along screen
         
         gazePoint.x = round(10*xPos)/10 // round with 1 decimal
         gazePoint.y = round(10*yPos)/10

@@ -32,6 +32,7 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
     @IBAction func start(_ sender: UIButton) {
         DispatchQueue.main.async {
             self.infoPage.isHidden = true
+            self.PoR.center = CalibrationData.data.calibrationPoints[self.index]
         }
         NotificationCenter.default.addObserver(self, selector: #selector(self.methodOfReceivedNotification(notification:)), name: Notification.Name("NotificationIdentifier"), object: nil)
     }
@@ -67,7 +68,7 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
         }
 
         // save data to struct
-        CalibrationData.data.gazePoints = gazeData
+        CalibrationData.data.result = gazeData
         CalibrationData.data.isCalibrated = true
         
         // go back to main after finished

@@ -9,7 +9,7 @@ import UIKit
 
 struct CalibrationData {
     static var data: CalibrationData = CalibrationData()
-    var gazePoints: [Int: CGPoint] = [:]
+    var result: [Int: CGPoint] = [:]
     var isCalibrated: Bool = false
     var calibrationPoints = [
         CGPoint(x: 50, y: 750), // bottom-left,

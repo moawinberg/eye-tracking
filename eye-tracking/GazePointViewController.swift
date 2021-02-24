@@ -17,13 +17,36 @@ class GazePointViewController: UIViewController {
     var calibrationScaleHeight = CGFloat(4)
     var displacement_x = CGFloat(0)
     var displacement_y = CGFloat(0)
+    var valuesX: [CGFloat] = []
+    var valuesY: [CGFloat] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
     }
     
-    func smoothing() {
-        // do smoothing here
+    func smoothing(point : simd_float4) -> CGPoint {
+        let threshold = 10
+        valuesX.append(CGFloat(point.x))
+        valuesY.append(CGFloat(point.y))
+        
+        valuesX = valuesX.suffix(threshold)
+        valuesY = valuesY.suffix(threshold)
+        
+        var sumX = CGFloat(0)
+        var sumY = CGFloat(0)
+        
+        for value in valuesX {
+            sumX += value
+        }
+        
+        for value in valuesY {
+            sumY += value
+        }
+        
+        let avgX = sumX / CGFloat(valuesX.count)
+        let avgY = sumY / CGFloat(valuesY.count)
+        
+        return CGPoint(x: avgX, y: avgY)
     }
     
     func adjustMapping() {
@@ -73,16 +96,17 @@ class GazePointViewController: UIViewController {
         let tRight = (0.0 - cameraEyePositionRight.z) / cameraEyeDirectionRight.z
         let intersectionPointRight = cameraEyePositionRight + tRight*cameraEyeDirectionRight
         
-        let avgIntersectionPoint = (intersectionPointLeft + intersectionPointRight) / 2
+        var intersectionPoint = (intersectionPointLeft + intersectionPointRight) / 2
+        intersectionPoint /= intersectionPoint.w // remove homogenous coord
         
-        smoothing()
+        let smoothedIntesectionPoint = smoothing(point: intersectionPoint)
         
         if (CalibrationData.data.isCalibrated) {
             adjustMapping()
         }
 
-        let p_x = CGFloat(avgIntersectionPoint.x / avgIntersectionPoint.w) * calibrationScaleWidth //+ CGFloat(displacement_x)// remove homogenous coordinate
-        let p_y = CGFloat(avgIntersectionPoint.y / avgIntersectionPoint.w) * calibrationScaleHeight //+ CGFloat(displacement_y)
+        let p_x = CGFloat(smoothedIntesectionPoint.x) * calibrationScaleWidth //+ CGFloat(displacement_x)
+        let p_y = CGFloat(smoothedIntesectionPoint.y) * calibrationScaleHeight //+ CGFloat(displacement_y)
         
         let xPos = (p_x * phonePointsWidth) + phonePointsWidth/2 // positioned in top left corner, translate to half screen
         let yPos = (-p_y * phonePointsHeight) + phonePointsHeight/2 // y is negative along screen

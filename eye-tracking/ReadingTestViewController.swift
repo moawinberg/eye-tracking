@@ -10,7 +10,7 @@ import SceneKit
 import ARKit
 import WebKit
 
-class EyeGazeViewController: UIViewController, ARSCNViewDelegate {
+class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
 
     // MARK: - outlets
     @IBOutlet weak var gazeIndicator: UIImageView!
@@ -19,6 +19,8 @@ class EyeGazeViewController: UIViewController, ARSCNViewDelegate {
     @IBOutlet weak var confirmText: UILabel!
     @IBOutlet weak var backBtn: UIButton!
     @IBOutlet weak var stopBtn: UIButton!
+    @IBOutlet weak var backArrow: UIImageView!
+    
     
     // MARK: - variables
     var leftEye: SCNNode = SCNNode()
@@ -29,10 +31,12 @@ class EyeGazeViewController: UIViewController, ARSCNViewDelegate {
     var gazePoints: [CGPoint] = []
     
     @IBAction func stop(_ sender: UIButton) {
-        isRecording = false
-        confirmText.isHidden = false
-        gazeIndicator.isHidden = true
-        stopBtn.isHidden = true
+        DispatchQueue.main.async {
+            self.isRecording = false
+            self.confirmText.isHidden = false
+            self.gazeIndicator.isHidden = true
+            self.stopBtn.isHidden = true
+        }
         
         print("collected data: ", gazePoints)
         
@@ -43,9 +47,12 @@ class EyeGazeViewController: UIViewController, ARSCNViewDelegate {
     }
     
     @IBAction func start(_ sender: UIButton) {
-        InfoPage.isHidden = true
-        isRecording = true
-        backBtn.isHidden = true
+        DispatchQueue.main.async {
+            self.InfoPage.isHidden = true
+            self.isRecording = true
+            self.backBtn.isHidden = true
+            self.backArrow.isHidden = true
+        }
     }
     
     override func viewDidLoad() {

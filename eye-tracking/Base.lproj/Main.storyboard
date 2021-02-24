@@ -88,7 +88,6 @@
                         <viewLayoutGuide key="safeArea" id="B0q-HJ-ght"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <navigationItem key="navigationItem" id="1P7-cP-LSE"/>
                     <connections>
                         <outlet property="PoR" destination="iHP-y4-tDI" id="Bhg-PE-ex5"/>
                         <outlet property="finishedLabel" destination="eXX-jt-1JB" id="wS1-y2-m09"/>
@@ -100,10 +99,10 @@
             </objects>
             <point key="canvasLocation" x="-257.97101449275362" y="60.9375"/>
         </scene>
-        <!--Eye Gaze View Controller-->
+        <!--Reading Test View Controller-->
         <scene sceneID="eTY-d5-e0T">
             <objects>
-                <viewController storyboardIdentifier="eyeGazeViewController" modalPresentationStyle="fullScreen" hidesBottomBarWhenPushed="YES" id="kra-CR-gcs" customClass="EyeGazeViewController" customModule="eye_tracking" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="eyeGazeViewController" modalPresentationStyle="fullScreen" hidesBottomBarWhenPushed="YES" id="kra-CR-gcs" customClass="ReadingTestViewController" customModule="eye_tracking" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="aur-1Y-dGA">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -113,7 +112,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NXb-Ze-RGS">
-                                <rect key="frame" x="12" y="44" width="76" height="30"/>
+                                <rect key="frame" x="12" y="42" width="77" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Cancel"/>
                                 <connections>
@@ -194,9 +193,9 @@
                         <viewLayoutGuide key="safeArea" id="w2n-KG-xlr"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <navigationItem key="navigationItem" id="3Ls-Dh-KBC"/>
                     <connections>
                         <outlet property="InfoPage" destination="b6V-bd-GuZ" id="eu2-xO-F58"/>
+                        <outlet property="backArrow" destination="nd9-pE-vuP" id="Ltg-OK-5Vb"/>
                         <outlet property="backBtn" destination="NXb-Ze-RGS" id="Apn-8Z-gHg"/>
                         <outlet property="confirmText" destination="LqS-5o-uDk" id="dEC-6G-rZF"/>
                         <outlet property="gazeIndicator" destination="wXc-XM-uua" id="a2h-NO-LTN"/>
@@ -266,7 +265,6 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" id="x90-Mj-70v"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2qd-Gf-Fwk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

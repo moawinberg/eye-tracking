@@ -34,10 +34,10 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
             self.infoPage.isHidden = true
             self.PoR.center = CalibrationData.data.calibrationPoints[self.index]
         }
-        NotificationCenter.default.addObserver(self, selector: #selector(self.methodOfReceivedNotification(notification:)), name: Notification.Name("NotificationIdentifier"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.checkFixation(notification:)), name: Notification.Name("NotificationIdentifier"), object: nil)
     }
     
-    @objc func methodOfReceivedNotification(notification: Notification) {
+    @objc func checkFixation(notification: Notification) {
         let gazePoint = notification.userInfo!["gazePoint"]
         let previousGazePoint = notification.userInfo!["previousGazePoint"]
         

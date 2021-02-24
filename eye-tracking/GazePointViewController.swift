@@ -26,21 +26,15 @@ class GazePointViewController: UIViewController {
     
     func smoothing(point : simd_float4) -> CGPoint {
         let threshold = 10
+        
         valuesX.append(CGFloat(point.x))
         valuesY.append(CGFloat(point.y))
         
         valuesX = valuesX.suffix(threshold)
         valuesY = valuesY.suffix(threshold)
-        
-        var sumX = CGFloat(0)
-        var sumY = CGFloat(0)
-        
-        for value in valuesX {
-            sumX += value
-        }
-        for value in valuesY {
-            sumY += value
-        }
+    
+        let sumX = valuesX.reduce(0, +)
+        let sumY = valuesY.reduce(0, +)
         
         let avgX = sumX / CGFloat(valuesX.count)
         let avgY = sumY / CGFloat(valuesY.count)

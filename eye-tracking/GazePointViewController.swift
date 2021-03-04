@@ -16,40 +16,32 @@ class GazePointViewController: UIViewController {
     var calibrationScaleHeight = CGFloat(1)
     var displacement_x = CGFloat(0)
     var displacement_y = CGFloat(0)
-    var valuesX: [CGFloat] = []
-    var valuesY: [CGFloat] = []
     var phonePointsWidth = CGFloat(414)
     var phonePointsHeight = CGFloat(896)
-
+    var leftEyeIntersections: [simd_float4] = []
+    var rightEyeIntersections: [simd_float4] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
     
-    func smoothedGazePoint(gazePoints: [String : CGPoint]) -> CGPoint {
-        let threshold = 50
-        let decimalValue = CGFloat(100)
+    func screenPoint(leftEyePoint: CGPoint, rightEyePoint: CGPoint) -> CGPoint {
+        let decimalValue = CGFloat(10)
+        var x = (leftEyePoint.x + rightEyePoint.x) / 2
+        var y = (leftEyePoint.y + rightEyePoint.y) / 2
         
-        // get avg from both eyes
-        let x = (gazePoints["left_eye"]!.x + gazePoints["right_eye"]!.x) / 2
-        let y = (gazePoints["left_eye"]!.y + gazePoints["right_eye"]!.y) / 2
+        x *= phonePointsWidth
+        y *= phonePointsHeight
         
-        valuesX.append(round(decimalValue*x)/decimalValue)
-        valuesY.append(round(decimalValue*y)/decimalValue)
+        x = round(decimalValue*x)/decimalValue
+        y = round(decimalValue*y)/decimalValue
         
-        valuesX = valuesX.suffix(threshold)
-        valuesY = valuesY.suffix(threshold)
-    
-        let sumX = valuesX.reduce(0, +)
-        let sumY = valuesY.reduce(0, +)
-        
-        let avgX = sumX / CGFloat(valuesX.count)
-        let avgY = sumY / CGFloat(valuesY.count)
-        
-        // NDC to screen coords
-        return CGPoint(x: avgX * phonePointsWidth, y: avgY * phonePointsHeight)
+        return CGPoint(x: x, y: y)
     }
     
     func adjustMapping() {
+        // both calibration points and result are in screen coords!
+        
         let calibrationResult = CalibrationData.data.result
         let calibrationPoints = CalibrationData.data.calibrationPoints
         
@@ -69,6 +61,40 @@ class GazePointViewController: UIViewController {
 
         displacement_x /= CGFloat(calibrationPoints.count)
         displacement_y /= CGFloat(calibrationPoints.count)
+    }
+    
+    func smoothing(leftEyeIntersection: simd_float4, rightEyeIntersection: simd_float4) -> Dictionary<String, CGPoint> {
+        let threshold = 50
+        leftEyeIntersections.append(leftEyeIntersection)
+        rightEyeIntersections.append(leftEyeIntersection)
+        
+        leftEyeIntersections = leftEyeIntersections.suffix(threshold)
+        rightEyeIntersections = rightEyeIntersections.suffix(threshold)
+        
+        var sumXLeft = Float(0);
+        var sumYLeft = Float(0);
+        for v in leftEyeIntersections {
+            sumXLeft += v.x
+            sumYLeft += v.y
+        }
+        
+        var sumXRight = Float(0);
+        var sumYRight = Float(0);
+        for v in rightEyeIntersections {
+            sumXRight += v.x
+            sumYRight += v.y
+        }
+        
+        let avgLeftX = sumXLeft / Float(leftEyeIntersections.count)
+        let avgLeftY = sumYLeft / Float(leftEyeIntersections.count)
+        
+        let avgRightX = sumXRight / Float(rightEyeIntersections.count)
+        let avgRightY = sumYRight / Float(rightEyeIntersections.count)
+        
+        let leftEyePos = CGPoint(x: CGFloat(avgLeftX), y: CGFloat(avgLeftY))
+        let rightEyePos = CGPoint(x: CGFloat(avgRightX), y: CGFloat(avgRightY))
+        
+        return ["left": leftEyePos, "right": rightEyePos]
     }
     
     func getIntersection(withFaceAnchor anchor: ARFaceAnchor, frame: ARFrame, worldTransformMatrix: simd_float4x4) -> simd_float4 {
@@ -104,27 +130,33 @@ class GazePointViewController: UIViewController {
         rightEyeIntersection.x -= diffHeadX
         rightEyeIntersection.y -= diffHeadY
         
+        // apply smoothing for both eyes
+        let smoothedPoints = smoothing(leftEyeIntersection: leftEyeIntersection, rightEyeIntersection: rightEyeIntersection)
+        var leftEyePoint = smoothedPoints["left"]!
+        var rightEyePoint = smoothedPoints["right"]!
+        
         if (CalibrationData.data.isCalibrated) {
             adjustMapping()
         }
+ 
+        leftEyePoint.x = leftEyePoint.x * calibrationScaleWidth // + displacement_x
+        leftEyePoint.y = leftEyePoint.y * calibrationScaleHeight // + displacement_y
         
-        var leftEyeX = (CGFloat(leftEyeIntersection.x) * calibrationScaleWidth) // + displacement_x
-        var leftEyeY = (CGFloat(leftEyeIntersection.y) * calibrationScaleHeight) // + displacement_y
-        
-        var rightEyeX = (CGFloat(leftEyeIntersection.x) * calibrationScaleWidth) // + displacement_x
-        var rightEyeY = (CGFloat(leftEyeIntersection.y) * calibrationScaleHeight) // + displacement_y
+        rightEyePoint.x = rightEyePoint.x * calibrationScaleWidth // + displacement_x
+        rightEyePoint.y = rightEyePoint.y * calibrationScaleHeight // + displacement_y
         
         // translate to origo from top left to center of screen, y is negative along screen
-        leftEyeX = (leftEyeX + 0.5)
-        leftEyeY = (1 - (leftEyeY + 0.5))
+        leftEyePoint.x = (leftEyePoint.x + 0.5)
+        leftEyePoint.y = (1 - (leftEyePoint.y + 0.5))
         
-        rightEyeX = (rightEyeX + 0.5) // positioned in top left corner, translate to half screen
-        rightEyeY = (1 - (rightEyeY + 0.5))
-
-        let leftEyePos = CGPoint(x: leftEyeX, y: leftEyeY)
-        let rightEyePos = CGPoint(x: rightEyeX, y: rightEyeY)
-        
-        return ["left_eye": leftEyePos, "right_eye": rightEyePos]
+        rightEyePoint.x = (rightEyePoint.x + 0.5)
+        rightEyePoint.y = (1 - (rightEyePoint.y + 0.5))
+ 
+        return [
+            "left_eye": CGPoint(x: leftEyePoint.x, y: leftEyePoint.y),
+            "right_eye": CGPoint(x: rightEyePoint.x, y: rightEyePoint.y),
+            "POG": screenPoint(leftEyePoint: leftEyePoint, rightEyePoint: rightEyePoint)
+        ]
     }
 
     ////  NOT USED

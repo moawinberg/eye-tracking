@@ -120,8 +120,8 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
             
             // wait 100 ms for new gazePoint
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
-                let gazePointsNDC = self.gazePointCtrl.rayPlaneIntersection(withFaceAnchor: faceAnchor, frame: ARFrame!)
-                self.gazePoint = self.gazePointCtrl.smoothedGazePoint(gazePoints: gazePointsNDC)
+                let gazePoints = self.gazePointCtrl.rayPlaneIntersection(withFaceAnchor: faceAnchor, frame: ARFrame!)
+                self.gazePoint = gazePoints["POG"]!
                 
                 // don't run if waiting for next calibration point
                 if (!self.wait) {

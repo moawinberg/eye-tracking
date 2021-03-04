@@ -105,20 +105,20 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
             faceGeometry.update(from: faceAnchor.geometry)
             let ARFrame = sceneView.session.currentFrame
             
-            let gazePointsNDC = self.gazePointCtrl.rayPlaneIntersection(withFaceAnchor: faceAnchor, frame: ARFrame!)
+            let gazePoints = self.gazePointCtrl.rayPlaneIntersection(withFaceAnchor: faceAnchor, frame: ARFrame!)
             
             if (isRecording) {
                 // save data
                 gazeData.append([
-                    "left_eye": gazePointsNDC["left_eye"]!,
-                    "right_eye": gazePointsNDC["right_eye"]!,
+                    "left_eye": gazePoints["left_eye"]!,
+                    "right_eye": gazePoints["right_eye"]!,
                     "left_eye_dist": distanceToScreen(eyeNode: leftEye),
                     "right_eye_dist": distanceToScreen(eyeNode: rightEye)
                 ])
             }
             
             DispatchQueue.main.async {
-                self.gazeIndicator.center = self.gazePointCtrl.smoothedGazePoint(gazePoints: gazePointsNDC)
+                self.gazeIndicator.center = gazePoints["POG"]!
             }
         }
     }

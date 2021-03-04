@@ -47,7 +47,7 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
         
             // set new point after 2 seconds
             DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
-                if (self.index < 4) {
+                if (self.index < CalibrationData.data.calibrationPoints.count - 1) {
                     self.wait = false
                     self.index += 1
                     self.PoR.tintColor = UIColor.red

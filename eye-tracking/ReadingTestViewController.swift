@@ -26,9 +26,8 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
     var leftEye: SCNNode = SCNNode()
     var rightEye: SCNNode = SCNNode()
     var isRecording = false
-    
     let gazePointCtrl = GazePointViewController()
-    var gazePoints: [CGPoint] = []
+    var gazeData: [[String : Any]] = []
     
     @IBAction func stop(_ sender: UIButton) {
         DispatchQueue.main.async {
@@ -38,7 +37,7 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
             self.stopBtn.isHidden = true
         }
         
-        print("collected data: ", gazePoints)
+        print("collected data: ", gazeData)
         
         // go back to main after finished
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
@@ -80,16 +79,6 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
     }
 
     // MARK: - ARSCNViewDelegate
-    func averageDistance() -> Float {
-        // euqludian distance of the eyes to the camera don't have to subtract because the center of worldPosition (camera) is (0,0,0)
-        let distanceL = sqrt(leftEye.worldPosition.x*leftEye.worldPosition.x + leftEye.worldPosition.y*leftEye.worldPosition.y + leftEye.worldPosition.z*leftEye.worldPosition.z)
-        let distanceR = sqrt(rightEye.worldPosition.x*rightEye.worldPosition.x + rightEye.worldPosition.y*rightEye.worldPosition.y + rightEye.worldPosition.z*rightEye.worldPosition.z)
-        
-        let distance = Float((distanceL + distanceR) / 2)
-        
-        return distance
-    }
-    
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
         let faceMesh = ARSCNFaceGeometry(device: sceneView.device!)
         let node = SCNNode(geometry: faceMesh)
@@ -100,22 +89,36 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
         
         return node
     }
-
+    
+    func distanceToScreen(eyeNode: SCNNode) -> Float {
+        // euqludian distance of the eyes to the camera
+        // don't have to subtract camera pos because it's in origo
+        return sqrt(
+            eyeNode.worldPosition.x*eyeNode.worldPosition.x +
+            eyeNode.worldPosition.y*eyeNode.worldPosition.y +
+            eyeNode.worldPosition.z*eyeNode.worldPosition.z
+        )
+    }
+    
     func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
         if let faceAnchor = anchor as? ARFaceAnchor, let faceGeometry = node.geometry as? ARSCNFaceGeometry {
             faceGeometry.update(from: faceAnchor.geometry)
-            
             let ARFrame = sceneView.session.currentFrame
-            let gazePoint = gazePointCtrl.rayPlaneIntersection(withFaceAnchor: faceAnchor, frame: ARFrame!)
             
-            // let distance = averageDistance()
+            let gazePointsNDC = self.gazePointCtrl.rayPlaneIntersection(withFaceAnchor: faceAnchor, frame: ARFrame!)
             
             if (isRecording) {
-                gazePoints.append(gazePoint)
+                // save data
+                gazeData.append([
+                    "left_eye": gazePointsNDC["left_eye"]!,
+                    "right_eye": gazePointsNDC["right_eye"]!,
+                    "left_eye_dist": distanceToScreen(eyeNode: leftEye),
+                    "right_eye_dist": distanceToScreen(eyeNode: rightEye)
+                ])
             }
             
             DispatchQueue.main.async {
-                self.gazeIndicator.center = gazePoint
+                self.gazeIndicator.center = self.gazePointCtrl.smoothedGazePoint(gazePoints: gazePointsNDC)
             }
         }
     }

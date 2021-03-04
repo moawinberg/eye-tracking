@@ -10,8 +10,6 @@ import SceneKit
 import ARKit
 
 class GazePointViewController: UIViewController {
-    var phonePointsWidth = CGFloat(414);
-    var phonePointsHeight = CGFloat(896);
     var gazePoint = CGPoint(x: 0, y: 0)
     var previousHeadPoint = simd_float4()
     var calibrationScaleWidth = CGFloat(1)
@@ -20,16 +18,23 @@ class GazePointViewController: UIViewController {
     var displacement_y = CGFloat(0)
     var valuesX: [CGFloat] = []
     var valuesY: [CGFloat] = []
+    var phonePointsWidth = CGFloat(414)
+    var phonePointsHeight = CGFloat(896)
 
     override func viewDidLoad() {
         super.viewDidLoad()
     }
     
-    func smoothing(point : simd_float4) -> CGPoint {
+    func smoothedGazePoint(gazePoints: [String : CGPoint]) -> CGPoint {
         let threshold = 50
+        let decimalValue = CGFloat(100)
         
-        valuesX.append(CGFloat(point.x))
-        valuesY.append(CGFloat(point.y))
+        // get avg from both eyes
+        let x = (gazePoints["left_eye"]!.x + gazePoints["right_eye"]!.x) / 2
+        let y = (gazePoints["left_eye"]!.y + gazePoints["right_eye"]!.y) / 2
+        
+        valuesX.append(round(decimalValue*x)/decimalValue)
+        valuesY.append(round(decimalValue*y)/decimalValue)
         
         valuesX = valuesX.suffix(threshold)
         valuesY = valuesY.suffix(threshold)
@@ -40,7 +45,8 @@ class GazePointViewController: UIViewController {
         let avgX = sumX / CGFloat(valuesX.count)
         let avgY = sumY / CGFloat(valuesY.count)
         
-        return CGPoint(x: avgX, y: avgY)
+        // NDC to screen coords
+        return CGPoint(x: avgX * phonePointsWidth, y: avgY * phonePointsHeight)
     }
     
     func adjustMapping() {
@@ -52,7 +58,7 @@ class GazePointViewController: UIViewController {
 
         let calibrationWidth = CGFloat(calibrationPoints[1].x) - CGFloat(calibrationPoints[0].x)
         let calibrationHeight = CGFloat(calibrationPoints[0].y) - CGFloat(calibrationPoints[2].y)
-        print(calibrationWidth, calibrationGazeWidth)
+
         calibrationScaleWidth = calibrationWidth / calibrationGazeWidth //divide by  start value of scale? //x-wise factor that is multiplied later
         calibrationScaleHeight = calibrationHeight / calibrationGazeHeight //divide by start value of scale  //y-wise factor that is multiplied later
         
@@ -63,70 +69,62 @@ class GazePointViewController: UIViewController {
 
         displacement_x /= CGFloat(calibrationPoints.count)
         displacement_y /= CGFloat(calibrationPoints.count)
-        
-        print("1", calibrationScaleWidth)
-        print("2", displacement_x, displacement_y)
     }
     
-    func rayPlaneIntersection(withFaceAnchor anchor: ARFaceAnchor, frame: ARFrame) -> CGPoint {
+    func getIntersection(withFaceAnchor anchor: ARFaceAnchor, frame: ARFrame, worldTransformMatrix: simd_float4x4) -> simd_float4 {
         let cameraTransformMatrix = frame.camera.viewMatrix(for: .portrait)
-        let worldTransformMatrixLeft = anchor.transform * anchor.leftEyeTransform
-        let worldTransformMatrixRight = anchor.transform * anchor.rightEyeTransform
-        let worldTransformMatrixHead = anchor.transform
-        
-        let worldToCameraMatrixLeft = cameraTransformMatrix * worldTransformMatrixLeft
-        let worldToCameraMatrixRight = cameraTransformMatrix * worldTransformMatrixRight
-        let worldToCameraMatrixHead = cameraTransformMatrix * worldTransformMatrixHead
         
         let localEyePosition = simd_float4(0, 0, 0, 1) // local space for eye
         let localEyeDirection = simd_float4(0, 0, 1, 0) // direction vector for eye
         
-        let cameraEyePositionLeft = worldToCameraMatrixLeft * localEyePosition // eye center in camera coords
-        let cameraEyeDirectionLeft = worldToCameraMatrixLeft * localEyeDirection // direction vector in camera coords
+        let worldToCameraMatrix = cameraTransformMatrix * worldTransformMatrix
         
-        let cameraEyePositionRight = worldToCameraMatrixRight * localEyePosition
-        let cameraEyeDirectionRight = worldToCameraMatrixRight * localEyeDirection
+        let cameraEyePosition = worldToCameraMatrix * localEyePosition // eye center in camera coords
+        let cameraEyeDirection = worldToCameraMatrix * localEyeDirection // direction vector in camera coords
         
-        let cameraEyePositionHead = worldToCameraMatrixHead * localEyePosition
-        let cameraEyeDirectionHead = worldToCameraMatrixHead * localEyeDirection
-        
-        let tLeft = (0.0 - cameraEyePositionLeft.z) / cameraEyeDirectionLeft.z // since all coords except z is 0 we only focus on z
-        let intersectionPointLeft = cameraEyePositionLeft + tLeft*cameraEyeDirectionLeft // intersection between ray-plane in NDC. value between 0 and 1
-        
-        let tRight = (0.0 - cameraEyePositionRight.z) / cameraEyeDirectionRight.z
-        let intersectionPointRight = cameraEyePositionRight + tRight*cameraEyeDirectionRight
-        
-        let tHead = (0.0 - cameraEyePositionHead.z) / cameraEyeDirectionHead.z
-        let intersectionPointHead = cameraEyePositionHead + tHead*cameraEyeDirectionHead
+        let t = (0.0 - cameraEyePosition.z) / cameraEyeDirection.z // since all coords except z is 0 we only focus on z
+        return cameraEyePosition + t * cameraEyeDirection // intersection between ray-plane in NDC. value between 0 and 1
+    }
+    
+    func rayPlaneIntersection(withFaceAnchor anchor: ARFaceAnchor, frame: ARFrame) -> [String : CGPoint] {
+        var leftEyeIntersection = getIntersection(withFaceAnchor: anchor, frame: frame, worldTransformMatrix: anchor.transform*anchor.leftEyeTransform)
+        var rightEyeIntersection = getIntersection(withFaceAnchor: anchor, frame: frame, worldTransformMatrix: anchor.transform*anchor.rightEyeTransform)
+        let headIntersection = getIntersection(withFaceAnchor: anchor, frame: frame, worldTransformMatrix: anchor.transform)
         
         // check how much head moved since last point
-        let diffHeadX = (previousHeadPoint.x - intersectionPointHead.x)
-        let diffHeadY = (previousHeadPoint.y - intersectionPointHead.y)
+        let diffHeadX = (previousHeadPoint.x - headIntersection.x)
+        let diffHeadY = (previousHeadPoint.y - headIntersection.y)
         
-        previousHeadPoint = intersectionPointHead
-        
-        var intersectionPoint = (intersectionPointLeft + intersectionPointRight) / 2
+        previousHeadPoint = headIntersection
         
         // remove movement from head
-        intersectionPoint.x -= diffHeadX
-        intersectionPoint.y -= diffHeadY
+        leftEyeIntersection.x -= diffHeadX
+        leftEyeIntersection.y -= diffHeadY
         
-        let smoothedIntesectionPoint = smoothing(point: intersectionPoint)
+        rightEyeIntersection.x -= diffHeadX
+        rightEyeIntersection.y -= diffHeadY
         
         if (CalibrationData.data.isCalibrated) {
             adjustMapping()
         }
+        
+        var leftEyeX = (CGFloat(leftEyeIntersection.x) * calibrationScaleWidth) // + displacement_x
+        var leftEyeY = (CGFloat(leftEyeIntersection.y) * calibrationScaleHeight) // + displacement_y
+        
+        var rightEyeX = (CGFloat(leftEyeIntersection.x) * calibrationScaleWidth) // + displacement_x
+        var rightEyeY = (CGFloat(leftEyeIntersection.y) * calibrationScaleHeight) // + displacement_y
+        
+        // translate to origo from top left to center of screen, y is negative along screen
+        leftEyeX = (leftEyeX + 0.5)
+        leftEyeY = (1 - (leftEyeY + 0.5))
+        
+        rightEyeX = (rightEyeX + 0.5) // positioned in top left corner, translate to half screen
+        rightEyeY = (1 - (rightEyeY + 0.5))
 
-        let p_x = (CGFloat(smoothedIntesectionPoint.x) * calibrationScaleWidth) // + displacement_x
-        let p_y = (CGFloat(smoothedIntesectionPoint.y) * calibrationScaleHeight) // + displacement_y
+        let leftEyePos = CGPoint(x: leftEyeX, y: leftEyeY)
+        let rightEyePos = CGPoint(x: rightEyeX, y: rightEyeY)
         
-        let xPos = (p_x + 0.5) * phonePointsWidth // positioned in top left corner, translate to half screen
-        let yPos = (1 - (p_y + 0.5)) * phonePointsHeight // y is negative along screen
-        
-        gazePoint.x = round(100*xPos)/100 // round with 1 decimal
-        gazePoint.y = round(100*yPos)/100
-        print("3", gazePoint)
-        return gazePoint
+        return ["left_eye": leftEyePos, "right_eye": rightEyePos]
     }
 
     ////  NOT USED

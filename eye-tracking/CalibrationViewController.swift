@@ -20,13 +20,11 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
     // MARK: - variables
     var leftEye: SCNNode = SCNNode()
     var rightEye: SCNNode = SCNNode()
-    
     var gazePoint = CGPoint()
     var previousGazePoint = CGPoint()
     var index = 0
     var gazeData: [Int: CGPoint] = [:]
     let gazePointCtrl = GazePointViewController()
-    
     var wait = false
     
     @IBAction func start(_ sender: UIButton) {
@@ -122,8 +120,9 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
             
             // wait 100 ms for new gazePoint
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
-                self.gazePoint = self.gazePointCtrl.rayPlaneIntersection(withFaceAnchor: faceAnchor, frame: ARFrame!)
-
+                let gazePointsNDC = self.gazePointCtrl.rayPlaneIntersection(withFaceAnchor: faceAnchor, frame: ARFrame!)
+                self.gazePoint = self.gazePointCtrl.smoothedGazePoint(gazePoints: gazePointsNDC)
+                
                 // don't run if waiting for next calibration point
                 if (!self.wait) {
                     // send the points to our function

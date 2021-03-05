@@ -110,15 +110,14 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
             if (isRecording) {
                 // save data
                 gazeData.append([
-                    "left_eye": gazePoints["left_eye"]!,
-                    "right_eye": gazePoints["right_eye"]!,
+                    "POG": gazePoints["POG"]!,
                     "left_eye_dist": distanceToScreen(eyeNode: leftEye),
                     "right_eye_dist": distanceToScreen(eyeNode: rightEye)
                 ])
             }
             
             DispatchQueue.main.async {
-                self.gazeIndicator.center = gazePoints["POG"]!
+                self.gazeIndicator.center = gazePoints["POG"] as! CGPoint
             }
         }
     }

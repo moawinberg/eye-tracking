@@ -16,7 +16,7 @@ struct CalibrationData {
         CGPoint(x: 360, y: 750), // bottom-right
         CGPoint(x: 50, y: 100), // top-left
         CGPoint(x: 360, y: 100), // top-right
-        CGPoint(x: 207, y: 448) // center
+        // CGPoint(x: 207, y: 448) // center
     ]
 }
 

@@ -38,13 +38,19 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
     @objc func checkFixation(notification: Notification) {
         let gazePoint = notification.userInfo!["gazePoint"]
         let previousGazePoint = notification.userInfo!["previousGazePoint"]
-        
+        //pulsating animation
+        UIImageView.animate(withDuration: 1.0, delay:0, options: [.repeat, .autoreverse], animations: {
+            self.PoR.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
+        }, completion: nil)
         // check if fixation
         if (gazePoint as! CGPoint == previousGazePoint as! CGPoint) {
             self.wait = true
+            //animation to blue
             self.gazeData[self.index] = self.gazePoint // save gazePoint
+            UIImageView.animate(withDuration: 0.5, delay: 0, options: .curveLinear, animations: {
+                self.PoR.tintColor = UIColor.blue
+              })
             self.PoR.tintColor = UIColor.blue
-        
             // set new point after 2 seconds
             DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
                 if (self.index < CalibrationData.data.calibrationPoints.count - 1) {

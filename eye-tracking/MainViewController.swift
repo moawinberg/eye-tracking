@@ -11,12 +11,28 @@ struct CalibrationData {
     static var data: CalibrationData = CalibrationData()
     var result: [Int: CGPoint] = [:]
     var isCalibrated: Bool = false
+    
     var calibrationPoints = [
-        CGPoint(x: 50, y: 750), // bottom-left,
-        CGPoint(x: 360, y: 750), // bottom-right
-        CGPoint(x: 50, y: 100), // top-left
-        CGPoint(x: 360, y: 100), // top-right
-        // CGPoint(x: 207, y: 448) // center
+        // bottom-left
+        CGPoint(
+            x: UIScreen.main.bounds.width*0.1,
+            y: UIScreen.main.bounds.height - (UIScreen.main.bounds.height*0.1)
+        ),
+        // bottom-right
+        CGPoint(
+            x: UIScreen.main.bounds.width - (UIScreen.main.bounds.width*0.1),
+            y: UIScreen.main.bounds.height - (UIScreen.main.bounds.height*0.1)
+        ),
+        // top-left
+        CGPoint(
+            x: UIScreen.main.bounds.width*0.1,
+            y: UIScreen.main.bounds.height*0.1
+        ),
+        // top-right
+        CGPoint(
+            x: UIScreen.main.bounds.width - (UIScreen.main.bounds.width*0.1),
+            y: UIScreen.main.bounds.height*0.1
+        ),
     ]
 }
 

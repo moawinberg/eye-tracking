@@ -10,18 +10,17 @@ import SceneKit
 import ARKit
 
 class GazePointViewController: UIViewController {
-    var gazePoint = CGPoint(x: 0, y: 0)
-    var previousHeadPointNDC = simd_float4()
-    var phonePointsWidth = CGFloat(414)
-    var phonePointsHeight = CGFloat(896)
+    var previousHeadIntersection = simd_float4()
     var intersections: [simd_float4] = []
+    var phonePointsWidth = Float(414)
+    var phonePointsHeight = Float(896)
     
     override func viewDidLoad() {
         super.viewDidLoad()
     }
     
     // our first mapping function
-    func correctPoint1(point: CGPoint) -> CGPoint {
+    func correctPoint(point: simd_float4) -> CGPoint {
         // both calibration points and result are in screen coords!
         if (CalibrationData.data.isCalibrated) {
             let calibrationResult = CalibrationData.data.result
@@ -36,8 +35,6 @@ class GazePointViewController: UIViewController {
             let calibrationScaleWidth = calibrationWidth / calibrationGazeWidth //divide by  start value of scale? //x-wise factor that is multiplied later
             let calibrationScaleHeight = calibrationHeight / calibrationGazeHeight //divide by start value of scale  //y-wise factor that is multiplied later
 
-            print("scale", calibrationScaleWidth, calibrationScaleHeight)
-
             var displacement_x = CGFloat(0)
             var displacement_y = CGFloat(0)
             for (index, _) in calibrationPoints.enumerated() {
@@ -47,59 +44,18 @@ class GazePointViewController: UIViewController {
 
             displacement_x /= CGFloat(calibrationPoints.count)
             displacement_y /= CGFloat(calibrationPoints.count)
-            
-            print("displacement", displacement_x, displacement_y)
 
-            let x = point.x * calibrationScaleWidth + displacement_x
-            let y = point.y * calibrationScaleHeight + displacement_y
+            let x = CGFloat(point.x) * calibrationScaleWidth + displacement_x
+            let y = CGFloat(point.y) * calibrationScaleHeight + displacement_y
             
             return CGPoint(x: x, y: y)
         } else {
-            return point
+            return CGPoint(x: CGFloat(point.x), y: CGFloat(point.y))
         }
     }
     
-    // tried correction from report
-    func correctPoint2(point: CGPoint) -> CGPoint {
-        // both calibration points and result are in screen coords!
-        if (CalibrationData.data.isCalibrated) {
-            let calibrationResult = CalibrationData.data.result
-            let calibrationPoints = CalibrationData.data.calibrationPoints
-            var corrected = simd_float2()
-            var w = Float()
-            var d_sum = Float()
-            
-            for (index, _) in calibrationPoints.enumerated() {
-                let diffx = point.x - calibrationResult[index]!.x
-                let diffy = point.y - calibrationResult[index]!.y
-                let d = sqrt(diffx*diffx + diffy*diffy)
-                d_sum += Float(d)
-            }
-            
-            for (index, _) in calibrationPoints.enumerated() {
-                var e = simd_float2()
-                
-                e[0] = Float(calibrationPoints[index].x - calibrationResult[index]!.x)
-                e[1] = Float(calibrationPoints[index].y - calibrationResult[index]!.y)
-                
-                let diffx = point.x - calibrationResult[index]!.x
-                let diffy = point.y - calibrationResult[index]!.y
-                let d = Float(sqrt(diffx*diffx + diffy*diffy))
-                
-                w = 1 / (d * 1/d_sum)
-                corrected += w*e
-            }
-            let x = point.x + CGFloat(corrected.x)
-            let y = point.y + CGFloat(corrected.y)
-            
-            return CGPoint(x: x, y: y)
-        } else {
-            return point
-        }
-    }
-    
-    func smoothing(point: simd_float4) -> CGPoint {
-        // larger threshold => more smooth but more lag
+    func smoothing(point: simd_float4) -> simd_float4 {
+        // more smoothing => more lag
         let threshold = 40
         intersections.append(point)
         intersections = intersections.suffix(threshold)
@@ -114,7 +70,7 @@ class GazePointViewController: UIViewController {
         let avgX = sumX / Float(intersections.count)
         let avgY = sumY / Float(intersections.count)
         
-        return CGPoint(x: CGFloat(avgX), y: CGFloat(avgY))
+        return simd_float4(Float(avgX), Float(avgY), point.z, point.w)
     }
     
     func getIntersection(withFaceAnchor anchor: ARFaceAnchor, frame: ARFrame, worldTransformMatrix: simd_float4x4) -> simd_float4 {
@@ -133,40 +89,54 @@ class GazePointViewController: UIViewController {
     }
     
     func rayPlaneIntersection(withFaceAnchor anchor: ARFaceAnchor, frame: ARFrame) -> [String : Any] {
-        var leftEyeIntersectionNDC = getIntersection(withFaceAnchor: anchor, frame: frame, worldTransformMatrix: anchor.transform*anchor.leftEyeTransform)
-        var rightEyeIntersectionNDC = getIntersection(withFaceAnchor: anchor, frame: frame, worldTransformMatrix: anchor.transform*anchor.rightEyeTransform)
-        let headIntersectionNDC = getIntersection(withFaceAnchor: anchor, frame: frame, worldTransformMatrix: anchor.transform)
+        var intersections = [
+            "leftEye": getIntersection(withFaceAnchor: anchor, frame: frame, worldTransformMatrix: anchor.transform*anchor.leftEyeTransform),
+            "rightEye": getIntersection(withFaceAnchor: anchor, frame: frame, worldTransformMatrix: anchor.transform*anchor.rightEyeTransform),
+            "head": getIntersection(withFaceAnchor: anchor, frame: frame, worldTransformMatrix: anchor.transform)
+        ]
         
-        // remove movement from head
-        let diffHead = previousHeadPointNDC - headIntersectionNDC
-        leftEyeIntersectionNDC -= diffHead
-        rightEyeIntersectionNDC -= diffHead
-        previousHeadPointNDC = headIntersectionNDC
+        // extract movement of head
+        let headMovement = previousHeadIntersection - intersections["head"]!
+        previousHeadIntersection = intersections["head"]!
+        
+        let scaleX = Float(10)
+        let scaleY = Float(5)
+        for eye in Array(intersections.keys) {
+            // remove movement of head
+            intersections[eye]! -= headMovement
+            
+            // scale
+            intersections[eye]!.x *= scaleX
+            intersections[eye]!.y *= scaleY
+            
+            // translate to center of screen, convert to screen coords
+            intersections[eye]!.x = (intersections[eye]!.x + 0.5) * phonePointsWidth
+            intersections[eye]!.y = (1 - (intersections[eye]!.y + 0.5)) * phonePointsHeight
+        }
 
-        let intersection = ((leftEyeIntersectionNDC + rightEyeIntersectionNDC) / 2)
-        var smoothedPoint = smoothing(point: intersection)
+        // smoth average point of both eyes
+        let averageIntersection = ((intersections["leftEye"]! + intersections["rightEye"]!) / 2)
+        let smoothedPoint = smoothing(point: averageIntersection)
 
-        // scale
-        smoothedPoint.x *= CGFloat(10)
-        smoothedPoint.y *= CGFloat(5)
+        // correct point after calibration
+        var screenPOG = correctPoint(point: smoothedPoint)
+        var leftEyePOG = correctPoint(point: intersections["leftEye"]!)
+        var rightEyePOG = correctPoint(point: intersections["rightEye"]!)
         
-        // translate to center of screen, convert to screen coords
-        smoothedPoint.x = (smoothedPoint.x + 0.5) * phonePointsWidth
-        smoothedPoint.y = (1 - (smoothedPoint.y + 0.5)) * phonePointsHeight
+        // return to NDC
+        leftEyePOG.x /= CGFloat(phonePointsWidth)
+        leftEyePOG.y /= CGFloat(phonePointsHeight)
+        rightEyePOG.x /= CGFloat(phonePointsWidth)
+        rightEyePOG.y /= CGFloat(phonePointsHeight)
         
-        // TODO: Correct points for left and right eye separately in NDC
-        var POG = correctPoint1(point: smoothedPoint)
-        
-        // round to 1 decimals
-        POG.x = round(10*POG.x)/10
-        POG.y = round(10*POG.y)/10
-        
-        print("before", smoothedPoint, "after", POG)
+        // round screen POG to 1 decimals
+        screenPOG.x = round(10*screenPOG.x)/10
+        screenPOG.y = round(10*screenPOG.y)/10
 
         return [
-            "left_eye": simd_float2(Float(leftEyeIntersectionNDC.x), Float(leftEyeIntersectionNDC.y)),
-            "right_eye": simd_float2(Float(rightEyeIntersectionNDC.x), Float(rightEyeIntersectionNDC.y)),
-            "POG": POG
+            "left_eye": leftEyePOG,
+            "right_eye": rightEyePOG,
+            "POG": screenPOG
         ]
     }
 }

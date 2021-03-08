@@ -12,8 +12,8 @@ import ARKit
 class GazePointViewController: UIViewController {
     var previousHeadIntersection = simd_float4()
     var intersections: [simd_float4] = []
-    var phonePointsWidth = Float(414)
-    var phonePointsHeight = Float(896)
+    var phonePointsWidth = Float(UIScreen.main.bounds.width)
+    var phonePointsHeight = Float(UIScreen.main.bounds.height)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -122,7 +122,7 @@ class GazePointViewController: UIViewController {
         var screenPOG = correctPoint(point: smoothedPoint)
         var leftEyePOG = correctPoint(point: intersections["leftEye"]!)
         var rightEyePOG = correctPoint(point: intersections["rightEye"]!)
-        
+
         // return to NDC
         leftEyePOG.x /= CGFloat(phonePointsWidth)
         leftEyePOG.y /= CGFloat(phonePointsHeight)

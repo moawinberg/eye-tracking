@@ -19,7 +19,6 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
     @IBOutlet weak var confirmText: UILabel!
     @IBOutlet weak var backBtn: UIButton!
     @IBOutlet weak var stopBtn: UIButton!
-    @IBOutlet weak var backArrow: UIImageView!
     
     
     // MARK: - variables
@@ -49,8 +48,6 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
         DispatchQueue.main.async {
             self.InfoPage.isHidden = true
             self.isRecording = true
-            self.backBtn.isHidden = true
-            self.backArrow.isHidden = true
         }
     }
     

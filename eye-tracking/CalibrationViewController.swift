@@ -26,6 +26,7 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
     var gazeData: [Int: CGPoint] = [:]
     let gazePointCtrl = GazePointViewController()
     var wait = false
+    var boxBoundaries: [Int: [String: CGPoint]] = [:]
     
     @IBAction func start(_ sender: UIButton) {
         DispatchQueue.main.async {
@@ -38,19 +39,17 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
     @objc func checkFixation(notification: Notification) {
         let gazePoint = notification.userInfo!["gazePoint"]
         let previousGazePoint = notification.userInfo!["previousGazePoint"]
-        //pulsating animation
-        UIImageView.animate(withDuration: 1.0, delay:0, options: [.repeat, .autoreverse], animations: {
-            self.PoR.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
-        }, completion: nil)
+        
         // check if fixation
         if (gazePoint as! CGPoint == previousGazePoint as! CGPoint) {
             self.wait = true
-            //animation to blue
             self.gazeData[self.index] = self.gazePoint // save gazePoint
+            
+            //animation to blue
             UIImageView.animate(withDuration: 0.5, delay: 0, options: .curveLinear, animations: {
                 self.PoR.tintColor = UIColor.blue
               })
-            self.PoR.tintColor = UIColor.blue
+            
             // set new point after 2 seconds
             DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
                 if (self.index < CalibrationData.data.calibrationPoints.count - 1) {
@@ -89,6 +88,27 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
         UIApplication.shared.isIdleTimerDisabled = true
 
         finishedLabel.isHidden = true
+        
+        let screenWidth = UIScreen.main.bounds.width
+        let screenHeight = UIScreen.main.bounds.height
+        boxBoundaries = [
+            0: [
+                "min": CGPoint(x: 0, y: screenHeight/2),
+                "max": CGPoint(x: screenWidth/2, y: screenHeight)
+            ],
+            1: [
+                "min": CGPoint(x: screenWidth/2, y: screenHeight/2),
+                "max": CGPoint(x: screenWidth, y: screenHeight)
+            ],
+            2: [
+                "min": CGPoint(x: 0, y: 0),
+                "max": CGPoint(x: screenWidth/2, y: screenHeight/2)
+            ],
+            3: [
+                "min": CGPoint(x: screenWidth/2, y: 0),
+                "max": CGPoint(x: screenWidth, y: screenHeight/2)
+            ]
+        ]
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -122,19 +142,31 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
             
             let ARFrame = sceneView.session.currentFrame
             
-            previousGazePoint = gazePoint
+            let previousGazePoints = gazePointCtrl.rayPlaneIntersection(withFaceAnchor: faceAnchor, frame: ARFrame!)
+            previousGazePoint = previousGazePoints["POG"] as! CGPoint
+            
+            DispatchQueue.main.async {
+                UIImageView.animate(withDuration: 1.0, delay:0, options: [.repeat, .autoreverse], animations: {
+                    self.PoR.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
+                }, completion: nil)
+            }
             
             // wait 100 ms for new gazePoint
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
                 let gazePoints = self.gazePointCtrl.rayPlaneIntersection(withFaceAnchor: faceAnchor, frame: ARFrame!)
                 self.gazePoint = gazePoints["POG"] as! CGPoint
                 
-                // don't run if waiting for next calibration point
-                if (!self.wait) {
-                    // send the points to our function
+                let max = self.boxBoundaries[self.index]!["max"]!
+                let min = self.boxBoundaries[self.index]!["min"]!
+                if (self.gazePoint.x >= min.x &&
+                    self.gazePoint.x <= max.x &&
+                    self.gazePoint.y >= min.y &&
+                    self.gazePoint.y <= max.y &&
+                    !self.wait) {
                     NotificationCenter.default.post(name: Notification.Name("NotificationIdentifier"), object: nil, userInfo: ["gazePoint": self.gazePoint, "previousGazePoint" : self.previousGazePoint])
                 }
             }
+
         }
     }
 }

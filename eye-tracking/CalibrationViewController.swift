@@ -88,27 +88,6 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
         UIApplication.shared.isIdleTimerDisabled = true
 
         finishedLabel.isHidden = true
-        
-        let screenWidth = UIScreen.main.bounds.width
-        let screenHeight = UIScreen.main.bounds.height
-        boxBoundaries = [
-            0: [
-                "min": CGPoint(x: 0, y: screenHeight/2),
-                "max": CGPoint(x: screenWidth/2, y: screenHeight)
-            ],
-            1: [
-                "min": CGPoint(x: screenWidth/2, y: screenHeight/2),
-                "max": CGPoint(x: screenWidth, y: screenHeight)
-            ],
-            2: [
-                "min": CGPoint(x: 0, y: 0),
-                "max": CGPoint(x: screenWidth/2, y: screenHeight/2)
-            ],
-            3: [
-                "min": CGPoint(x: screenWidth/2, y: 0),
-                "max": CGPoint(x: screenWidth, y: screenHeight/2)
-            ]
-        ]
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -156,13 +135,7 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
                 let gazePoints = self.gazePointCtrl.rayPlaneIntersection(withFaceAnchor: faceAnchor, frame: ARFrame!)
                 self.gazePoint = gazePoints["POG"] as! CGPoint
                 
-                let max = self.boxBoundaries[self.index]!["max"]!
-                let min = self.boxBoundaries[self.index]!["min"]!
-                if (self.gazePoint.x >= min.x &&
-                    self.gazePoint.x <= max.x &&
-                    self.gazePoint.y >= min.y &&
-                    self.gazePoint.y <= max.y &&
-                    !self.wait) {
+                if (!self.wait) {
                     NotificationCenter.default.post(name: Notification.Name("NotificationIdentifier"), object: nil, userInfo: ["gazePoint": self.gazePoint, "previousGazePoint" : self.previousGazePoint])
                 }
             }

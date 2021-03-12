@@ -26,11 +26,11 @@ class GazePointViewController: UIViewController {
             let calibrationResult = CalibrationData.data.result
             let calibrationPoints = CalibrationData.data.calibrationPoints
             
-            let calibrationGazeWidth = abs((calibrationResult[1]!.x - calibrationResult[0]!.x) + (calibrationResult[3]!.x - calibrationResult[2]!.x)) / 2
-            let calibrationGazeHeight = abs((calibrationResult[2]!.y - calibrationResult[0]!.y) + (calibrationResult[3]!.y - calibrationResult[1]!.y)) / 2
+            let calibrationGazeWidth = abs((calibrationResult[2]!.x - calibrationResult[1]!.x) + (calibrationResult[3]!.x - calibrationResult[4]!.x)) / 2
+            let calibrationGazeHeight = abs((calibrationResult[4]!.y - calibrationResult[1]!.y) + (calibrationResult[3]!.y - calibrationResult[2]!.y)) / 2
 
-            let calibrationWidth = calibrationPoints[1].x - calibrationPoints[0].x
-            let calibrationHeight = calibrationPoints[0].y - calibrationPoints[2].y
+            let calibrationWidth = calibrationPoints[2].x - calibrationPoints[1].x
+            let calibrationHeight = calibrationPoints[1].y - calibrationPoints[4].y
 
             let calibrationScaleWidth = calibrationWidth / calibrationGazeWidth //divide by  start value of scale? //x-wise factor that is multiplied later
             let calibrationScaleHeight = calibrationHeight / calibrationGazeHeight //divide by start value of scale  //y-wise factor that is multiplied later
@@ -56,7 +56,7 @@ class GazePointViewController: UIViewController {
     
     func smoothing(point: simd_float4) -> simd_float4 {
         // more smoothing => more lag
-        let threshold = 40
+        let threshold = 20
         intersections.append(point)
         intersections = intersections.suffix(threshold)
         
@@ -130,8 +130,8 @@ class GazePointViewController: UIViewController {
         rightEyePOG.y /= CGFloat(phonePointsHeight)
         
         // round screen POG 
-        screenPOG.x = round(50*screenPOG.x)/50
-        screenPOG.y = round(50*screenPOG.y)/50
+        screenPOG.x = round(10*screenPOG.x)/10
+        screenPOG.y = round(10*screenPOG.y)/10
 
         return [
             "left_eye": leftEyePOG,

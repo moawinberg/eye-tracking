@@ -25,63 +25,72 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
     var index = 0
     var gazeData: [Int: CGPoint] = [:]
     let gazePointCtrl = GazePointViewController()
-    var wait = false
+    var wait = true
     var boxBoundaries: [Int: [String: CGPoint]] = [:]
     
     @IBAction func start(_ sender: UIButton) {
         DispatchQueue.main.async {
             self.infoPage.isHidden = true
             self.PoR.center = CalibrationData.data.calibrationPoints[self.index]
+            self.wait = false
         }
         NotificationCenter.default.addObserver(self, selector: #selector(self.checkFixation(notification:)), name: Notification.Name("NotificationIdentifier"), object: nil)
     }
     
+    func showResult() {
+        DispatchQueue.main.async {
+            for point in CalibrationData.data.calibrationPoints {
+                let dot = UIView(frame: CGRect(x: point.x, y: point.y, width: 10, height: 10))
+                dot.backgroundColor = .blue
+                self.view.addSubview(dot)
+            }
+            
+            for (index, _) in self.gazeData.enumerated() {
+                let dot = UIView(frame: CGRect(x: self.gazeData[index]!.x, y: self.gazeData[index]!.y, width: 10, height: 10))
+                dot.backgroundColor = .red
+                 self.view.addSubview(dot)
+            }
+        }
+    }
+    
     @objc func checkFixation(notification: Notification) {
-       //self.PoR.isHidden = false
         let gazePoint = notification.userInfo!["gazePoint"]
         let previousGazePoint = notification.userInfo!["previousGazePoint"]
+        
         //pulsating animation
         UIImageView.animate(withDuration: 1.0, delay:0, options: [.repeat, .autoreverse], animations: {
             self.PoR.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
         }, completion: nil)
+        
         // check if fixation
         if (gazePoint as! CGPoint == previousGazePoint as! CGPoint) {
             self.wait = true
-            //stop pulsating
+            
+            // stop animations
             self.PoR.layer.removeAllAnimations()
             self.gazeData[self.index] = self.gazePoint // save gazePoint
+            
             UIImageView.animate(withDuration: 0.5, delay: 0, options: .curveLinear, animations: {
                 self.PoR.tintColor = UIColor.blue
               })
+            
             self.PoR.tintColor = UIColor.blue
-            //self.PoR.isHidden = true
-            // set new point after 2 seconds
+            
+            // set new point after 2 seconds if not finished
             DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
                 if (self.index < CalibrationData.data.calibrationPoints.count - 1) {
                     self.index += 1
                     self.PoR.tintColor = UIColor.red
+                    
                     UIImageView.animate(withDuration: 1.0, delay:0, options: .curveEaseIn, animations: {
                         self.PoR.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
-                    self.PoR.center = CalibrationData.data.calibrationPoints[self.index]
+                        self.PoR.center = CalibrationData.data.calibrationPoints[self.index]
                         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
                             self.wait = false
                         }
-                    })} else {
-                    //prints out the gazepoints in the end
-                    DispatchQueue.main.async {
-                           self.finishedLabel.isHidden = false
-                           self.PoR.isHidden = true
-                           for point in CalibrationData.data.calibrationPoints {
-                             let dot = UIView(frame: CGRect(x: point.x, y: point.y, width: 10, height: 10))
-                            dot.backgroundColor = .blue
-                             self.view.addSubview(dot)
-                          }
-                           for (index, _) in self.gazeData.enumerated() {
-                             let dot = UIView(frame: CGRect(x: self.gazeData[index]!.x, y: self.gazeData[index]!.y, width: 10, height: 10))
-                            dot.backgroundColor = .red
-                             self.view.addSubview(dot)
-                          }
-                        }
+                    })
+                } else {
+                    self.showResult()
                     self.finished()
                 }
             }
@@ -120,11 +129,12 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
         let configuration = ARFaceTrackingConfiguration()
         sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
         NotificationCenter.default.removeObserver(self)
+        
         // Pause the view's session
         sceneView.session.pause()
     }

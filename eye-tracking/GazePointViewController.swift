@@ -113,9 +113,11 @@ class GazePointViewController: UIViewController {
             intersections[eye]!.x = (intersections[eye]!.x + 0.5) * phonePointsWidth
             intersections[eye]!.y = (1 - (intersections[eye]!.y + 0.5)) * phonePointsHeight
         }
-
+        
         // smoth average point of both eyes
-        let averageIntersection = ((intersections["leftEye"]! + intersections["rightEye"]!) / 2)
+        var averageIntersection = simd_float4()
+        averageIntersection = ((intersections["leftEye"]! + intersections["rightEye"]!) / 2)
+        
         let smoothedPoint = smoothing(point: averageIntersection)
 
         // correct point after calibration

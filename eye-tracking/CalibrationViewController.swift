@@ -124,6 +124,7 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
+        NotificationCenter.default.removeObserver(self)
         // Pause the view's session
         sceneView.session.pause()
     }

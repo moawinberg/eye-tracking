@@ -16,7 +16,6 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
     @IBOutlet weak var gazeIndicator: UIImageView!
     @IBOutlet weak var sceneView: ARSCNView!
     @IBOutlet weak var InfoPage: UIView!
-    @IBOutlet weak var confirmText: UILabel!
     @IBOutlet weak var backBtn: UIButton!
     @IBOutlet weak var stopBtn: UIButton!
     
@@ -27,22 +26,6 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
     var isRecording = false
     let gazePointCtrl = GazePointViewController()
     var gazeData: [[String : Any]] = []
-    
-    @IBAction func stop(_ sender: UIButton) {
-        DispatchQueue.main.async {
-            self.isRecording = false
-            self.confirmText.isHidden = false
-            self.gazeIndicator.isHidden = true
-            self.stopBtn.isHidden = true
-        }
-        
-        print("collected data: ", gazeData)
-        
-        // go back to main after finished
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
-          self.performSegue(withIdentifier: "Back", sender: self)
-        }
-    }
     
     @IBAction func start(_ sender: UIButton) {
         DispatchQueue.main.async {
@@ -57,8 +40,6 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
         sceneView.delegate = self
         sceneView.automaticallyUpdatesLighting = true
         UIApplication.shared.isIdleTimerDisabled = true
-        
-        confirmText.isHidden = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -70,6 +51,8 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        
+        print("collected data: ", gazeData)
         
         // Pause the view's session
         sceneView.session.pause()

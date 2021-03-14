@@ -13,7 +13,6 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
 
     @IBOutlet weak var sceneView: ARSCNView!
     @IBOutlet weak var PoR: UIImageView!
-    @IBOutlet weak var finishedLabel: UILabel!
     @IBOutlet weak var startBtn: UIButton!
     @IBOutlet weak var infoPage: UIView!
     
@@ -99,7 +98,6 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
     
     func finished() {
         DispatchQueue.main.async {
-            self.finishedLabel.isHidden = false
             self.PoR.isHidden = true
         }
 
@@ -119,8 +117,6 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
         sceneView.delegate = self
         sceneView.automaticallyUpdatesLighting = true
         UIApplication.shared.isIdleTimerDisabled = true
-
-        finishedLabel.isHidden = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -156,19 +152,19 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
             
             let ARFrame = sceneView.session.currentFrame
             
-            let previousGazePoints = gazePointCtrl.rayPlaneIntersection(withFaceAnchor: faceAnchor, frame: ARFrame!)
-            previousGazePoint = previousGazePoints["POG"] as! CGPoint
-            
-            // wait 100 ms for new gazePoint
-            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
-                let gazePoints = self.gazePointCtrl.rayPlaneIntersection(withFaceAnchor: faceAnchor, frame: ARFrame!)
-                self.gazePoint = gazePoints["POG"] as! CGPoint
+            if (!wait) {
+                let previousGazePoints = gazePointCtrl.rayPlaneIntersection(withFaceAnchor: faceAnchor, frame: ARFrame!)
+                previousGazePoint = previousGazePoints["POG"] as! CGPoint
                 
-                if (!self.wait) {
+                // wait 100 ms for new gazePoint
+                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
+                    let gazePoints = self.gazePointCtrl.rayPlaneIntersection(withFaceAnchor: faceAnchor, frame: ARFrame!)
+                    self.gazePoint = gazePoints["POG"] as! CGPoint
+                    print(self.gazePoint)
+                    
                     NotificationCenter.default.post(name: Notification.Name("NotificationIdentifier"), object: nil, userInfo: ["gazePoint": self.gazePoint, "previousGazePoint" : self.previousGazePoint])
                 }
             }
-
         }
     }
 }

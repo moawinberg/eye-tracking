@@ -56,6 +56,8 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
         
         // Pause the view's session
         sceneView.session.pause()
+        sceneView.removeFromSuperview()
+        sceneView = nil
     }
 
     // MARK: - ARSCNViewDelegate
@@ -105,14 +107,17 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
     // MARK: - ARSessions
     
     func session(_ session: ARSession, didFailWithError error: Error) {
-        // Present an error message to the user
+        print("didFailWithError", error)
     }
     
     func sessionWasInterrupted(_ session: ARSession) {
-        // Inform the user that the session has been interrupted, for example, by presenting an overlay
+        print("sessionWasInterrupted")
     }
     
     func sessionInterruptionEnded(_ session: ARSession) {
+        sceneView.session.pause()
+        sceneView.removeFromSuperview()
+        sceneView = nil
         // Reset tracking and/or remove existing anchors if consistent tracking is required
     }
 }

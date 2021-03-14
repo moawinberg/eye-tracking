@@ -133,6 +133,8 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
         
         // Pause the view's session
         sceneView.session.pause()
+        sceneView.removeFromSuperview()
+        sceneView = nil
     }
     
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {

@@ -23,9 +23,8 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
     var previousGazePoint = CGPoint()
     var index = 0
     var gazeData: [Int: CGPoint] = [:]
-    let gazePointCtrl = GazePointViewController()
+    var gazePointCtrl = GazePointViewController()
     var wait = true
-    var boxBoundaries: [Int: [String: CGPoint]] = [:]
     
     @IBAction func start(_ sender: UIButton) {
         DispatchQueue.main.async {
@@ -55,7 +54,6 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
     
     @objc func checkFixation(notification: Notification) {
         let gazePoint = notification.userInfo!["gazePoint"]
-        let previousGazePoint = notification.userInfo!["previousGazePoint"]
         
         //pulsating animation
         DispatchQueue.main.async {
@@ -65,7 +63,7 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
         }
         
         // check if fixation
-        if (gazePoint as! CGPoint == previousGazePoint as! CGPoint) {
+        if (gazePoint as! CGPoint == notification.userInfo!["previousGazePoint"] as! CGPoint) {
             self.wait = true
             self.gazeData[self.index] = self.gazePoint // save gazePoint
                         
@@ -105,7 +103,7 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
         }
 
         // save data to struct
-        CalibrationData.data.result = gazeData
+        CalibrationData.data.result = self.gazeData
         CalibrationData.data.isCalibrated = true
         
         // go back to main after finished
@@ -131,7 +129,7 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
+
         NotificationCenter.default.removeObserver(self)
         
         // Pause the view's session
@@ -145,8 +143,8 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
         let node = SCNNode(geometry: faceMesh)
         node.geometry?.firstMaterial?.fillMode = .lines
         
-        node.addChildNode(leftEye)
-        node.addChildNode(rightEye)
+        node.addChildNode(self.leftEye)
+        node.addChildNode(self.rightEye)
         
         return node
     }
@@ -157,8 +155,8 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
             
             let ARFrame = sceneView.session.currentFrame
             
-            if (!wait) {
-                let previousGazePoints = gazePointCtrl.rayPlaneIntersection(withFaceAnchor: faceAnchor, frame: ARFrame!)
+            if (!self.wait) {
+                let previousGazePoints = self.gazePointCtrl.rayPlaneIntersection(withFaceAnchor: faceAnchor, frame: ARFrame!)
                 previousGazePoint = previousGazePoints["POG"] as! CGPoint
                 
                 // wait 100 ms for new gazePoint

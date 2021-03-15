@@ -56,7 +56,7 @@ class GazePointViewController: UIViewController {
     
     func smoothing(point: simd_float4) -> simd_float4 {
         // more smoothing => more lag
-        let threshold = 40
+        let threshold = 30
         self.intersections.append(point)
         if (self.intersections.count >= threshold) {
             self.intersections = self.intersections.suffix(threshold)

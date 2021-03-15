@@ -101,15 +101,10 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
             let ARFrame = sceneView.session.currentFrame
             
             let gazePoints = self.gazePointCtrl.rayPlaneIntersection(withFaceAnchor: faceAnchor, frame: ARFrame!)
-            
-            let formatter = DateFormatter()
-            formatter.timeZone = TimeZone.current
-            formatter.dateFormat = "H:m:ss.SSSS"
-            let timestamp = formatter.string(from: Date())
-            
+
             if (isRecording) {
                 gazeData[textNumber] = [
-                    "timestamp": timestamp,
+                    "timestamp": gazePoints["timestamp"]!,
                     "POG": gazePoints["POG"]!,
                     "left_eye_dist": distanceToScreen(eyeNode: leftEye),
                     "right_eye_dist": distanceToScreen(eyeNode: rightEye)

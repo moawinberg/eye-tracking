@@ -97,6 +97,11 @@ class GazePointViewController: UIViewController {
             "head": getIntersection(withFaceAnchor: anchor, frame: frame, worldTransformMatrix: anchor.transform)
         ]
         
+        let formatter = DateFormatter()
+        formatter.timeZone = TimeZone.current
+        formatter.dateFormat = "H:m:ss.SSSS"
+        let timestamp = formatter.string(from: Date())
+        
         // extract movement of head
         let headMovement = previousHeadIntersection - intersections["head"]!
         previousHeadIntersection = intersections["head"]!
@@ -139,6 +144,7 @@ class GazePointViewController: UIViewController {
         screenPOG.y = round(decimalValue*screenPOG.y)/decimalValue
 
         return [
+            "timestamp": timestamp,
             "left_eye": leftEyePOG,
             "right_eye": rightEyePOG,
             "POG": screenPOG

@@ -13,11 +13,6 @@ struct CalibrationData {
     var isCalibrated: Bool = false
     
     var calibrationPoints = [
-        // center
-        CGPoint(
-            x: UIScreen.main.bounds.width/2,
-            y: UIScreen.main.bounds.height/2
-        ),
         // bottom-left
         CGPoint(
             x: UIScreen.main.bounds.width*0.08,
@@ -28,14 +23,14 @@ struct CalibrationData {
             x: UIScreen.main.bounds.width - (UIScreen.main.bounds.width*0.08),
             y: UIScreen.main.bounds.height - (UIScreen.main.bounds.height*0.08)
         ),
-        // top-right byt 3 och 4
-        CGPoint(
-            x: UIScreen.main.bounds.width - (UIScreen.main.bounds.width*0.08),
-            y: UIScreen.main.bounds.height*0.08
-        ),
         // top-left
         CGPoint(
             x: UIScreen.main.bounds.width*0.08,
+            y: UIScreen.main.bounds.height*0.08
+        ),
+        // top-right
+        CGPoint(
+            x: UIScreen.main.bounds.width - (UIScreen.main.bounds.width*0.08),
             y: UIScreen.main.bounds.height*0.08
         ),
     ]

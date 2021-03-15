@@ -22,22 +22,20 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
     var leftEye: SCNNode = SCNNode()
     var rightEye: SCNNode = SCNNode()
     var isRecording = false
-    let gazePointCtrl = GazePointViewController()
+    var gazePointCtrl = GazePointViewController()
     var textNumber = 1
-    let maxPages = 2
+    var maxPages = 2
     var gazeData: [Int : [String : Any]] = [:]
     
     @IBAction func next(_ sender: Any) {
-        if (textNumber == maxPages-1) {
-            DispatchQueue.main.async {
+        DispatchQueue.main.async {
+            if (self.textNumber == self.maxPages-1) {
                 self.label.setTitle("Done", for: .normal)
-            }
-        } else if (textNumber == maxPages) {
-            DispatchQueue.main.async {
+            } else if (self.textNumber == self.maxPages) {
                 self.performSegue(withIdentifier: "Back", sender: self)
             }
+            self.textNumber += 1
         }
-        textNumber += 1
     }
     
     @IBAction func start(_ sender: UIButton) {
@@ -64,7 +62,7 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
+
         print("collected data: ", gazeData)
         
         // Pause the view's session
@@ -79,8 +77,8 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
         let node = SCNNode(geometry: faceMesh)
         node.geometry?.firstMaterial?.fillMode = .lines
         
-        node.addChildNode(leftEye)
-        node.addChildNode(rightEye)
+        node.addChildNode(self.leftEye)
+        node.addChildNode(self.rightEye)
         
         return node
     }
@@ -102,7 +100,7 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
             
             let gazePoints = self.gazePointCtrl.rayPlaneIntersection(withFaceAnchor: faceAnchor, frame: ARFrame!)
 
-            if (isRecording) {
+            if (self.isRecording) {
                 gazeData[textNumber] = [
                     "timestamp": gazePoints["timestamp"]!,
                     "POG": gazePoints["POG"]!,

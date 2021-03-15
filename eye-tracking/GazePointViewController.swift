@@ -103,8 +103,8 @@ class GazePointViewController: UIViewController {
         let timestamp = formatter.string(from: Date())
         
         // extract movement of head
-        let headMovement = previousHeadIntersection - intersections["head"]!
-        previousHeadIntersection = intersections["head"]!
+        let headMovement = self.previousHeadIntersection - intersections["head"]!
+        self.previousHeadIntersection = intersections["head"]!
         
         let scaleX = Float(10)
         let scaleY = Float(5)
@@ -117,8 +117,8 @@ class GazePointViewController: UIViewController {
             intersections[eye]!.y *= scaleY
             
             // translate to center of screen, convert to screen coords
-            intersections[eye]!.x = (intersections[eye]!.x + 0.5) * phonePointsWidth
-            intersections[eye]!.y = (1 - (intersections[eye]!.y + 0.5)) * phonePointsHeight
+            intersections[eye]!.x = (intersections[eye]!.x + 0.5) * self.phonePointsWidth
+            intersections[eye]!.y = (1 - (intersections[eye]!.y + 0.5)) * self.phonePointsHeight
         }
         
         // smoth average point of both eyes
@@ -133,10 +133,10 @@ class GazePointViewController: UIViewController {
         var rightEyePOG = correctPoint(point: intersections["rightEye"]!)
 
         // return to NDC
-        leftEyePOG.x /= CGFloat(phonePointsWidth)
-        leftEyePOG.y /= CGFloat(phonePointsHeight)
-        rightEyePOG.x /= CGFloat(phonePointsWidth)
-        rightEyePOG.y /= CGFloat(phonePointsHeight)
+        leftEyePOG.x /= CGFloat(self.phonePointsWidth)
+        leftEyePOG.y /= CGFloat(self.phonePointsHeight)
+        rightEyePOG.x /= CGFloat(self.phonePointsWidth)
+        rightEyePOG.y /= CGFloat(self.phonePointsHeight)
         
         // round screen POG
         let decimalValue = CGFloat(10)

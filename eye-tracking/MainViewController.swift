@@ -32,7 +32,11 @@ struct CalibrationData {
         CGPoint(
             x: UIScreen.main.bounds.width*0.08,
             y: UIScreen.main.bounds.height*0.08
-        )
+        ),
+        CGPoint(
+            x: UIScreen.main.bounds.width/2,
+            y: UIScreen.main.bounds.height/2
+        ),
     ]
 }
 

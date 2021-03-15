@@ -20,23 +20,23 @@ struct CalibrationData {
         ),
         // bottom-left
         CGPoint(
-            x: UIScreen.main.bounds.width*0.1,
-            y: UIScreen.main.bounds.height - (UIScreen.main.bounds.height*0.1)
+            x: UIScreen.main.bounds.width*0.08,
+            y: UIScreen.main.bounds.height - (UIScreen.main.bounds.height*0.08)
         ),
         // bottom-right
         CGPoint(
-            x: UIScreen.main.bounds.width - (UIScreen.main.bounds.width*0.1),
-            y: UIScreen.main.bounds.height - (UIScreen.main.bounds.height*0.1)
+            x: UIScreen.main.bounds.width - (UIScreen.main.bounds.width*0.08),
+            y: UIScreen.main.bounds.height - (UIScreen.main.bounds.height*0.08)
         ),
         // top-right byt 3 och 4
         CGPoint(
-            x: UIScreen.main.bounds.width - (UIScreen.main.bounds.width*0.1),
-            y: UIScreen.main.bounds.height*0.1
+            x: UIScreen.main.bounds.width - (UIScreen.main.bounds.width*0.08),
+            y: UIScreen.main.bounds.height*0.08
         ),
         // top-left
         CGPoint(
-            x: UIScreen.main.bounds.width*0.1,
-            y: UIScreen.main.bounds.height*0.1
+            x: UIScreen.main.bounds.width*0.08,
+            y: UIScreen.main.bounds.height*0.08
         ),
     ]
 }

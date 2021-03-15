@@ -26,11 +26,11 @@ class GazePointViewController: UIViewController {
             let calibrationResult = CalibrationData.data.result
             let calibrationPoints = CalibrationData.data.calibrationPoints
             
-            let calibrationGazeWidth = abs((calibrationResult[1]!.x - calibrationResult[0]!.x) + (calibrationResult[3]!.x - calibrationResult[2]!.x)) / 2
-            let calibrationGazeHeight = abs((calibrationResult[2]!.y - calibrationResult[0]!.y) + (calibrationResult[3]!.y - calibrationResult[1]!.y)) / 2
+            let calibrationGazeWidth = (abs(calibrationResult[1]!.x - calibrationResult[0]!.x) + abs(calibrationResult[3]!.x - calibrationResult[2]!.x)) / 2
+            let calibrationGazeHeight = (abs(calibrationResult[2]!.y - calibrationResult[0]!.y) + abs(calibrationResult[3]!.y - calibrationResult[1]!.y)) / 2
 
-            let calibrationWidth = calibrationPoints[1].x - calibrationPoints[0].x
-            let calibrationHeight = calibrationPoints[0].y - calibrationPoints[2].y
+            let calibrationWidth = abs(calibrationPoints[1].x - calibrationPoints[0].x)
+            let calibrationHeight = abs(calibrationPoints[0].y - calibrationPoints[2].y)
 
             let calibrationScaleWidth = calibrationWidth / calibrationGazeWidth //divide by  start value of scale? //x-wise factor that is multiplied later
             let calibrationScaleHeight = calibrationHeight / calibrationGazeHeight //divide by start value of scale  //y-wise factor that is multiplied later

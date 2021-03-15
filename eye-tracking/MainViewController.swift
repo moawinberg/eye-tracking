@@ -23,16 +23,16 @@ struct CalibrationData {
             x: UIScreen.main.bounds.width - (UIScreen.main.bounds.width*0.08),
             y: UIScreen.main.bounds.height - (UIScreen.main.bounds.height*0.08)
         ),
-        // top-left
-        CGPoint(
-            x: UIScreen.main.bounds.width*0.08,
-            y: UIScreen.main.bounds.height*0.08
-        ),
         // top-right
         CGPoint(
             x: UIScreen.main.bounds.width - (UIScreen.main.bounds.width*0.08),
             y: UIScreen.main.bounds.height*0.08
         ),
+        // top-left
+        CGPoint(
+            x: UIScreen.main.bounds.width*0.08,
+            y: UIScreen.main.bounds.height*0.08
+        )
     ]
 }
 

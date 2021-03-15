@@ -16,16 +16,29 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
     @IBOutlet weak var gazeIndicator: UIImageView!
     @IBOutlet weak var sceneView: ARSCNView!
     @IBOutlet weak var InfoPage: UIView!
-    @IBOutlet weak var backBtn: UIButton!
-    @IBOutlet weak var stopBtn: UIButton!
-    
+    @IBOutlet weak var label: UIButton!
     
     // MARK: - variables
     var leftEye: SCNNode = SCNNode()
     var rightEye: SCNNode = SCNNode()
     var isRecording = false
     let gazePointCtrl = GazePointViewController()
-    var gazeData: [[String : Any]] = []
+    var textNumber = 1
+    let maxPages = 2
+    var gazeData: [Int : [String : Any]] = [:]
+    
+    @IBAction func next(_ sender: Any) {
+        if (textNumber == maxPages-1) {
+            DispatchQueue.main.async {
+                self.label.setTitle("Done", for: .normal)
+            }
+        } else if (textNumber == maxPages) {
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: "Back", sender: self)
+            }
+        }
+        textNumber += 1
+    }
     
     @IBAction func start(_ sender: UIButton) {
         DispatchQueue.main.async {
@@ -89,13 +102,18 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
             
             let gazePoints = self.gazePointCtrl.rayPlaneIntersection(withFaceAnchor: faceAnchor, frame: ARFrame!)
             
+            let formatter = DateFormatter()
+            formatter.timeZone = TimeZone.current
+            formatter.dateFormat = "H:m:ss.SSSS"
+            let timestamp = formatter.string(from: Date())
+            
             if (isRecording) {
-                // save data
-                gazeData.append([
+                gazeData[textNumber] = [
+                    "timestamp": timestamp,
                     "POG": gazePoints["POG"]!,
                     "left_eye_dist": distanceToScreen(eyeNode: leftEye),
                     "right_eye_dist": distanceToScreen(eyeNode: rightEye)
-                ])
+                ]
             }
             
             DispatchQueue.main.async {

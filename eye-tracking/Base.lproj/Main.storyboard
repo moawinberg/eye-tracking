@@ -116,14 +116,14 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <state key="normal" title="Stop"/>
+                                <state key="normal" title="Next"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                         <integer key="value" value="5"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <segue destination="bty-ZV-BWz" kind="show" id="HdB-zU-4wg"/>
+                                    <action selector="next:" destination="kra-CR-gcs" eventType="touchUpInside" id="Ajb-Jc-gmO"/>
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="b6V-bd-GuZ">
@@ -188,6 +188,7 @@
                     <connections>
                         <outlet property="InfoPage" destination="b6V-bd-GuZ" id="eu2-xO-F58"/>
                         <outlet property="gazeIndicator" destination="wXc-XM-uua" id="a2h-NO-LTN"/>
+                        <outlet property="label" destination="D0t-DO-vpb" id="aD1-TQ-ZVd"/>
                         <outlet property="sceneView" destination="IBF-bf-Fqi" id="njz-Md-I68"/>
                     </connections>
                 </viewController>
@@ -262,7 +263,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="hSe-cn-nCq"/>
+        <segue reference="lhk-Sd-zBM"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="circle.fill" catalog="system" width="128" height="121"/>

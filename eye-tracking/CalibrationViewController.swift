@@ -32,8 +32,9 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
             self.infoPage.isHidden = true
             self.PoR.center = CalibrationData.data.calibrationPoints[self.index]
             self.wait = false
+            
+            NotificationCenter.default.addObserver(self, selector: #selector(self.checkFixation(notification:)), name: Notification.Name("NotificationIdentifier"), object: nil)
         }
-        NotificationCenter.default.addObserver(self, selector: #selector(self.checkFixation(notification:)), name: Notification.Name("NotificationIdentifier"), object: nil)
     }
     
     func showResult() {
@@ -47,7 +48,7 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
             for (index, _) in self.gazeData.enumerated() {
                 let dot = UIView(frame: CGRect(x: self.gazeData[index]!.x, y: self.gazeData[index]!.y, width: 10, height: 10))
                 dot.backgroundColor = .red
-                 self.view.addSubview(dot)
+                self.view.addSubview(dot)
             }
         }
     }
@@ -57,26 +58,28 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
         let previousGazePoint = notification.userInfo!["previousGazePoint"]
         
         //pulsating animation
-        UIImageView.animate(withDuration: 1.0, delay:0, options: [.repeat, .autoreverse], animations: {
-            self.PoR.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
-        }, completion: nil)
+        DispatchQueue.main.async {
+            UIImageView.animate(withDuration: 1.0, delay:0, options: [.repeat, .autoreverse], animations: {
+                self.PoR.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
+            }, completion: nil)
+        }
         
         // check if fixation
         if (gazePoint as! CGPoint == previousGazePoint as! CGPoint) {
             self.wait = true
-            
-            // stop animations
-            self.PoR.layer.removeAllAnimations()
             self.gazeData[self.index] = self.gazePoint // save gazePoint
-            
-            UIImageView.animate(withDuration: 0.5, delay: 0, options: .curveLinear, animations: {
+                        
+            DispatchQueue.main.async {
+                UIImageView.animate(withDuration: 0.5, delay: 0, options: .curveLinear, animations: {
+                    self.PoR.tintColor = UIColor.blue
+                })
                 self.PoR.tintColor = UIColor.blue
-              })
-            
-            self.PoR.tintColor = UIColor.blue
+            }
             
             // set new point after 2 seconds if not finished
             DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+                self.PoR.layer.removeAllAnimations()
+                
                 if (self.index < CalibrationData.data.calibrationPoints.count - 1) {
                     self.index += 1
                     self.PoR.tintColor = UIColor.red
@@ -162,7 +165,6 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
                 DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
                     let gazePoints = self.gazePointCtrl.rayPlaneIntersection(withFaceAnchor: faceAnchor, frame: ARFrame!)
                     self.gazePoint = gazePoints["POG"] as! CGPoint
-                    print(self.gazePoint)
                     
                     NotificationCenter.default.post(name: Notification.Name("NotificationIdentifier"), object: nil, userInfo: ["gazePoint": self.gazePoint, "previousGazePoint" : self.previousGazePoint])
                 }

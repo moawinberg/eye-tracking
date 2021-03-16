@@ -55,24 +55,28 @@ class GazePointViewController: UIViewController {
     }
     
     func smoothing(point: simd_float4) -> simd_float4 {
-        // more smoothing => more lag
-        let threshold = 30
-        self.intersections.append(point)
-        if (self.intersections.count >= threshold) {
-            self.intersections = self.intersections.suffix(threshold)
-        }
-        
-        var sumX = Float(0);
-        var sumY = Float(0);
-        for i in intersections {
-            sumX += i.x
-            sumY += i.y
-        }
+        if (CalibrationData.data.isCalibrated) {
+            // more smoothing => more lag
+            let threshold = 30
+            
+            self.intersections.append(point)
+            if (self.intersections.count >= threshold) {
+                self.intersections = self.intersections.suffix(threshold)
+            }
+            
+            var sumX = Float(0);
+            var sumY = Float(0);
+            for i in intersections {
+                sumX += i.x
+                sumY += i.y
+            }
 
-        let avgX = sumX / Float(intersections.count)
-        let avgY = sumY / Float(intersections.count)
-        
-        return simd_float4(Float(avgX), Float(avgY), point.z, point.w)
+            let avgX = sumX / Float(intersections.count)
+            let avgY = sumY / Float(intersections.count)
+            
+            return simd_float4(Float(avgX), Float(avgY), point.z, point.w)
+        }
+        return point
     }
     
     func getIntersection(withFaceAnchor anchor: ARFaceAnchor, frame: ARFrame, worldTransformMatrix: simd_float4x4) -> simd_float4 {

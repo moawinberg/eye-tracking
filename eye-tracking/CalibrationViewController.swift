@@ -31,8 +31,6 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
             self.infoPage.isHidden = true
             self.PoR.center = CalibrationData.data.calibrationPoints[self.index]
             self.wait = false
-            
-            NotificationCenter.default.addObserver(self, selector: #selector(self.checkFixation(notification:)), name: Notification.Name("NotificationIdentifier"), object: nil)
         }
     }
     
@@ -48,51 +46,6 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
                 let dot = UIView(frame: CGRect(x: self.gazeData[index]!.x, y: self.gazeData[index]!.y, width: 10, height: 10))
                 dot.backgroundColor = .red
                 self.view.addSubview(dot)
-            }
-        }
-    }
-    
-    @objc func checkFixation(notification: Notification) {
-        let gazePoint = notification.userInfo!["gazePoint"]
-        
-        //pulsating animation
-        DispatchQueue.main.async {
-            UIImageView.animate(withDuration: 1.0, delay:0, options: [.repeat, .autoreverse], animations: {
-                self.PoR.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
-            }, completion: nil)
-        }
-        
-        // check if fixation
-        if (gazePoint as! CGPoint == notification.userInfo!["previousGazePoint"] as! CGPoint) {
-            self.wait = true
-            self.gazeData[self.index] = self.gazePoint // save gazePoint
-                        
-            DispatchQueue.main.async {
-                UIImageView.animate(withDuration: 0.5, delay: 0, options: .curveLinear, animations: {
-                    self.PoR.tintColor = UIColor.blue
-                })
-                self.PoR.tintColor = UIColor.blue
-            }
-            
-            // set new point after 2 seconds if not finished
-            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
-                self.PoR.layer.removeAllAnimations()
-                
-                if (self.index < CalibrationData.data.calibrationPoints.count - 1) {
-                    self.index += 1
-                    self.PoR.tintColor = UIColor.red
-                    
-                    UIImageView.animate(withDuration: 1.0, delay:0, options: .curveEaseIn, animations: {
-                        self.PoR.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
-                        self.PoR.center = CalibrationData.data.calibrationPoints[self.index]
-                        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-                            self.wait = false
-                        }
-                    })
-                } else {
-                    self.showResult()
-                    self.finished()
-                }
             }
         }
     }
@@ -129,8 +82,6 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-
-        NotificationCenter.default.removeObserver(self)
         
         // Pause the view's session
         sceneView.session.pause()
@@ -156,15 +107,43 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
             let ARFrame = sceneView.session.currentFrame
             
             if (!self.wait) {
-                let previousGazePoints = self.gazePointCtrl.rayPlaneIntersection(withFaceAnchor: faceAnchor, frame: ARFrame!)
-                previousGazePoint = previousGazePoints["POG"] as! CGPoint
-                
-                // wait 100 ms for new gazePoint
-                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
-                    let gazePoints = self.gazePointCtrl.rayPlaneIntersection(withFaceAnchor: faceAnchor, frame: ARFrame!)
-                    self.gazePoint = gazePoints["POG"] as! CGPoint
-                    
-                    NotificationCenter.default.post(name: Notification.Name("NotificationIdentifier"), object: nil, userInfo: ["gazePoint": self.gazePoint, "previousGazePoint" : self.previousGazePoint])
+                DispatchQueue.main.async {
+                    UIImageView.animate(withDuration: 0.1, delay: 0, options: [.repeat, .autoreverse], animations: {
+                        self.PoR.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
+                        let previousGazePoints = self.gazePointCtrl.rayPlaneIntersection(withFaceAnchor: faceAnchor, frame: ARFrame!)
+                        self.previousGazePoint = previousGazePoints["POG"] as! CGPoint
+                    }, completion: { finished in
+                        let gazePoints = self.gazePointCtrl.rayPlaneIntersection(withFaceAnchor: faceAnchor, frame: ARFrame!)
+                        self.gazePoint = gazePoints["POG"] as! CGPoint
+                        
+                        if (self.previousGazePoint == self.gazePoint) {
+                            self.wait = true
+                            self.gazeData[self.index] = self.gazePoint // save gazePoint
+                                        
+                            DispatchQueue.main.async {
+                                UIImageView.animate(withDuration: 1, delay: 0, options: .curveLinear, animations: {
+                                    self.PoR.tintColor = UIColor.blue
+                                }, completion: { finished in
+                                    self.PoR.tintColor = UIColor.red
+                                    if (self.index < CalibrationData.data.calibrationPoints.count - 1) {
+                                        UIImageView.animate(withDuration: 1.0, delay: 1.0, options: .curveEaseIn, animations: {
+                                            self.index += 1
+                                            self.PoR.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+                                            self.PoR.center = CalibrationData.data.calibrationPoints[self.index]
+                                        }, completion: { finished in
+                                            self.wait = false
+                                            self.PoR.layer.removeAllAnimations()
+                                        })
+                                    } else {
+                                        self.wait = true
+                                        self.PoR.layer.removeAllAnimations()
+                                        self.showResult()
+                                        self.finished()
+                                    }
+                                })
+                            }
+                        }
+                    })
                 }
             }
         }

@@ -138,13 +138,9 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
             
             if (!self.wait) {
                 DispatchQueue.main.async {
-                    // pulsating animation
-                    UIImageView.animate(withDuration: 1, delay: 0, options: [.repeat, .autoreverse], animations: {
-                        self.PoR.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
-                    })
-                    
-                    // timer for fixation
-                    UIImageView.animate(withDuration: 0.1, delay: 0, animations: {
+                    // pulsating animation to find fixation
+                    UIImageView.animate(withDuration: 0.1, delay: 0, options: [.repeat, .autoreverse], animations: {
+                        self.PoR.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
                         let previousGazePoints = self.gazePointCtrl.rayPlaneIntersection(withFaceAnchor: faceAnchor, frame: ARFrame!)
                         self.previousGazePoint = previousGazePoints["POG"] as! CGPoint
                     }, completion: { finished in

@@ -135,7 +135,7 @@ class GazePointViewController: UIViewController {
         rightEyePOG.y /= CGFloat(self.phonePointsHeight)
         
         // round screen POG
-        let decimalValue = CGFloat(10)
+        let decimalValue = CGFloat(100)
         screenPOG.x = round(decimalValue*screenPOG.x)/decimalValue
         screenPOG.y = round(decimalValue*screenPOG.y)/decimalValue
 

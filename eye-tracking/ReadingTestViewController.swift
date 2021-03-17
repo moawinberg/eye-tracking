@@ -104,6 +104,8 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
                 gazeData[textNumber] = [
                     "timestamp": gazePoints["timestamp"]!,
                     "POG": gazePoints["POG"]!,
+                    "left_eye_NDC": gazePoints["left_eye"]!,
+                    "right_eye_NDC": gazePoints["right_eye"]!,
                     "left_eye_dist": distanceToScreen(eyeNode: leftEye),
                     "right_eye_dist": distanceToScreen(eyeNode: rightEye)
                 ]

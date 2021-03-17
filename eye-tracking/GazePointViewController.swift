@@ -19,9 +19,7 @@ class GazePointViewController: UIViewController {
         super.viewDidLoad()
     }
     
-    // our first mapping function
     func correctPoint(point: simd_float4) -> CGPoint {
-        // both calibration points and result are in screen coords!
         if (CalibrationData.data.isCalibrated) {
             let calibrationResult = CalibrationData.data.result
             let calibrationPoints = CalibrationData.data.calibrationPoints
@@ -32,8 +30,8 @@ class GazePointViewController: UIViewController {
             let calibrationWidth = abs(calibrationPoints[1].x - calibrationPoints[0].x)
             let calibrationHeight = abs(calibrationPoints[0].y - calibrationPoints[2].y)
 
-            let calibrationScaleWidth = calibrationWidth / calibrationGazeWidth //divide by  start value of scale? //x-wise factor that is multiplied later
-            let calibrationScaleHeight = calibrationHeight / calibrationGazeHeight //divide by start value of scale  //y-wise factor that is multiplied later
+            let calibrationScaleWidth = calibrationWidth / calibrationGazeWidth
+            let calibrationScaleHeight = calibrationHeight / calibrationGazeHeight
 
             var displacement_x = CGFloat(0)
             var displacement_y = CGFloat(0)
@@ -125,7 +123,7 @@ class GazePointViewController: UIViewController {
             intersections[eye]!.y = (1 - (intersections[eye]!.y + 0.5)) * self.phonePointsHeight
         }
         
-        // smoth average point of both eyes
+        // smooth average point of both eyes if calibrated
         var averageIntersection = simd_float4()
         averageIntersection = ((intersections["leftEye"]! + intersections["rightEye"]!) / 2)
         

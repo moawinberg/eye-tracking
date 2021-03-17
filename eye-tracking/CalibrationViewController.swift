@@ -15,6 +15,8 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
     @IBOutlet weak var PoR: UIImageView!
     @IBOutlet weak var startBtn: UIButton!
     @IBOutlet weak var infoPage: UIView!
+    @IBOutlet weak var gazeIndicator: UIImageView!
+    @IBOutlet weak var quitBtn: UIButton!
     
     // MARK: - variables
     var leftEye: SCNNode = SCNNode()
@@ -34,35 +36,29 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
     }
     
     func stop() {
-        // save data to struct
         CalibrationData.data.isCalibrated = true
         
-        // print points
         DispatchQueue.main.async {
+            self.quitBtn.isHidden = false
             self.PoR.isHidden = true
+            self.gazeIndicator.isHidden = false
             self.wait = true
             self.PoR.layer.removeAllAnimations()
             
+            // print points
             let calibrationPoints = CalibrationData.data.calibrationPoints
             let result = CalibrationData.data.result
-            
             for point in calibrationPoints {
                 let dot = UIView(frame: CGRect(x: point.x-5, y: point.y-5, width: 10, height: 10))
                 dot.backgroundColor = .blue
                 self.view.addSubview(dot)
             }
             
-            for (index, points) in result.enumerated() {
-                print(points)
+            for (index, _) in result.enumerated() {
                 let dot = UIView(frame: CGRect(x: result[index]!.x-5, y: result[index]!.y-5, width: 10, height: 10))
                 dot.backgroundColor = .red
                 self.view.addSubview(dot)
             }
-        }
-        
-        // go back to main after finished
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
-          self.performSegue(withIdentifier: "Back", sender: self)
         }
     }
     
@@ -135,6 +131,13 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
             faceGeometry.update(from: faceAnchor.geometry)
             
             let ARFrame = sceneView.session.currentFrame
+            
+            DispatchQueue.main.async {
+                if (!self.gazeIndicator.isHidden) {
+                    let gazePoints = self.gazePointCtrl.rayPlaneIntersection(withFaceAnchor: faceAnchor, frame: ARFrame!)
+                    self.gazeIndicator.center = gazePoints["POG"] as! CGPoint
+                }
+            }
             
             if (!self.wait) {
                 DispatchQueue.main.async {

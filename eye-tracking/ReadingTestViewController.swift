@@ -13,7 +13,6 @@ import WebKit
 class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
 
     // MARK: - outlets
-    @IBOutlet weak var gazeIndicator: UIImageView!
     @IBOutlet weak var sceneView: ARSCNView!
     @IBOutlet weak var InfoPage: UIView!
     @IBOutlet weak var label: UIButton!
@@ -109,10 +108,6 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
                     "left_eye_dist": distanceToScreen(eyeNode: leftEye),
                     "right_eye_dist": distanceToScreen(eyeNode: rightEye)
                 ]
-            }
-            
-            DispatchQueue.main.async {
-                self.gazeIndicator.center = gazePoints["POG"] as! CGPoint
             }
         }
     }

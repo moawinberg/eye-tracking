@@ -47,14 +47,14 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
             let result = CalibrationData.data.result
             
             for point in calibrationPoints {
-                let dot = UIView(frame: CGRect(x: point.x, y: point.y, width: 10, height: 10))
+                let dot = UIView(frame: CGRect(x: point.x-5, y: point.y-5, width: 10, height: 10))
                 dot.backgroundColor = .blue
                 self.view.addSubview(dot)
             }
             
             for (index, points) in result.enumerated() {
                 print(points)
-                let dot = UIView(frame: CGRect(x: result[index]!.x, y: result[index]!.y, width: 10, height: 10))
+                let dot = UIView(frame: CGRect(x: result[index]!.x-5, y: result[index]!.y-5, width: 10, height: 10))
                 dot.backgroundColor = .red
                 self.view.addSubview(dot)
             }

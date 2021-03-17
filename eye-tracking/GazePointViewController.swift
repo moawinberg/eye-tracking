@@ -99,24 +99,18 @@ class GazePointViewController: UIViewController {
             "head": getIntersection(withFaceAnchor: anchor, frame: frame, worldTransformMatrix: anchor.transform)
         ]
         
+        // timestamp for gaze point
         let formatter = DateFormatter()
         formatter.timeZone = TimeZone.current
         formatter.dateFormat = "H:m:ss.SSSS"
         let timestamp = formatter.string(from: Date())
         
-        // extract movement of head
+        // movement of head
         let headMovement = self.previousHeadIntersection - intersections["head"]!
         self.previousHeadIntersection = intersections["head"]!
         
-        let scaleX = Float(10)
-        let scaleY = Float(5)
         for eye in Array(intersections.keys) {
-            // remove movement of head
             intersections[eye]! -= headMovement
-            
-            // scale
-            intersections[eye]!.x *= scaleX
-            intersections[eye]!.y *= scaleY
             
             // translate to center of screen, convert to screen coords
             intersections[eye]!.x = (intersections[eye]!.x + 0.5) * self.phonePointsWidth

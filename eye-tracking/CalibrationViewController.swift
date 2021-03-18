@@ -109,27 +109,33 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
     func fixation(currentGazePoint: CGPoint, previousGazePoint: CGPoint) {
         if (previousGazePoint == currentGazePoint) {
             self.wait = true
+            self.PoR.layer.removeAllAnimations()
             CalibrationData.data.result[self.index] = currentGazePoint
                         
             DispatchQueue.main.async {
-                UIImageView.animate(withDuration: 1, delay: 0, options: .curveLinear, animations: {
-                    self.PoR.tintColor = UIColor.blue
+                // hide point to indicate done
+                UIImageView.animate(withDuration: 1, animations: {
+                    self.PoR.alpha = 0
                 }, completion: { finished in
                     if (self.index < CalibrationData.data.calibrationPoints.count - 1) {
-                        self.PoR.tintColor = UIColor.red
                         self.index += 1
                         
-                        // animate point to next position
-                        UIImageView.animate(withDuration: 1.0, delay: 1.0, options: .curveEaseIn, animations: {
-                            self.PoR.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
-                            self.PoR.center = CalibrationData.data.calibrationPoints[self.index]
+                        // show point and move to its new position
+                        UIImageView.animate(withDuration: 1, animations: {
+                            self.PoR.alpha = 1.0
                         }, completion: { finished in
-                            self.wait = false
-                            self.PoR.layer.removeAllAnimations()
+                            UIImageView.animate(withDuration: 1.0, delay: 0, options: .curveEaseIn, animations: {
+                                self.PoR.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+                                self.PoR.center = CalibrationData.data.calibrationPoints[self.index]
+                            }, completion: { finished in
+                                self.wait = false
+                                self.PoR.layer.removeAllAnimations()
+                            })
                         })
                     } else {
                         self.stop()
                     }
+                    
                 })
             }
         }

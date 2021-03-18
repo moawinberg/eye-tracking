@@ -18,6 +18,7 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
     @IBOutlet weak var gazeIndicator: UIImageView!
     @IBOutlet weak var quitBtn: UIButton!
     @IBOutlet weak var readingTestBtn: UIButton!
+    @IBOutlet weak var distanceLabel: UILabel!
     
     // MARK: - variables
     var leftEye: SCNNode = SCNNode()
@@ -65,6 +66,13 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
                 let dot = UIView(frame: CGRect(x: result[index]!.x-5, y: result[index]!.y-5, width: 10, height: 10))
                 dot.backgroundColor = .red
                 self.view.addSubview(dot)
+                
+                // corrected point
+//                let v = simd_float4(Float(result[index]!.x), Float(result[index]!.y), 1, 1)
+//                let corrected = self.gazePointCtrl.correctPoint(point: v)
+//                let corredtedDot = UIView(frame: CGRect(x: corrected.x-5, y: corrected.y-5, width: 10, height: 10))
+//                corredtedDot.backgroundColor = .green
+//                self.view.addSubview(corredtedDot)
             }
         }
     }
@@ -148,11 +156,19 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
             let ARFrame = sceneView.session.currentFrame
             
             DispatchQueue.main.async {
+                // show distance to screen before start
+                if (!self.infoPage.isHidden) {
+                    let distance = self.gazePointCtrl.distance(node: node)
+                    self.distanceLabel.text = "\(Int(round(distance * 100))) cm"
+                }
+                
+                // show gaze indicator after finished
                 if (!self.gazeIndicator.isHidden) {
                     let gazePoints = self.gazePointCtrl.gazePoints(withFaceAnchor: faceAnchor, frame: ARFrame!)
                     self.gazeIndicator.center = gazePoints["POG"] as! CGPoint
                 }
 
+                // perform calibration
                 if (!self.wait) {
                     // pulsating animation to find fixation
                     UIImageView.animate(withDuration: 0.1, delay: 0, options: [.repeat, .autoreverse], animations: {

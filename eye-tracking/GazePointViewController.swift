@@ -19,6 +19,16 @@ class GazePointViewController: UIViewController {
         super.viewDidLoad()
     }
     
+    func distance(node: SCNNode) -> Float {
+        // euqludian distance of the eyes to the camera
+        // don't have to subtract camera pos because it's in origo
+        return sqrt(
+            node.worldPosition.x*node.worldPosition.x +
+            node.worldPosition.y*node.worldPosition.y +
+            node.worldPosition.z*node.worldPosition.z
+        )
+    }
+    
     func correctPoint(point: simd_float4) -> CGPoint {
         if (CalibrationData.data.isCalibrated) {
             let calibrationResult = CalibrationData.data.result

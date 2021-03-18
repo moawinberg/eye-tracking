@@ -16,6 +16,7 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
     @IBOutlet weak var sceneView: ARSCNView!
     @IBOutlet weak var InfoPage: UIView!
     @IBOutlet weak var label: UIButton!
+    @IBOutlet weak var distanceLabel: UILabel!
     
     // MARK: - variables
     var leftEye: SCNNode = SCNNode()
@@ -82,22 +83,20 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
         return node
     }
     
-    func distanceToScreen(eyeNode: SCNNode) -> Float {
-        // euqludian distance of the eyes to the camera
-        // don't have to subtract camera pos because it's in origo
-        return sqrt(
-            eyeNode.worldPosition.x*eyeNode.worldPosition.x +
-            eyeNode.worldPosition.y*eyeNode.worldPosition.y +
-            eyeNode.worldPosition.z*eyeNode.worldPosition.z
-        )
-    }
-    
     func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
         if let faceAnchor = anchor as? ARFaceAnchor, let faceGeometry = node.geometry as? ARSCNFaceGeometry {
             faceGeometry.update(from: faceAnchor.geometry)
             let ARFrame = sceneView.session.currentFrame
             
             let gazePoints = self.gazePointCtrl.gazePoints(withFaceAnchor: faceAnchor, frame: ARFrame!)
+            
+            // show distance to screen before start
+            DispatchQueue.main.async {
+                if (!self.InfoPage.isHidden) {
+                    let distance = self.gazePointCtrl.distance(node: node)
+                    self.distanceLabel.text = "\(Int(round(distance * 100))) cm"
+                }
+            }
 
             if (self.isRecording) {
                 gazeData[textNumber] = [
@@ -105,8 +104,8 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
                     "POG": gazePoints["POG"]!,
                     "left_eye_NDC": gazePoints["left_eye"]!,
                     "right_eye_NDC": gazePoints["right_eye"]!,
-                    "left_eye_dist": distanceToScreen(eyeNode: leftEye),
-                    "right_eye_dist": distanceToScreen(eyeNode: rightEye)
+                    "left_eye_dist": self.gazePointCtrl.distance(node: leftEye),
+                    "right_eye_dist": self.gazePointCtrl.distance(node: rightEye)
                 ]
             }
         }

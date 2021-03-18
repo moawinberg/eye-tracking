@@ -113,7 +113,7 @@ class GazePointViewController: UIViewController {
             intersections[eye]! -= headMovement
             
             // translate to center of screen, convert to screen coords
-            intersections[eye]!.x = (intersections[eye]!.x + 0.5) * self.phonePointsWidth
+            intersections[eye]!.x = (intersections[eye]!.x) * self.phonePointsWidth*1.5
             intersections[eye]!.y = (1 - (intersections[eye]!.y + 0.5)) * self.phonePointsHeight
         }
         

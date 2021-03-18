@@ -39,9 +39,9 @@
                                 <color key="tintColor" systemColor="systemRedColor"/>
                             </imageView>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NyS-zn-faB">
-                                <rect key="frame" x="259" y="815" width="78" height="30"/>
+                                <rect key="frame" x="255" y="815" width="86" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Reding test"/>
+                                <state key="normal" title="Reading test"/>
                                 <connections>
                                     <segue destination="kra-CR-gcs" kind="show" id="W4h-fb-pZb"/>
                                 </connections>

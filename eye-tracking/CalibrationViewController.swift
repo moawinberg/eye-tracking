@@ -68,6 +68,8 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
         sceneView.delegate = self
         sceneView.automaticallyUpdatesLighting = true
         UIApplication.shared.isIdleTimerDisabled = true
+        
+        CalibrationData.data.isCalibrated = false
     }
     
     override func viewWillAppear(_ animated: Bool) {

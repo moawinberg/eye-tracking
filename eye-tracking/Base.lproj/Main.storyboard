@@ -26,20 +26,28 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j7K-C9-rTT">
-                                <rect key="frame" x="192" y="813" width="30" height="30"/>
+                                <rect key="frame" x="66" y="815" width="94" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Quit"/>
+                                <state key="normal" title="Back to menu"/>
                                 <connections>
                                     <segue destination="bty-ZV-BWz" kind="show" id="hl6-sf-Qzo"/>
                                 </connections>
                             </button>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" fixedFrame="YES" image="circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="iHP-y4-tDI">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" fixedFrame="YES" image="circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="iHP-y4-tDI">
                                 <rect key="frame" x="195" y="437" width="20" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="tintColor" systemColor="systemRedColor"/>
                             </imageView>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3Wk-4U-dhZ">
-                                <rect key="frame" x="0.0" y="-1" width="414" height="896"/>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NyS-zn-faB">
+                                <rect key="frame" x="259" y="815" width="78" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Reding test"/>
+                                <connections>
+                                    <segue destination="kra-CR-gcs" kind="show" id="W4h-fb-pZb"/>
+                                </connections>
+                            </button>
+                            <view contentMode="scaleToFill" id="3Wk-4U-dhZ">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Calibration" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sjc-Ed-d0Z">
@@ -91,6 +99,7 @@
                                         </connections>
                                     </button>
                                 </subviews>
+                                <viewLayoutGuide key="safeArea" id="skN-Fi-A3k"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
                         </subviews>
@@ -102,6 +111,7 @@
                         <outlet property="gazeIndicator" destination="OBw-lt-LHL" id="m8a-lv-cgz"/>
                         <outlet property="infoPage" destination="3Wk-4U-dhZ" id="QEI-Wh-gaI"/>
                         <outlet property="quitBtn" destination="j7K-C9-rTT" id="Q9c-XP-tT3"/>
+                        <outlet property="readingTestBtn" destination="NyS-zn-faB" id="D53-CZ-KUe"/>
                         <outlet property="sceneView" destination="DbB-XA-ZhB" id="iU7-H8-asW"/>
                     </connections>
                 </viewController>
@@ -273,6 +283,7 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="hl6-sf-Qzo"/>
+        <segue reference="W4h-fb-pZb"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="circle.fill" catalog="system" width="128" height="121"/>

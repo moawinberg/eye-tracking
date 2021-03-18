@@ -17,6 +17,7 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
     @IBOutlet weak var infoPage: UIView!
     @IBOutlet weak var gazeIndicator: UIImageView!
     @IBOutlet weak var quitBtn: UIButton!
+    @IBOutlet weak var readingTestBtn: UIButton!
     
     // MARK: - variables
     var leftEye: SCNNode = SCNNode()
@@ -39,6 +40,7 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
         CalibrationData.data.isCalibrated = true
         
         DispatchQueue.main.async {
+            self.readingTestBtn.isHidden = false
             self.quitBtn.isHidden = false
             self.PoR.isHidden = true
             self.gazeIndicator.isHidden = false

@@ -98,9 +98,9 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
     }
     
     func fixation(currentGazePoint: CGPoint, previousGazePoint: CGPoint) {
-        if (previousGazePoint == gazePoint) {
+        if (previousGazePoint == currentGazePoint) {
             self.wait = true
-            CalibrationData.data.result[self.index] = gazePoint
+            CalibrationData.data.result[self.index] = currentGazePoint
                         
             DispatchQueue.main.async {
                 UIImageView.animate(withDuration: 1, delay: 0, options: .curveLinear, animations: {
@@ -134,20 +134,18 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
             
             DispatchQueue.main.async {
                 if (!self.gazeIndicator.isHidden) {
-                    let gazePoints = self.gazePointCtrl.rayPlaneIntersection(withFaceAnchor: faceAnchor, frame: ARFrame!)
+                    let gazePoints = self.gazePointCtrl.gazePoints(withFaceAnchor: faceAnchor, frame: ARFrame!)
                     self.gazeIndicator.center = gazePoints["POG"] as! CGPoint
                 }
-            }
-            
-            if (!self.wait) {
-                DispatchQueue.main.async {
+
+                if (!self.wait) {
                     // pulsating animation to find fixation
                     UIImageView.animate(withDuration: 0.1, delay: 0, options: [.repeat, .autoreverse], animations: {
                         self.PoR.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
-                        let previousGazePoints = self.gazePointCtrl.rayPlaneIntersection(withFaceAnchor: faceAnchor, frame: ARFrame!)
+                        let previousGazePoints = self.gazePointCtrl.gazePoints(withFaceAnchor: faceAnchor, frame: ARFrame!)
                         self.previousGazePoint = previousGazePoints["POG"] as! CGPoint
                     }, completion: { finished in
-                        let gazePoints = self.gazePointCtrl.rayPlaneIntersection(withFaceAnchor: faceAnchor, frame: ARFrame!)
+                        let gazePoints = self.gazePointCtrl.gazePoints(withFaceAnchor: faceAnchor, frame: ARFrame!)
                         self.gazePoint = gazePoints["POG"] as! CGPoint
                         self.fixation(currentGazePoint: self.gazePoint, previousGazePoint: self.previousGazePoint)
                     })

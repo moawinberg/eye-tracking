@@ -97,7 +97,7 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
             faceGeometry.update(from: faceAnchor.geometry)
             let ARFrame = sceneView.session.currentFrame
             
-            let gazePoints = self.gazePointCtrl.rayPlaneIntersection(withFaceAnchor: faceAnchor, frame: ARFrame!)
+            let gazePoints = self.gazePointCtrl.gazePoints(withFaceAnchor: faceAnchor, frame: ARFrame!)
 
             if (self.isRecording) {
                 gazeData[textNumber] = [

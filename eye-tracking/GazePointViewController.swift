@@ -77,7 +77,7 @@ class GazePointViewController: UIViewController {
         return point
     }
     
-    func getIntersection(withFaceAnchor anchor: ARFaceAnchor, frame: ARFrame, worldTransformMatrix: simd_float4x4) -> simd_float4 {
+    func intersection(withFaceAnchor anchor: ARFaceAnchor, frame: ARFrame, worldTransformMatrix: simd_float4x4) -> simd_float4 {
         let cameraTransformMatrix = frame.camera.viewMatrix(for: .portrait)
         
         let localEyePosition = simd_float4(0, 0, 0, 1) // local space for eye
@@ -92,11 +92,11 @@ class GazePointViewController: UIViewController {
         return cameraEyePosition + t * cameraEyeDirection // intersection between ray-plane in NDC. value between 0 and 1
     }
     
-    func rayPlaneIntersection(withFaceAnchor anchor: ARFaceAnchor, frame: ARFrame) -> [String : Any] {
+    func gazePoints(withFaceAnchor anchor: ARFaceAnchor, frame: ARFrame) -> [String : Any] {
         var intersections = [
-            "leftEye": getIntersection(withFaceAnchor: anchor, frame: frame, worldTransformMatrix: anchor.transform*anchor.leftEyeTransform),
-            "rightEye": getIntersection(withFaceAnchor: anchor, frame: frame, worldTransformMatrix: anchor.transform*anchor.rightEyeTransform),
-            "head": getIntersection(withFaceAnchor: anchor, frame: frame, worldTransformMatrix: anchor.transform)
+            "leftEye": intersection(withFaceAnchor: anchor, frame: frame, worldTransformMatrix: anchor.transform*anchor.leftEyeTransform),
+            "rightEye": intersection(withFaceAnchor: anchor, frame: frame, worldTransformMatrix: anchor.transform*anchor.rightEyeTransform),
+            "head": intersection(withFaceAnchor: anchor, frame: frame, worldTransformMatrix: anchor.transform)
         ]
         
         // timestamp for gaze point

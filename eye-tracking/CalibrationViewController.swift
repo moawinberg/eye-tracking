@@ -32,7 +32,12 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
         DispatchQueue.main.async {
             self.infoPage.isHidden = true
             self.PoR.center = CalibrationData.data.calibrationPoints[self.index]
-            self.wait = false
+            
+            UIImageView.animate(withDuration: 1.0, delay: 1.0, animations: {
+                self.PoR.alpha = 1.0
+            }, completion: { finished in
+                self.wait = false
+            })
         }
     }
     

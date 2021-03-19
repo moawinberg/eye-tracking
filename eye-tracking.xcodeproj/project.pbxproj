@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		CD0F37BA25E65CB600369B28 /* ReadingTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0F37B925E65CB600369B28 /* ReadingTestViewController.swift */; };
+		CD2049C52604D89B00819CD0 /* stimulus in Resources */ = {isa = PBXBuildFile; fileRef = CD2049C42604D89B00819CD0 /* stimulus */; };
+		CD2049D02604DA8100819CD0 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = CD2049CF2604DA8100819CD0 /* .gitignore */; };
 		CD24E4E325DBCE6000FD5D5B /* CalibrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD24E4E225DBCE6000FD5D5B /* CalibrationViewController.swift */; };
 		CD24E4E625DBCE9D00FD5D5B /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD24E4E525DBCE9D00FD5D5B /* MainViewController.swift */; };
 		CD24E4E925DBD46E00FD5D5B /* GazePointViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD24E4E825DBD46D00FD5D5B /* GazePointViewController.swift */; };
@@ -20,6 +22,8 @@
 
 /* Begin PBXFileReference section */
 		CD0F37B925E65CB600369B28 /* ReadingTestViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingTestViewController.swift; sourceTree = "<group>"; };
+		CD2049C42604D89B00819CD0 /* stimulus */ = {isa = PBXFileReference; lastKnownFileType = folder; path = stimulus; sourceTree = "<group>"; };
+		CD2049CF2604DA8100819CD0 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		CD24E4E225DBCE6000FD5D5B /* CalibrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalibrationViewController.swift; sourceTree = "<group>"; };
 		CD24E4E525DBCE9D00FD5D5B /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		CD24E4E825DBD46D00FD5D5B /* GazePointViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GazePointViewController.swift; sourceTree = "<group>"; };
@@ -62,9 +66,11 @@
 		CD92B10525AF1A850072E4E5 /* eye-tracking */ = {
 			isa = PBXGroup;
 			children = (
+				CD2049C42604D89B00819CD0 /* stimulus */,
 				CD92B10625AF1A850072E4E5 /* AppDelegate.swift */,
 				CD92B10825AF1A850072E4E5 /* art.scnassets */,
 				CD92B10C25AF1A850072E4E5 /* Main.storyboard */,
+				CD2049CF2604DA8100819CD0 /* .gitignore */,
 				CD0F37B925E65CB600369B28 /* ReadingTestViewController.swift */,
 				CD24E4E525DBCE9D00FD5D5B /* MainViewController.swift */,
 				CD24E4E225DBCE6000FD5D5B /* CalibrationViewController.swift */,
@@ -135,7 +141,9 @@
 			files = (
 				CD92B10925AF1A850072E4E5 /* art.scnassets in Resources */,
 				CD92B11325AF1A870072E4E5 /* LaunchScreen.storyboard in Resources */,
+				CD2049C52604D89B00819CD0 /* stimulus in Resources */,
 				CD92B11025AF1A870072E4E5 /* Assets.xcassets in Resources */,
+				CD2049D02604DA8100819CD0 /* .gitignore in Resources */,
 				CD92B10E25AF1A850072E4E5 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -299,13 +307,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = R5DCAGWA7V;
+				DEVELOPMENT_TEAM = 8959K9SBUN;
 				INFOPLIST_FILE = "eye-tracking/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.eye-tracking";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.moas.eye-tracking";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

@@ -17,6 +17,7 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
     @IBOutlet weak var InfoPage: UIView!
     @IBOutlet weak var label: UIButton!
     @IBOutlet weak var distanceLabel: UILabel!
+    @IBOutlet weak var stimuli: UIImageView!
     
     // MARK: - variables
     var leftEye: SCNNode = SCNNode()
@@ -26,20 +27,28 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
     var textNumber = 1
     var maxPages = 2
     var gazeData: [Int : [String : Any]] = [:]
+    var gradeNumber = 9
     
     @IBAction func next(_ sender: Any) {
         DispatchQueue.main.async {
-            if (self.textNumber == self.maxPages-1) {
-                self.label.setTitle("Done", for: .normal)
-            } else if (self.textNumber == self.maxPages) {
-                self.performSegue(withIdentifier: "Back", sender: self)
+            if (self.textNumber == self.maxPages) {
+                self.isRecording = false
+                print("collected data: ", self.gazeData)
+                self.label.isHidden = true
+                self.stimuli.image = UIImage(named: "stimulus/done.png")
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                    self.performSegue(withIdentifier: "Back", sender: self)
+                }
+            } else {
+                self.textNumber += 1
+                self.stimuli.image = UIImage(named: "stimulus/grade\(self.gradeNumber)text\(self.textNumber).png")
             }
-            self.textNumber += 1
         }
     }
     
     @IBAction func start(_ sender: UIButton) {
         DispatchQueue.main.async {
+            self.stimuli.image = UIImage(named: "stimulus/grade\(self.gradeNumber)text\(self.textNumber).png")
             self.InfoPage.isHidden = true
             self.isRecording = true
         }
@@ -62,8 +71,6 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-
-        print("collected data: ", gazeData)
         
         // Pause the view's session
         sceneView.session.pause()

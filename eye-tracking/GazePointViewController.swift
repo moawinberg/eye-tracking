@@ -40,8 +40,8 @@ class GazePointViewController: UIViewController {
             let calibrationWidth = abs(calibrationPoints[1].x - calibrationPoints[0].x)
             let calibrationHeight = abs(calibrationPoints[0].y - calibrationPoints[2].y)
 
-            let calibrationScaleWidth = calibrationWidth / calibrationGazeWidth
-            let calibrationScaleHeight = calibrationHeight / calibrationGazeHeight
+            let calibrationScaleWidth = (calibrationWidth / calibrationGazeWidth) * 1.1
+            let calibrationScaleHeight = (calibrationHeight / calibrationGazeHeight) * 1.1
 
             var displacement_x = CGFloat(0)
             var displacement_y = CGFloat(0)
@@ -52,7 +52,7 @@ class GazePointViewController: UIViewController {
 
             displacement_x /= CGFloat(calibrationPoints.count)
             displacement_y /= CGFloat(calibrationPoints.count)
-
+            
             let x = CGFloat(point.x) * calibrationScaleWidth + displacement_x
             let y = CGFloat(point.y) * calibrationScaleHeight + displacement_y
             
@@ -65,7 +65,7 @@ class GazePointViewController: UIViewController {
     func smoothing(point: simd_float4) -> simd_float4 {
         if (CalibrationData.data.isCalibrated) {
             // more smoothing => more lag
-            let threshold = 30
+            let threshold = 25
             
             self.intersections.append(point)
             if (self.intersections.count >= threshold) {
@@ -123,7 +123,7 @@ class GazePointViewController: UIViewController {
             intersections[eye]! -= headMovement
             
             // translate to center of screen, convert to screen coords
-            intersections[eye]!.x = (intersections[eye]!.x) * self.phonePointsWidth*1.5
+            intersections[eye]!.x = (intersections[eye]!.x + 0.5) * self.phonePointsWidth
             intersections[eye]!.y = (1 - (intersections[eye]!.y + 0.5)) * self.phonePointsHeight
         }
         

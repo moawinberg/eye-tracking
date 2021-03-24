@@ -26,20 +26,23 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
     var gazePointCtrl = GazePointViewController()
     var textNumber = 1
     var maxPages = 2
-    var gazeData: [Int : [String : Any]] = [:]
+    var gazeData: [Int: [Dictionary<String, Any>]] = [:]
+    var results = [Dictionary<String, Any>]()
     var gradeNumber = 9
     
     @IBAction func next(_ sender: Any) {
         DispatchQueue.main.async {
             if (self.textNumber == self.maxPages) {
                 self.isRecording = false
-                print("collected data: ", self.gazeData)
+                print(self.gazeData)
                 self.label.isHidden = true
                 self.stimuli.image = UIImage(named: "stimulus/done.png")
+                
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                     self.performSegue(withIdentifier: "Back", sender: self)
                 }
             } else {
+                self.gazeData[self.textNumber] = self.results
                 self.textNumber += 1
                 self.stimuli.image = UIImage(named: "stimulus/grade\(self.gradeNumber)text\(self.textNumber).png")
             }
@@ -106,14 +109,14 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
             }
 
             if (self.isRecording) {
-                gazeData[textNumber] = [
-                    "timestamp": gazePoints["timestamp"]!,
-                    "POG": gazePoints["POG"]!,
-                    "left_eye_NDC": gazePoints["left_eye"]!,
-                    "right_eye_NDC": gazePoints["right_eye"]!,
-                    "left_eye_dist": self.gazePointCtrl.distance(node: leftEye),
-                    "right_eye_dist": self.gazePointCtrl.distance(node: rightEye)
-                ]
+                results.append([
+                        "timestamp": gazePoints["timestamp"]!,
+                        "POG": gazePoints["POG"]!,
+                        "left_eye_NDC": gazePoints["left_eye"]!,
+                        "right_eye_NDC": gazePoints["right_eye"]!,
+                        "left_eye_dist": self.gazePointCtrl.distance(node: leftEye),
+                        "right_eye_dist": self.gazePointCtrl.distance(node: rightEye)
+                ])
             }
         }
     }

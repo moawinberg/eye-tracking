@@ -287,6 +287,22 @@
                                     <segue destination="Dxa-YG-hgQ" kind="presentation" id="db4-N4-6xI"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Deltagar-id" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oo7-dG-ZcG">
+                                <rect key="frame" x="106" y="271" width="86" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dpM-Bg-dBD">
+                                <rect key="frame" x="207" y="264" width="97" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <action selector="input:" destination="bty-ZV-BWz" eventType="valueChanged" id="joz-ZH-y3w"/>
+                                </connections>
+                            </textField>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Kol-TD-2FK"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -294,6 +310,9 @@
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="KJq-jS-wtC"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="textField" destination="dpM-Bg-dBD" id="825-JE-hCK"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2qd-Gf-Fwk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -301,7 +320,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="lhk-Sd-zBM"/>
+        <segue reference="hl6-sf-Qzo"/>
         <segue reference="d1Y-tx-Uma"/>
     </inferredMetricsTieBreakers>
     <resources>

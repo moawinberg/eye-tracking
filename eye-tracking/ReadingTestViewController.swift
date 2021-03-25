@@ -36,6 +36,7 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
             
             if (self.textNumber == self.maxPages) {
                 self.isRecording = false
+                print(Participant.data.id)
                 print(self.gazeData)
                 self.label.isHidden = true
                 self.stimuli.image = UIImage(named: "stimulus/done.png")

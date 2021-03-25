@@ -6,6 +6,12 @@
 //
 
 import UIKit
+import SwiftUI
+
+struct Participant {
+    static var data: Participant = Participant()
+    var id: Int = 0
+}
 
 struct CalibrationData {
     static var data: CalibrationData = CalibrationData()
@@ -40,9 +46,20 @@ struct CalibrationData {
     ]
 }
 
+
 class MainViewController: UIViewController {
+    @IBOutlet weak var textField: UITextField!
+    
+    // add particpant id to result
+    @objc func textFieldDidChange(_ textField: UITextField) {
+        let id = (Int(textField.text!))
+        if (id != nil) {
+            Participant.data.id = id!
+        }
+    }
 
     override func viewDidLoad() {
+        textField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         super.viewDidLoad()
     }
 }

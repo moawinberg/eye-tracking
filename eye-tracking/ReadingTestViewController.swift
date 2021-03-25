@@ -32,6 +32,8 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
     
     @IBAction func next(_ sender: Any) {
         DispatchQueue.main.async {
+            self.gazeData[self.textNumber] = self.results
+            
             if (self.textNumber == self.maxPages) {
                 self.isRecording = false
                 print(self.gazeData)
@@ -42,7 +44,6 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
                     self.performSegue(withIdentifier: "Back", sender: self)
                 }
             } else {
-                self.gazeData[self.textNumber] = self.results
                 self.textNumber += 1
                 self.stimuli.image = UIImage(named: "stimulus/grade\(self.gradeNumber)text\(self.textNumber).png")
             }
@@ -111,7 +112,6 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
             if (self.isRecording) {
                 results.append([
                         "timestamp": gazePoints["timestamp"]!,
-                        "POG": gazePoints["POG"]!,
                         "left_eye_NDC": gazePoints["left_eye"]!,
                         "right_eye_NDC": gazePoints["right_eye"]!,
                         "left_eye_dist": self.gazePointCtrl.distance(node: leftEye),

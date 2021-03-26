@@ -22,43 +22,53 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
     // MARK: - variables
     var leftEye: SCNNode = SCNNode()
     var rightEye: SCNNode = SCNNode()
-    var isRecording = false
-    var gazePointCtrl = GazePointViewController()
-    var textNumber = 1
-    var maxPages = 2
-    var gazeData: [Int: [Dictionary<String, Any>]] = [:]
-    var results = [Dictionary<String, Any>]()
-    var gradeNumber = 9
     
+    var isRecording = false
+    
+    var gazePointCtrl = GazePointViewController()
+    var results = [Dictionary<String, Any>]()
+    var gazeData: [Int: [Dictionary<String, Any>]] = [:]
+    
+    var pageNumber = 0
+    var maxPages = 4
+    var pages = [
+        "stimulus/grade9text1.png",
+        "stimulus/whitebg.png",
+        "stimulus/grade9text1.png",
+        "stimulus/whitebg.png",
+        "stimulus/done.png"
+    ]
+    
+    // MARK: - button clicks
     @IBAction func next(_ sender: Any) {
         DispatchQueue.main.async {
-            self.gazeData[self.textNumber] = self.results
+            self.gazeData[self.pageNumber+1] = self.results
             
-            if (self.textNumber == self.maxPages) {
+            self.pageNumber += 1
+            self.stimuli.image = UIImage(named: self.pages[self.pageNumber])
+            
+            if (self.pageNumber == self.maxPages) {
                 self.isRecording = false
                 print(Participant.data.id)
                 print(self.gazeData)
                 self.label.isHidden = true
-                self.stimuli.image = UIImage(named: "stimulus/done.png")
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                     self.performSegue(withIdentifier: "Back", sender: self)
                 }
-            } else {
-                self.textNumber += 1
-                self.stimuli.image = UIImage(named: "stimulus/grade\(self.gradeNumber)text\(self.textNumber).png")
             }
         }
     }
     
     @IBAction func start(_ sender: UIButton) {
         DispatchQueue.main.async {
-            self.stimuli.image = UIImage(named: "stimulus/grade\(self.gradeNumber)text\(self.textNumber).png")
+            self.stimuli.image = UIImage(named: self.pages[self.pageNumber])
             self.InfoPage.isHidden = true
             self.isRecording = true
         }
     }
     
+    // MARK: - view sessions
     override func viewDidLoad() {
         super.viewDidLoad()
      
@@ -136,6 +146,5 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
         sceneView.session.pause()
         sceneView.removeFromSuperview()
         sceneView = nil
-        // Reset tracking and/or remove existing anchors if consistent tracking is required
     }
 }

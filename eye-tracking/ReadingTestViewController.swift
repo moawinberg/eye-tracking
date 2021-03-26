@@ -26,8 +26,7 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
     var isRecording = false
     
     var gazePointCtrl = GazePointViewController()
-    var results = [Dictionary<String, Any>]()
-    var gazeData: [Int: [Dictionary<String, Any>]] = [:]
+    var gazeData = [Dictionary<String, Any>]()
     
     var pageNumber = 0
     var maxPages = 4
@@ -42,16 +41,15 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
     // MARK: - button clicks
     @IBAction func next(_ sender: Any) {
         DispatchQueue.main.async {
-            self.gazeData[self.pageNumber+1] = self.results
-            
             self.pageNumber += 1
             self.stimuli.image = UIImage(named: self.pages[self.pageNumber])
             
             if (self.pageNumber == self.maxPages) {
                 self.isRecording = false
-                print(Participant.data.id)
-                print(self.gazeData)
                 self.label.isHidden = true
+                
+                print("participant: ", Participant.data.id)
+                print("data: ", self.gazeData)
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                     self.performSegue(withIdentifier: "Back", sender: self)
@@ -71,7 +69,7 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
     // MARK: - view sessions
     override func viewDidLoad() {
         super.viewDidLoad()
-     
+
         sceneView.delegate = self
         sceneView.automaticallyUpdatesLighting = true
         UIApplication.shared.isIdleTimerDisabled = true
@@ -121,12 +119,12 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
             }
 
             if (self.isRecording) {
-                results.append([
-                        "timestamp": gazePoints["timestamp"]!,
-                        "left_eye_NDC": gazePoints["left_eye"]!,
-                        "right_eye_NDC": gazePoints["right_eye"]!,
-                        "left_eye_dist": self.gazePointCtrl.distance(node: leftEye),
-                        "right_eye_dist": self.gazePointCtrl.distance(node: rightEye)
+                self.gazeData.append([
+                    "timestamp": gazePoints["timestamp"]!,
+                    "left_eye_NDC": gazePoints["left_eye"]!,
+                    "right_eye_NDC": gazePoints["right_eye"]!,
+                    "left_eye_dist": self.gazePointCtrl.distance(node: leftEye),
+                    "right_eye_dist": self.gazePointCtrl.distance(node: rightEye)
                 ])
             }
         }

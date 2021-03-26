@@ -75,23 +75,22 @@ class MainViewController: UIViewController {
     // add particpant id to result
     @objc func textFieldDidChange(_ textField: UITextField) {
         let id = (Int(textField.text!))
+        var highlighted = true
+        var alpha = CGFloat(0.5)
+        var enabled = false
         
         if (id != nil) {
             Participant.data.id = id!
-            self.label.isHighlighted = false
-            self.calibrationBtn.isEnabled = true
-            self.readingBtn.isEnabled = true
-            
-            self.calibrationBtn.alpha = 1.0
-            self.readingBtn.alpha = 1.0
-        } else {
-            self.label.isHighlighted = true
-            self.textField.isHighlighted = true
-            self.calibrationBtn.isEnabled = false
-            self.readingBtn.isEnabled = false
-            self.calibrationBtn.alpha = 0.5
-            self.readingBtn.alpha = 0.5
+            highlighted = false
+            alpha = CGFloat(1.0)
+            enabled = true
         }
+        self.label.isHighlighted = highlighted
+        self.textField.isHighlighted = highlighted
+        self.calibrationBtn.isEnabled = enabled
+        self.readingBtn.isEnabled = enabled
+        self.calibrationBtn.alpha = alpha
+        self.readingBtn.alpha = alpha
     }
 
     override func viewDidLoad() {

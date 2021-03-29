@@ -106,6 +106,7 @@ class MainViewController: UIViewController {
     @IBOutlet weak var calibrationBtn: UIButton!
     @IBOutlet weak var label: UILabel!
     @IBOutlet weak var readingBtn: UIButton!
+    @IBOutlet weak var validationBtn: UIButton!
     
     // add particpant id to result
     @objc func textFieldDidChange(_ textField: UITextField) {
@@ -119,17 +120,28 @@ class MainViewController: UIViewController {
             highlighted = false
             alpha = CGFloat(1.0)
             enabled = true
+            
+            print("participant: ", id!)
         }
         self.label.isHighlighted = highlighted
         self.textField.isHighlighted = highlighted
         self.calibrationBtn.isEnabled = enabled
+        self.validationBtn.isEnabled = enabled
         self.readingBtn.isEnabled = enabled
         self.calibrationBtn.alpha = alpha
         self.readingBtn.alpha = alpha
+        self.validationBtn.alpha = alpha
+        self.validationBtn.alpha = alpha
     }
 
     override func viewDidLoad() {
         self.label.isHighlighted = true
+        
+        // reset validation count after 2 performances
+        if (ValidationData.data.index == 2) {
+            ValidationData.data.index = 1
+        }
+        
         textField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         textField.addDoneButtonToKeyboard(myAction:  #selector(self.textField.resignFirstResponder))
         

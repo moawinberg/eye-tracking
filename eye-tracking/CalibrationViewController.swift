@@ -53,26 +53,19 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
             self.wait = true
             self.PoR.layer.removeAllAnimations()
             
-            // print points
+            // show points
             let calibrationPoints = CalibrationData.data.calibrationPoints
             let result = CalibrationData.data.result
             for (index, _) in calibrationPoints.enumerated() {
                 let dot = UIView(frame: CGRect(x: calibrationPoints[index]!.x-5, y: calibrationPoints[index]!.y-5, width: 10, height: 10))
-                dot.backgroundColor = .blue
+                dot.backgroundColor = .red
                 self.view.addSubview(dot)
             }
             
             for (index, _) in result.enumerated() {
                 let dot = UIView(frame: CGRect(x: result[index]!.x-5, y: result[index]!.y-5, width: 10, height: 10))
-                dot.backgroundColor = .red
+                dot.backgroundColor = .blue
                 self.view.addSubview(dot)
-                
-                // corrected point
-//                let v = simd_float4(Float(result[index]!.x), Float(result[index]!.y), 1, 1)
-//                let corrected = self.gazePointCtrl.correctPoint(point: v)
-//                let corredtedDot = UIView(frame: CGRect(x: corrected.x-5, y: corrected.y-5, width: 10, height: 10))
-//                corredtedDot.backgroundColor = .green
-//                self.view.addSubview(corredtedDot)
             }
         }
     }
@@ -84,6 +77,7 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
         sceneView.automaticallyUpdatesLighting = true
         UIApplication.shared.isIdleTimerDisabled = true
         
+        CalibrationData.data.result = [:]
         CalibrationData.data.isCalibrated = false
     }
     

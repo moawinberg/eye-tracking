@@ -19,22 +19,20 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
     @IBOutlet weak var distanceLabel: UILabel!
     @IBOutlet weak var stimuli: UIImageView!
     @IBOutlet weak var nextBtn: UIButton!
+    @IBOutlet weak var backBtn: UIButton!
     
     // MARK: - variables
     var leftEye: SCNNode = SCNNode()
     var rightEye: SCNNode = SCNNode()
-    
     var isRecording = false
-    
     var gazePointCtrl = GazePointViewController()
     var gazeData = [Dictionary<String, Any>]()
-    
     var pageNumber = 0
     var maxPages = 4
     var pages = [
         "stimulus/grade9text1.png",
         "stimulus/whitebg.png",
-        "stimulus/grade9text1.png",
+        "stimulus/grade9text2.png",
         "stimulus/whitebg.png",
         "stimulus/done.png"
     ]
@@ -48,9 +46,9 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
             if (self.pageNumber == self.maxPages) {
                 self.isRecording = false
                 self.label.isHidden = true
+                self.backBtn.isHidden = false
                 
-                print("participant: ", Participant.data.id)
-                print("data: ", self.gazeData)
+                print("Reading: ", self.gazeData)
                 
                 self.nextBtn.isHidden = false
             }

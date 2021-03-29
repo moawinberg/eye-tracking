@@ -24,7 +24,7 @@
                             <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" fixedFrame="YES" image="circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="OBw-lt-LHL">
                                 <rect key="frame" x="197" y="438" width="20" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="tintColor" systemColor="systemGreenColor"/>
+                                <color key="tintColor" name="AccentColor"/>
                             </imageView>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j7K-C9-rTT">
                                 <rect key="frame" x="87" y="815" width="53" height="30"/>
@@ -40,9 +40,9 @@
                                 <color key="tintColor" systemColor="systemRedColor"/>
                             </imageView>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NyS-zn-faB">
-                                <rect key="frame" x="262" y="815" width="73" height="30"/>
+                                <rect key="frame" x="253" y="815" width="91" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Till läsning"/>
+                                <state key="normal" title="Till validering"/>
                                 <connections>
                                     <segue destination="2lm-rM-WXb" kind="show" id="kIJ-Bc-OkH"/>
                                 </connections>
@@ -144,22 +144,35 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="buX-jD-GTO">
-                                <rect key="frame" x="141" y="755" width="133" height="51"/>
+                                <rect key="frame" x="261" y="811" width="133" height="51"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" systemColor="linkColor"/>
-                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <state key="normal" title="Nästa"/>
+                                <color key="tintColor" name="AccentColor"/>
+                                <state key="normal" title="Till validering"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                         <integer key="value" value="5"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <segue destination="2lm-rM-WXb" kind="show" id="5SA-Rt-ziZ"/>
+                                    <segue destination="2lm-rM-WXb" kind="show" id="4UH-3M-L3i"/>
+                                </connections>
+                            </button>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aKm-HX-Mq7">
+                                <rect key="frame" x="20" y="811" width="133" height="51"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="tintColor" name="AccentColor"/>
+                                <state key="normal" title="Tillbaka"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="5"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <segue destination="bty-ZV-BWz" kind="show" id="UaX-uE-S7d"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="D0t-DO-vpb">
-                                <rect key="frame" x="141" y="755" width="133" height="51"/>
+                                <rect key="frame" x="141" y="764" width="133" height="51"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="linkColor"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -240,6 +253,7 @@
                     <navigationItem key="navigationItem" id="hD9-K8-Prz"/>
                     <connections>
                         <outlet property="InfoPage" destination="b6V-bd-GuZ" id="eu2-xO-F58"/>
+                        <outlet property="backBtn" destination="aKm-HX-Mq7" id="cfK-xb-z2a"/>
                         <outlet property="distanceLabel" destination="UCL-sN-kIJ" id="PVU-uJ-Prk"/>
                         <outlet property="label" destination="D0t-DO-vpb" id="aD1-TQ-ZVd"/>
                         <outlet property="nextBtn" destination="buX-jD-GTO" id="gzZ-c1-Gu2"/>
@@ -272,7 +286,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <segue destination="2lm-rM-WXb" kind="show" id="w1G-tX-tMW"/>
+                                    <segue destination="kra-CR-gcs" kind="show" id="6g7-bu-XHk"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9qT-7C-2GA">
@@ -301,7 +315,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <segue destination="Dxa-YG-hgQ" kind="presentation" id="db4-N4-6xI"/>
+                                    <segue destination="Dxa-YG-hgQ" kind="show" id="we4-7P-y6H"/>
                                 </connections>
                             </button>
                             <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dpM-Bg-dBD">
@@ -314,14 +328,14 @@
                                 </connections>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Deltagar-id: " lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" highlighted="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oo7-dG-ZcG">
-                                <rect key="frame" x="97" y="271" width="102" height="21"/>
+                                <rect key="frame" x="97" y="271" width="95" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <color key="highlightedColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <size key="shadowOffset" width="0.0" height="0.0"/>
                             </label>
-                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J5k-hA-mjU">
+                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J5k-hA-mjU">
                                 <rect key="frame" x="57" y="557" width="300" height="60"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" name="AccentColor"/>
@@ -349,6 +363,7 @@
                         <outlet property="label" destination="oo7-dG-ZcG" id="AkD-hG-t1S"/>
                         <outlet property="readingBtn" destination="L55-r0-vTg" id="Mtq-QN-hWu"/>
                         <outlet property="textField" destination="dpM-Bg-dBD" id="825-JE-hCK"/>
+                        <outlet property="validationBtn" destination="J5k-hA-mjU" id="R3K-Jv-kaa"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2qd-Gf-Fwk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -372,7 +387,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Tillbaka"/>
                                 <connections>
-                                    <segue destination="bty-ZV-BWz" kind="show" id="YvP-HO-DOd"/>
+                                    <segue destination="bty-ZV-BWz" kind="show" identifier="Back" id="YvP-HO-DOd"/>
                                 </connections>
                             </button>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" fixedFrame="YES" image="circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="8lo-aN-whW">
@@ -449,6 +464,13 @@
                                 <viewLayoutGuide key="safeArea" id="YER-5r-O3a"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Bra jobbat!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Upf-i6-IPG">
+                                <rect key="frame" x="122" y="438" width="169" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="0Cu-0R-ytg"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -457,6 +479,7 @@
                     <connections>
                         <outlet property="PoR" destination="8lo-aN-whW" id="XSw-oO-QJF"/>
                         <outlet property="distanceLabel" destination="u3H-Ep-uhH" id="2dQ-9d-N7W"/>
+                        <outlet property="finishedLabel" destination="Upf-i6-IPG" id="B38-Zk-feZ"/>
                         <outlet property="infoPage" destination="kev-u0-Mog" id="lY1-EM-10e"/>
                         <outlet property="quitBtn" destination="dPe-Wq-ngh" id="oa6-EK-bF9"/>
                         <outlet property="readingTestBtn" destination="Xpg-7K-DNe" id="pMk-OQ-gVg"/>
@@ -465,12 +488,13 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="r0s-r5-1Tz" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="687" y="61"/>
+            <point key="canvasLocation" x="686.95652173913049" y="60.9375"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="w1G-tX-tMW"/>
-        <segue reference="lhk-Sd-zBM"/>
+        <segue reference="4UH-3M-L3i"/>
+        <segue reference="YvP-HO-DOd"/>
+        <segue reference="dlf-kR-Iah"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="circle.fill" catalog="system" width="128" height="121"/>
@@ -485,9 +509,6 @@
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemGreenColor">
-            <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemRedColor">
             <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

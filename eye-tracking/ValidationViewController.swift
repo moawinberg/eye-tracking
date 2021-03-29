@@ -16,6 +16,7 @@ class ValidationViewController: UIViewController, ARSCNViewDelegate {
     @IBOutlet weak var infoPage: UIView!
     @IBOutlet weak var readingTestBtn: UIButton!
     @IBOutlet weak var quitBtn: UIButton!
+    @IBOutlet weak var finishedLabel: UILabel!
     
     // MARK: - variables
     var leftEye: SCNNode = SCNNode()
@@ -30,6 +31,7 @@ class ValidationViewController: UIViewController, ARSCNViewDelegate {
         DispatchQueue.main.async {
             self.infoPage.isHidden = true
             self.PoR.center = ValidationData.data.validationPoints[self.index]!
+            ValidationData.data.result = [:]
             
             UIImageView.animate(withDuration: 1.0, delay: 1.0, animations: {
                 self.PoR.alpha = 1.0
@@ -41,11 +43,21 @@ class ValidationViewController: UIViewController, ARSCNViewDelegate {
     
     func stop() {
         DispatchQueue.main.async {
-            self.readingTestBtn.isHidden = false
-            self.quitBtn.isHidden = false
             self.PoR.isHidden = true
             self.wait = true
             self.PoR.layer.removeAllAnimations()
+            
+            if (ValidationData.data.index == 2) {
+                self.finishedLabel.text = "Testet är klart!"
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                    self.performSegue(withIdentifier: "Back", sender: self)
+                }
+            } else {
+                self.readingTestBtn.isHidden = false
+                self.quitBtn.isHidden = false
+            }
+            self.finishedLabel.isHidden = false
             
             print("validation: ", ValidationData.data.index, ValidationData.data.result)
             

@@ -65,6 +65,40 @@ struct CalibrationData {
     ]
 }
 
+struct ValidationData {
+    static var data: ValidationData = ValidationData()
+    var index = Int(1)
+    var result: [Int: CGPoint] = [:]
+    
+    var validationPoints = [
+        // bottom
+        CGPoint(
+            x: UIScreen.main.bounds.width/2,
+            y: UIScreen.main.bounds.height - (UIScreen.main.bounds.height*0.05)
+        ),
+        // right
+        CGPoint(
+            x: UIScreen.main.bounds.width - (UIScreen.main.bounds.width*0.05),
+            y: UIScreen.main.bounds.height/2
+        ),
+        // top
+        CGPoint(
+            x: UIScreen.main.bounds.width/2,
+            y: UIScreen.main.bounds.height*0.05
+        ),
+        // left
+        CGPoint(
+            x: UIScreen.main.bounds.width*0.05,
+            y: UIScreen.main.bounds.height/2
+        ),
+        // centre
+        CGPoint(
+            x: UIScreen.main.bounds.width/2,
+            y: UIScreen.main.bounds.height/2
+        ),
+    ]
+}
+
 
 class MainViewController: UIViewController {
     @IBOutlet weak var textField: UITextField!

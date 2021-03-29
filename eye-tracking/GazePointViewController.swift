@@ -144,8 +144,11 @@ class GazePointViewController: UIViewController {
         rightEyePOG.x /= CGFloat(self.phonePointsWidth)
         rightEyePOG.y /= CGFloat(self.phonePointsHeight)
         
-        // round screen POG
-        let decimalValue = CGFloat(100)
+        // round screen POG, more sensitive if calibrated
+        var decimalValue = CGFloat(100)
+        if (CalibrationData.data.isCalibrated) {
+            decimalValue = CGFloat(10)
+        }
         screenPOG.x = round(decimalValue*screenPOG.x)/decimalValue
         screenPOG.y = round(decimalValue*screenPOG.y)/decimalValue
 
@@ -153,6 +156,7 @@ class GazePointViewController: UIViewController {
             "timestamp": timestamp,
             "left_eye": leftEyePOG,
             "right_eye": rightEyePOG,
+            "head_movement" : headMovement,
             "POG": screenPOG
         ]
     }

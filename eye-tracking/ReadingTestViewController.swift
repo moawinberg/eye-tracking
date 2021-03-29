@@ -18,6 +18,7 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
     @IBOutlet weak var label: UIButton!
     @IBOutlet weak var distanceLabel: UILabel!
     @IBOutlet weak var stimuli: UIImageView!
+    @IBOutlet weak var nextBtn: UIButton!
     
     // MARK: - variables
     var leftEye: SCNNode = SCNNode()
@@ -51,9 +52,7 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
                 print("participant: ", Participant.data.id)
                 print("data: ", self.gazeData)
                 
-                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                    self.performSegue(withIdentifier: "Back", sender: self)
-                }
+                self.nextBtn.isHidden = false
             }
         }
     }
@@ -121,6 +120,7 @@ class ReadingTestViewController: UIViewController, ARSCNViewDelegate {
             if (self.isRecording) {
                 self.gazeData.append([
                     "timestamp": gazePoints["timestamp"]!,
+                    "head_movement": gazePoints["head_movement"]!,
                     "left_eye_NDC": gazePoints["left_eye"]!,
                     "right_eye_NDC": gazePoints["right_eye"]!,
                     "left_eye_dist": self.gazePointCtrl.distance(node: leftEye),

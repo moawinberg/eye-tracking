@@ -18,6 +18,7 @@
 		CD92B10E25AF1A850072E4E5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CD92B10C25AF1A850072E4E5 /* Main.storyboard */; };
 		CD92B11025AF1A870072E4E5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CD92B10F25AF1A870072E4E5 /* Assets.xcassets */; };
 		CD92B11325AF1A870072E4E5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CD92B11125AF1A870072E4E5 /* LaunchScreen.storyboard */; };
+		CDD300A12611D77D006036DE /* ValidationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDD300A02611D77D006036DE /* ValidationViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		CD92B10F25AF1A870072E4E5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CD92B11225AF1A870072E4E5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CD92B11425AF1A870072E4E5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CDD300A02611D77D006036DE /* ValidationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +72,7 @@
 				CD92B10625AF1A850072E4E5 /* AppDelegate.swift */,
 				CD92B10825AF1A850072E4E5 /* art.scnassets */,
 				CD92B10C25AF1A850072E4E5 /* Main.storyboard */,
+				CDD300A02611D77D006036DE /* ValidationViewController.swift */,
 				CD2049CF2604DA8100819CD0 /* .gitignore */,
 				CD0F37B925E65CB600369B28 /* ReadingTestViewController.swift */,
 				CD24E4E525DBCE9D00FD5D5B /* MainViewController.swift */,
@@ -156,6 +159,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CD24E4E925DBD46E00FD5D5B /* GazePointViewController.swift in Sources */,
+				CDD300A12611D77D006036DE /* ValidationViewController.swift in Sources */,
 				CD24E4E325DBCE6000FD5D5B /* CalibrationViewController.swift in Sources */,
 				CD92B10725AF1A850072E4E5 /* AppDelegate.swift in Sources */,
 				CD0F37BA25E65CB600369B28 /* ReadingTestViewController.swift in Sources */,

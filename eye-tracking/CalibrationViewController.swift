@@ -32,7 +32,7 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
     @IBAction func start(_ sender: UIButton) {
         DispatchQueue.main.async {
             self.infoPage.isHidden = true
-            self.PoR.center = CalibrationData.data.calibrationPoints[self.index]
+            self.PoR.center = CalibrationData.data.calibrationPoints[self.index]!
             
             UIImageView.animate(withDuration: 1.0, delay: 1.0, animations: {
                 self.PoR.alpha = 1.0
@@ -56,8 +56,8 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
             // print points
             let calibrationPoints = CalibrationData.data.calibrationPoints
             let result = CalibrationData.data.result
-            for point in calibrationPoints {
-                let dot = UIView(frame: CGRect(x: point.x-5, y: point.y-5, width: 10, height: 10))
+            for (index, _) in calibrationPoints.enumerated() {
+                let dot = UIView(frame: CGRect(x: calibrationPoints[index]!.x-5, y: calibrationPoints[index]!.y-5, width: 10, height: 10))
                 dot.backgroundColor = .blue
                 self.view.addSubview(dot)
             }
@@ -134,7 +134,7 @@ class CalibrationViewController: UIViewController, ARSCNViewDelegate {
                         }, completion: { finished in
                             UIImageView.animate(withDuration: 1.0, delay: 0, options: .curveEaseIn, animations: {
                                 self.PoR.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
-                                self.PoR.center = CalibrationData.data.calibrationPoints[self.index]
+                                self.PoR.center = CalibrationData.data.calibrationPoints[self.index]!
                             }, completion: { finished in
                                 self.wait = false
                                 self.PoR.layer.removeAllAnimations()

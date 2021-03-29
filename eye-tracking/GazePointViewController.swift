@@ -37,8 +37,8 @@ class GazePointViewController: UIViewController {
             let calibrationGazeWidth = (abs(calibrationResult[1]!.x - calibrationResult[0]!.x) + abs(calibrationResult[3]!.x - calibrationResult[2]!.x)) / 2
             let calibrationGazeHeight = (abs(calibrationResult[2]!.y - calibrationResult[0]!.y) + abs(calibrationResult[3]!.y - calibrationResult[1]!.y)) / 2
 
-            let calibrationWidth = abs(calibrationPoints[1].x - calibrationPoints[0].x)
-            let calibrationHeight = abs(calibrationPoints[0].y - calibrationPoints[2].y)
+            let calibrationWidth = abs(calibrationPoints[1]!.x - calibrationPoints[0]!.x)
+            let calibrationHeight = abs(calibrationPoints[0]!.y - calibrationPoints[2]!.y)
 
             let calibrationScaleWidth = (calibrationWidth / calibrationGazeWidth) * 1.1
             let calibrationScaleHeight = (calibrationHeight / calibrationGazeHeight) * 1.1
@@ -46,8 +46,8 @@ class GazePointViewController: UIViewController {
             var displacement_x = CGFloat(0)
             var displacement_y = CGFloat(0)
             for (index, _) in calibrationPoints.enumerated() {
-                displacement_x += calibrationPoints[index].x - calibrationResult[index]!.x*calibrationScaleWidth
-                displacement_y += calibrationPoints[index].y - calibrationResult[index]!.y*calibrationScaleHeight
+                displacement_x += calibrationPoints[index]!.x - calibrationResult[index]!.x*calibrationScaleWidth
+                displacement_y += calibrationPoints[index]!.y - calibrationResult[index]!.y*calibrationScaleHeight
             }
 
             displacement_x /= CGFloat(calibrationPoints.count)

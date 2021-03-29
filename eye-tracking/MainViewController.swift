@@ -39,26 +39,26 @@ struct CalibrationData {
     
     var calibrationPoints = [
         // bottom-left
-        CGPoint(
+        0: CGPoint(
             x: UIScreen.main.bounds.width*0.05,
             y: UIScreen.main.bounds.height - (UIScreen.main.bounds.height*0.05)
         ),
         // bottom-right
-        CGPoint(
+        1: CGPoint(
             x: UIScreen.main.bounds.width - (UIScreen.main.bounds.width*0.05),
             y: UIScreen.main.bounds.height - (UIScreen.main.bounds.height*0.05)
         ),
         // top-right
-        CGPoint(
+        2: CGPoint(
             x: UIScreen.main.bounds.width - (UIScreen.main.bounds.width*0.05),
             y: UIScreen.main.bounds.height*0.05
         ),
         // top-left
-        CGPoint(
+        3: CGPoint(
             x: UIScreen.main.bounds.width*0.05,
             y: UIScreen.main.bounds.height*0.05
         ),
-        CGPoint(
+        4: CGPoint(
             x: UIScreen.main.bounds.width/2,
             y: UIScreen.main.bounds.height/2
         ),
@@ -68,31 +68,32 @@ struct CalibrationData {
 struct ValidationData {
     static var data: ValidationData = ValidationData()
     var index = Int(1)
-    var result: [Int: CGPoint] = [:]
+    var result: [Int: Dictionary<String, Any>] = [:]
     
     var validationPoints = [
         // bottom
-        CGPoint(
+        0: CGPoint(
             x: UIScreen.main.bounds.width/2,
             y: UIScreen.main.bounds.height - (UIScreen.main.bounds.height*0.05)
         ),
         // right
-        CGPoint(
+        1: CGPoint(
             x: UIScreen.main.bounds.width - (UIScreen.main.bounds.width*0.05),
             y: UIScreen.main.bounds.height/2
         ),
+        2:
         // top
         CGPoint(
             x: UIScreen.main.bounds.width/2,
             y: UIScreen.main.bounds.height*0.05
         ),
         // left
-        CGPoint(
+        3: CGPoint(
             x: UIScreen.main.bounds.width*0.05,
             y: UIScreen.main.bounds.height/2
         ),
         // centre
-        CGPoint(
+        4: CGPoint(
             x: UIScreen.main.bounds.width/2,
             y: UIScreen.main.bounds.height/2
         ),

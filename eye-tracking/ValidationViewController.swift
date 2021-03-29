@@ -29,7 +29,7 @@ class ValidationViewController: UIViewController, ARSCNViewDelegate {
     @IBAction func start(_ sender: Any) {
         DispatchQueue.main.async {
             self.infoPage.isHidden = true
-            self.PoR.center = ValidationData.data.validationPoints[self.index]
+            self.PoR.center = ValidationData.data.validationPoints[self.index]!
             
             UIImageView.animate(withDuration: 1.0, delay: 1.0, animations: {
                 self.PoR.alpha = 1.0
@@ -47,8 +47,7 @@ class ValidationViewController: UIViewController, ARSCNViewDelegate {
             self.wait = true
             self.PoR.layer.removeAllAnimations()
             
-            print("validation number: ", ValidationData.data.index)
-            print("data: ", ValidationData.data.result)
+            print("validation: ", ValidationData.data.index, ValidationData.data.result)
             
             ValidationData.data.index += 1
         }
@@ -89,11 +88,11 @@ class ValidationViewController: UIViewController, ARSCNViewDelegate {
         return node
     }
     
-    func fixation(currentGazePoint: CGPoint, previousGazePoint: CGPoint) {
-        if (previousGazePoint == currentGazePoint) {
+    func fixation(gazeData: Dictionary<String, Any>, previousGazePoint: CGPoint) {
+        if (previousGazePoint == gazeData["POG"]! as! CGPoint) {
             self.wait = true
             self.PoR.layer.removeAllAnimations()
-            ValidationData.data.result[self.index] = currentGazePoint
+            ValidationData.data.result[self.index] = gazeData
                         
             DispatchQueue.main.async {
                 // hide point to indicate done
@@ -109,7 +108,7 @@ class ValidationViewController: UIViewController, ARSCNViewDelegate {
                         }, completion: { finished in
                             UIImageView.animate(withDuration: 1.0, delay: 0, options: .curveEaseIn, animations: {
                                 self.PoR.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
-                                self.PoR.center = ValidationData.data.validationPoints[self.index]
+                                self.PoR.center = ValidationData.data.validationPoints[self.index]!
                             }, completion: { finished in
                                 self.wait = false
                                 self.PoR.layer.removeAllAnimations()
@@ -145,9 +144,8 @@ class ValidationViewController: UIViewController, ARSCNViewDelegate {
                         let previousGazePoints = self.gazePointCtrl.gazePoints(withFaceAnchor: faceAnchor, frame: ARFrame!)
                         self.previousGazePoint = previousGazePoints["POG"] as! CGPoint
                     }, completion: { finished in
-                        let gazePoints = self.gazePointCtrl.gazePoints(withFaceAnchor: faceAnchor, frame: ARFrame!)
-                        self.gazePoint = gazePoints["POG"] as! CGPoint
-                        self.fixation(currentGazePoint: self.gazePoint, previousGazePoint: self.previousGazePoint)
+                        let gazeData = self.gazePointCtrl.gazePoints(withFaceAnchor: faceAnchor, frame: ARFrame!)
+                        self.fixation(gazeData: gazeData, previousGazePoint: self.previousGazePoint)
                     })
                 }
             }
